@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include "SA/parsing/parsing.h"
 #include "SA/strings/strings.h"
 #define MAX_URL_SIZE 1024
@@ -30,4 +31,44 @@ SA_bool SA_parser_search_occurence_in_bytes_stream(char stream_single_byte, cons
         return SA_TRUE;
     }
     return SA_FALSE;
+}
+
+void SA_urldecode(char *dst, const char *src)
+{
+    char a, b;
+    while (*src != '\0')
+    {
+        if ((*src == '%') && ((a = src[1]) && (b = src[2])) && (isxdigit(a) && isxdigit(b)))
+        {
+            if (a >= 'a')
+                a -= 'a' - 'A';
+            if (a >= 'A')
+                a -= ('A' - 10);
+            else
+                a -= '0';
+            if (b >= 'a')
+                b -= 'a' - 'A';
+            if (b >= 'A')
+                b -= ('A' - 10);
+            else
+                b -= '0';
+            *dst++ = 16 * a + b;
+            src += 3;
+        }
+        else if (*src == '+')
+        {
+            *dst++ = ' ';
+            src++;
+        }
+        else
+        {
+            *dst++ = *src++;
+        }
+    }
+    *dst++ = '\0';
+}
+
+void SA_urldecode_inplace(char* data)
+{
+    SA_urldecode(data, data);
 }

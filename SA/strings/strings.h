@@ -30,8 +30,8 @@
 
     void SA_reverse_string(char* str, int len_str);
 
-    char* SA_strcpy(char* dest, char* src);
-    int SA_strncpy(char* dest, char* src, int n);
+    char* SA_strcpy(char* dest, const char* src);
+    int SA_strncpy(char* dest, const char* src, int n);
     void SA_strcat(char* dest, const char* add);
 
     void* SA_memset(void* ptr, char value, uint64_t count);

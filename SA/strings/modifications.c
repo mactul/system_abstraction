@@ -92,7 +92,7 @@ Returns the number of characters copied, '\0' included
 If the length of SRC is bigger than DEST_BUFFER_LENGTH, only the first bytes are copied.
 In any case, DEST is always terminated by '\0'.
 */
-int SA_strncpy(char* dest, char* src, int dest_buffer_length)
+int SA_strncpy(char* dest, const char* src, int dest_buffer_length)
 {
     int i;
     for(i = 0; i < dest_buffer_length-1 && src[i] != '\0'; i++)
@@ -108,7 +108,7 @@ Copy the content of SRC into DEST
 DEST should be at least the size of SRC
 return a pointer to the end of the string, the '\0'
 */
-char* SA_strcpy(char* dest, char* src)
+char* SA_strcpy(char* dest, const char* src)
 {
     while(*src != '\0')
     {
