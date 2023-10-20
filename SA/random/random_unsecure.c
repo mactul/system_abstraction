@@ -20,7 +20,7 @@ Generate an uint64_t integer between the range 0 and SA_RAND_U64_MAX
 */
 uint64_t SA_random_unsecure_uint64(void)
 {
-	return ((_unsecure_seed = _unsecure_seed * 1103515245ULL + 12345ULL) % SA_RAND_U64_MAX);
+	return ((_unsecure_seed = SA_time_seed_ns() + _unsecure_seed * 1103515245ULL + 12345ULL) % SA_RAND_U64_MAX);
 }
 
 
