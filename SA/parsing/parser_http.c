@@ -16,6 +16,7 @@ SA_ParserTree* SA_parse_urlencoded_form(const char* data)
             SA_ptree_free(&tree);
             return NULL;
         }
+        i++;
         
         SA_ptree_update_key(tree, data, i);
         data += i;
@@ -24,7 +25,11 @@ SA_ParserTree* SA_parse_urlencoded_form(const char* data)
         {
             i++;
         }
-        SA_ptree_update_value(tree, data, i);
+        SA_ptree_update_value(tree, data, i+1);
+        if(data[i] != '\0')
+        {
+            i++;
+        }
         data += i;
 
         SA_ptree_push(tree, SA_urldecode_inplace);
