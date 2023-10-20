@@ -2,6 +2,7 @@
     #define SA_GLOBAL
 
     #include <stdint.h>
+    #include <stddef.h>
     #include "SA/global/errors.h"
 
     /*
@@ -19,8 +20,6 @@
 
     #define SA_TRUE 1
     #define SA_FALSE 0
-
-    #define NULL (void*)(0)
 
     typedef char SA_bool;
 

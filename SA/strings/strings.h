@@ -34,6 +34,8 @@
     int SA_strncpy(char* dest, char* src, int n);
     void SA_strcat(char* dest, const char* add);
 
+    void* SA_memset(void* ptr, char value, uint64_t count);
+
     char* SA_strtrim_inplace(char* str);
     void SA_strtrim(char* dest, const char* src);
 

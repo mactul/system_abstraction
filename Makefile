@@ -4,15 +4,6 @@ CFLAGS_DEBUG = -O0 -g -DDEBUG
 STATIC = ar cr $@ $^
 
 Files := $(wildcard SA/*/*.c)
-# Files := $(wildcard SA/global/*.c)
-# Files += $(wildcard SA/memory/*.c)
-# Files += $(wildcard SA/strings/*.c)
-# Files += $(wildcard SA/time/*.c)
-# Files += $(wildcard SA/network/*.c)
-# Files += $(wildcard SA/random/*.c)
-# Files += $(wildcard SA/parsing/*.c)
-# Files += $(wildcard SA/maths/*.c)
-
 
 all: release
 

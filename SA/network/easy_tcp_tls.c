@@ -114,7 +114,7 @@ static int build_connected_socket(const char* server_hostname, char* str_server_
     struct addrinfo hints;
     struct addrinfo* result;
 
-    memset(&hints, 0, sizeof(hints));
+    SA_memset(&hints, 0, sizeof(hints));
     hints.ai_family = ai_family;       /* Allow IPv4 or IPv6 */
     hints.ai_socktype = SOCK_STREAM;   /* TCP socket */
     hints.ai_flags = 0;

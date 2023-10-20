@@ -204,3 +204,13 @@ void SA_reverse_string(char* str, int len_str)
         len_str--;
     }
 }
+
+void* SA_memset(void* ptr, char value, uint64_t count)
+{
+    char* p = (char*)ptr;
+    for(uint64_t i =0; i < count; i++)
+    {
+        p[i] = value;
+    }
+    return p;
+}
