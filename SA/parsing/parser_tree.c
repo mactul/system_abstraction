@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "SA/memory/mem_alloc.h"
 #include "SA/strings/strings.h"
 #include "SA/parsing/parser_tree.h"
@@ -186,4 +187,22 @@ void SA_ptree_free(SA_ParserTree** tree)
         SA_free(&((*tree)->current_value));
         SA_free(tree);
     }
+}
+
+static void _ptree_display(TreeNode* root)
+{
+    if(root->left_child != NULL)
+        _ptree_display(root->left_child);
+    if(root->right_child != NULL)
+        _ptree_display(root->right_child);
+    
+    if(root->key != NULL)
+        printf("KEY: %s\n", root->key);
+    if(root->value != NULL)
+        printf("VALUE: %s\n\n", root->value);
+}
+
+void SA_ptree_display(SA_ParserTree* tree)
+{
+    _ptree_display(tree->root);
 }

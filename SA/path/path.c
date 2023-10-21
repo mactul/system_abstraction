@@ -51,18 +51,26 @@ void SA_simplify_path(char* dest, const char* src)
 Concatenate each variadic element in PATH_DEST with '/' between each.
 NB_ELEMENTS must contains the number of variadic parameters.
 */
-void SA_path_join(char* path_dest, int nb_elements, ...)
+void SA_path_join(char* path_dest, int dest_buffer_size, int nb_elements, ...)
 {
     va_list args;
     va_start(args, nb_elements);
 
-    for(int i =0; i < nb_elements; i++)
+    for(int i =0; i < nb_elements && dest_buffer_size > 0; i++)
     {
-        path_dest = SA_strcpy(path_dest, va_arg(args, char*));
-        if(i != nb_elements - 1 && *(path_dest-1) != '/')
+        const char* src = va_arg(args, char*);
+        while(*src == '/')
+        {
+            src++;
+        }
+        int n = SA_strncpy(path_dest, src, dest_buffer_size);
+        path_dest += n;
+        dest_buffer_size -= n;
+        if(i != nb_elements - 1 && n > 0 && *(path_dest-1) != '/')
         {
             *path_dest = '/';
             path_dest++;
+            dest_buffer_size--;
         }
     }
 }

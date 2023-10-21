@@ -16,8 +16,7 @@
     void SA_ptree_free(SA_ParserTree** tree);
     void SA_ptree_abort(SA_ParserTree* tree);
 
-    void SA_urldecode(char* dest, const char* src);
-    void SA_urldecode_inplace(char* data);
+    void SA_ptree_display(SA_ParserTree* tree);
 
     #ifdef __cplusplus
     }

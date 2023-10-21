@@ -8,7 +8,7 @@
     
     void SA_simplify_path(char* dest, const char* src);
 
-    void SA_path_join(char* path_dest, int nb_elements, ...);
+    void SA_path_join(char* path_dest, int dest_buffer_size, int nb_elements, ...);
     
     #ifdef __cplusplus
     }

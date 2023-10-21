@@ -12,6 +12,9 @@
 
     SA_ParserTree* SA_parse_urlencoded_form(const char* data);
 
+    void SA_urldecode(char* dest, const char* src);
+    void SA_urldecode_inplace(char* data);
+
     #ifdef __cplusplus
     }
     #endif

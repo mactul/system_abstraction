@@ -76,3 +76,51 @@ SA_bool SA_startswith_case_unsensitive(const char* str, const char* ref)
     }
     return *ref == '\0';
 }
+
+int SA_str_search(const char* str, const char* expr)
+{
+    int i = 0;
+    int pos = 0;
+    while(expr[i] != '\0' && str[i] != '\0')
+    {
+        if(str[i] == expr[i])
+        {
+            i++;
+        }
+        else
+        {
+            str += i+1;
+            pos += i+1;
+            i = 0;
+        }
+    }
+    if(expr[i] != '\0')
+    {
+        return -1;
+    }
+    return pos;
+}
+
+int SA_str_search_case_unsensitive(const char* str, const char* expr)
+{
+    int i = 0;
+    int pos = 0;
+    while(expr[i] != '\0' && str[i] != '\0')
+    {
+        if(SA_tolower(str[i]) == SA_tolower(expr[i]))
+        {
+            i++;
+        }
+        else
+        {
+            str += i+1;
+            pos += i+1;
+            i = 0;
+        }
+    }
+    if(expr[i] != '\0')
+    {
+        return -1;
+    }
+    return pos;
+}

@@ -7,6 +7,7 @@ This header include everything in the SA lib.
 #include "SA/strings/strings.h"
 #include "SA/time/time.h"
 #include "SA/network/easy_tcp_tls.h"
+#include "SA/network/requests.h"
 #include "SA/random/random.h"
 #include "SA/parsing/parsing.h"
 #include "SA/path/path.h"

@@ -208,9 +208,21 @@ void SA_reverse_string(char* str, int len_str)
 void* SA_memset(void* ptr, char value, uint64_t count)
 {
     char* p = (char*)ptr;
-    for(uint64_t i =0; i < count; i++)
+    for(uint64_t i = 0; i < count; i++)
     {
         p[i] = value;
     }
     return p;
+}
+
+
+void* SA_memcpy(void* dest, void* source, uint64_t size)
+{
+    char* d = (char*)dest;
+    char* s = (char*)source;
+    for(uint64_t i = 0; i < size; i++)
+    {
+        d[i] = s[i];
+    }
+    return dest;
 }

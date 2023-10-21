@@ -6,6 +6,7 @@
     #define SA_CHAR_IS_UPPERCASE(c) ((c) >= 'A' && (c) <= 'Z')
 
     #define SA_CHAR_IS_DIGIT(c) ((c) >= '0' && (c) <= '9')
+    #define SA_CHAR_IS_HEXDIGIT(c) (((c) >= '0' && (c) <= '9') || ((c) >= 'A' && (c) <= 'F') || ((c) >= 'a' && (c) <= 'f'))
 
     #ifdef __cplusplus
     extern "C"{
@@ -23,6 +24,9 @@
     SA_bool SA_startswith(const char* str, const char* ref);
     SA_bool SA_startswith_case_unsensitive(const char* str, const char* ref);
 
+    int SA_str_search(const char* str, const char* expr);
+    int SA_str_search_case_unsensitive(const char* str, const char* expr);
+
     char SA_toupper(char c);
     char SA_tolower(char c);
     void SA_str_to_upper_inplace(char* str);
@@ -37,6 +41,7 @@
     void SA_strcat(char* dest, const char* add);
 
     void* SA_memset(void* ptr, char value, uint64_t count);
+    void* SA_memcpy(void* dest, void* source, uint64_t size);
 
     char* SA_strtrim_inplace(char* str);
     void SA_strtrim(char* dest, const char* src);
@@ -46,6 +51,8 @@
     uint64_t SA_str_to_uint64(const char* str);
     int64_t SA_str_to_int64(const char* str);
     double SA_str_to_double(const char* str);
+
+    uint64_t SA_hex_to_uint64(const char* str);
 
     #ifdef __cplusplus
     }

@@ -79,6 +79,38 @@ uint64_t SA_str_to_uint64(const char* str)
     return result;
 }
 
+
+/*
+This transform a hexadecimal string to an uint64_t.
+If the string is not the hexadecimal representation of an uint64_t, for example if it contains symbols like '-',
+the function will returns 0 and SA_get_last_error() will returns SA_ERROR_NAN
+Please make sure to check this if the function returns 0, unless you are sure that the string is well formated.
+*/
+uint64_t SA_hex_to_uint64(const char* str)
+{
+    uint64_t result = 0;
+    _SA_set_error(SA_NOERROR);
+    do
+    {
+        if(!SA_CHAR_IS_HEXDIGIT(*str))
+        {
+            _SA_set_error(SA_ERROR_NAN);
+            return 0;
+        }
+        result *= 16;
+
+        if(*str >= 'A' && *str <= 'F')
+            result += 10 + *str - 'A';
+        else if(*str >= 'a' && *str <= 'f')
+            result += 10 + *str - 'a';
+        else
+            result += *str - '0';
+        
+        str++;
+    } while(*str != '\0');
+    return result;
+}
+
 /*
 This transform a string to an int64_t.
 If the string is not the representation of an int64_t, for example if it contains symbols like '.',

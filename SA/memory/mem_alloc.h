@@ -20,7 +20,7 @@
     Takes the adress of the pointer allocated by SA_malloc, SA_calloc or SA_realloc
     free the memory block and set the pointer to NULL to avoid multiple free of a same block.
     */
-    #define SA_free(pptr) _SA_free((void**)pptr)
+    #define SA_free(pptr) _SA_free((void**)(pptr))
 
     #ifdef SA_MEMORY_DEBUG
         SA_bool _SA_is_everything_freed(void);

@@ -62,6 +62,13 @@ int main()
     assert(SA_strcmp(SA_int64_to_str(str2, -0), "0") == 0);
     assert(SA_strcmp(SA_int64_to_str(str2, -1), "-1") == 0);
 
+    assert(SA_hex_to_uint64("162E") == 5678);
+    assert(SA_hex_to_uint64("162e") == 5678);
+    assert(SA_hex_to_uint64("-162E") == 0 && SA_get_last_error() == SA_ERROR_NAN);
+    assert(SA_hex_to_uint64("dfg") == 0 && SA_get_last_error() == SA_ERROR_NAN);
+    assert(SA_hex_to_uint64("-") == 0 && SA_get_last_error() == SA_ERROR_NAN);
+    assert(SA_hex_to_uint64("") == 0 && SA_get_last_error() == SA_ERROR_NAN);
+
     assert(SA_str_to_uint64("5678") == 5678);
     assert(SA_str_to_uint64("-5678") == 0 && SA_get_last_error() == SA_ERROR_NAN);
     assert(SA_str_to_uint64("dfg") == 0 && SA_get_last_error() == SA_ERROR_NAN);
@@ -85,11 +92,14 @@ int main()
     SA_strncpy(str2, "trucs", 4);
     assert(SA_strcmp(str2, "tru") == 0);
 
-    SA_path_join(str2, 3, "machin", "chose", "bidule");
+    SA_path_join(str2, 256, 3, "machin", "chose", "bidule");
     assert(SA_strcmp(str2, "machin/chose/bidule") == 0);
 
-    SA_path_join(str2, 3, "machin/", "chose/", "bidule");
+    SA_path_join(str2, 256, 3, "machin/", "chose/", "bidule");
     assert(SA_strcmp(str2, "machin/chose/bidule") == 0);
+
+    SA_path_join(str1, 8, 2, "cc", "bonjour");
+    assert(SA_strcmp(str1, "cc/bonj") == 0);
 
     assert(SA_startswith("bonjour", "bon") == SA_TRUE);
     assert(SA_startswith("bonjour", "fon") == SA_FALSE);
@@ -136,59 +146,29 @@ int main()
     assert(SA_strcmp(str2, "../../../truc/chose/machin/ttyy/") == 0);
 
 
-    SA_microseconds t;
-    int x = 0;
-
-    t = SA_cpu_usage();
-    for(register int i = 0; i < 1000000000; i++)
-    {
-        if(!(i>>1))
-        {
-            x++;
-        }
-    }
-    printf("%lu\n", SA_cpu_usage() - t);
-
-    t = SA_cpu_usage();
-    for(register int i = 0; i < 1000000000; i++)
-    {
-        if(i == 0 || i == 1)
-        {
-            x++;
-        }
-    }
-    printf("%lu\n", SA_cpu_usage() - t);
-
     /*
     ======================================
-    ============ Test sockets ============
+    ============ Test network ============
     ======================================
     */
 
-    SA_SocketHandler* client_handler;
+    SA_RequestsHandler* handler = NULL;
     char buffer[1024];
-    char headers[] = "GET / HTTP/1.1\r\n"
-        "Host: example.com\r\n"
-        "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0\r\n"
-        "Connection: close\r\n\r\n";
-    
-    client_handler = SA_socket_ssl_client_init("example.com", 443, NULL);
+    int n;
 
-    if(client_handler == NULL)
+    handler = SA_req_get(handler, "https://api.coindesdevs.fr/get-exercice?difficulty=2&liked=0&disliked=45&beginners=0&topics_left=0", "");
+
+    SA_req_display_headers(handler);
+
+    while((n = SA_req_read_output_body(handler, buffer, 1024)))
     {
-        SA_print_last_error();
-        return 1;
-    }
-
-    SA_socket_send(client_handler, headers, SA_strlen(headers)+1, 0);
-
-    while((i = SA_socket_recv(client_handler, buffer, sizeof(buffer), 0)) > 0)
-    {
-        buffer[i] = '\0';
+        buffer[n] = '\0';
         printf("%s", buffer);
     }
 
-    SA_socket_close(&client_handler);  // this is very important because it will free all structures
+    putchar('\n');
 
+    SA_req_close_connection(&handler);
+    
     SA_destroy();
 }
