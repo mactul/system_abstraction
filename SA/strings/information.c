@@ -26,3 +26,19 @@ SA_bool SA_char_in_str(const char* str, char c)
     }
     return 0;
 }
+
+/*
+Returns whether or not the string STR is a unsigned number
+*/
+SA_bool SA_is_uint(const char* str)
+{
+    while(*str != '\0')
+    {
+        if(!SA_CHAR_IS_DIGIT(*str))
+        {
+            return SA_FALSE;
+        }
+        str++;
+    }
+    return SA_TRUE;
+}

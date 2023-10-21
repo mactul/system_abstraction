@@ -15,6 +15,8 @@
 
     SA_bool SA_char_in_str(const char* str, char c);
 
+    SA_bool SA_is_uint(const char* str);
+
     signed char SA_strcmp(const char* str1, const char* str2);
     signed char SA_strcasecmp(const char* str1, const char* str2);
 
