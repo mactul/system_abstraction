@@ -113,7 +113,9 @@ SA_bool SA_ptree_push(SA_ParserTree* tree, void (*data_modifications)(char*))
         if(cmp == 0)
         {
             // The key already exists, just replace the value
+            SA_free(&(root->value));
             root->value = node->value;
+            SA_free(&(node->key));
             SA_free(&node);
             return SA_TRUE;
         }

@@ -18,6 +18,12 @@
         #define SA_OS_IS_UNIX
     #endif
 
+    #ifdef __GNUC__
+        #define SA_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+    #else
+        #define SA_WARN_UNUSED_RESULT
+    #endif
+
     #define SA_TRUE 1
     #define SA_FALSE 0
 

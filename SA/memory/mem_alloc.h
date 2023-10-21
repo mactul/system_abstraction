@@ -8,11 +8,7 @@
 
     void* SA_malloc(uint64_t size);
     void* SA_calloc(uint64_t size);
-    #ifdef __GNUC__
-        void* __attribute__((warn_unused_result)) SA_realloc(void* ptr, uint64_t size);
-    #else
-        void* SA_realloc(void* ptr, uint64_t size);
-    #endif
+    void* SA_WARN_UNUSED_RESULT SA_realloc(void* ptr, uint64_t size);
 
     void _SA_free(void** pptr);
     
