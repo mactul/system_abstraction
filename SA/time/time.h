@@ -14,6 +14,7 @@
     SA_microseconds SA_cpu_usage(void);
     SA_nanoseconds SA_time_ns(void);
     SA_nanoseconds SA_time_seed_ns(void);
+    void SA_sleep(SA_microseconds n);
 
     #ifdef __cplusplus
     }

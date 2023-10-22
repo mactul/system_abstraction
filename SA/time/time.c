@@ -46,3 +46,8 @@ SA_microseconds SA_cpu_usage(void)
     clock_t ticks = clock();
     return (1000000 * ticks) / CLOCKS_PER_SEC;
 }
+
+void SA_sleep(SA_microseconds n)
+{
+    usleep(n);
+}

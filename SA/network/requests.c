@@ -367,7 +367,7 @@ static SA_bool req_parse_headers(SA_RequestsHandler* handler)
 
             i++;
         }
-        if(buffer[i] == '\n' && c_return)
+        if(i < size)
         {
             offset = i+1;
         }
@@ -518,10 +518,10 @@ int SA_req_read_output_body(SA_RequestsHandler* handler, char* buffer, int buffe
             size = start_chunk_read(handler, buffer, size, buffer_size);
         }
     }
-        if(size < buffer_size)
-        {
-            return size + SA_req_read_output_body(handler, &(buffer[size]), buffer_size-size);
-        }
+    if(size < buffer_size)
+    {
+        return size + SA_req_read_output_body(handler, &(buffer[size]), buffer_size-size);
+    }
     return size;
 }
 
