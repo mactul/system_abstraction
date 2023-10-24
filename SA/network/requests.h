@@ -45,11 +45,11 @@
 
     static inline SA_RequestsHandler* SA_WARN_UNUSED_RESULT SA_req_put(SA_RequestsHandler* handler, const char* url, const char* data, const char* additional_headers)
     {
-        return req_request(handler, "PUT ", url, data, additional_headers);
+        return SA_req_request(handler, "PUT ", url, data, additional_headers);
     }
 
     static inline SA_RequestsHandler* SA_WARN_UNUSED_RESULT SA_req_head(SA_RequestsHandler* handler, const char* url, const char* additional_headers)
     {
-        return req_request(handler, "HEAD ", url, "", additional_headers);
+        return SA_req_request(handler, "HEAD ", url, "", additional_headers);
     }
 #endif
