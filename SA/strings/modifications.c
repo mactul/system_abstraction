@@ -162,9 +162,9 @@ char* SA_strtrim_inplace(char* str)
 }
 
 /*
-Copy the string STR in DEST with whitespace stripped from the beginning and end of STR
+Copy the string SRC in DEST with whitespace stripped from the beginning and end of SRC
 The characters removed are ' ', '\t', '\b', '\n', '\r' and '\v'.
-The length of the DEST buffer must be at least as big as the length of STR
+The length of the DEST buffer must be at least as big as the length of SRC
 */
 void SA_strtrim(char* dest, const char* src)
 {

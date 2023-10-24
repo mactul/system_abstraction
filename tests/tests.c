@@ -160,7 +160,7 @@ int main()
 
     SA_req_display_headers(handler);
 
-    while((n = SA_req_read_output_body(handler, buffer, 1024)))
+    while((n = SA_req_read_output_body(handler, buffer, 1023)))
     {
         buffer[n] = '\0';
         printf("%s", buffer);
