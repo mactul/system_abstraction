@@ -8,7 +8,9 @@ This function MUST BE put at the top of the main function before doing anything 
 */
 void SA_init(void)
 {
-    _SA_socket_start();
+    #ifndef SA_NETWORK_DISABLED
+        _SA_socket_start();
+    #endif
     SA_set_unsecure_seed(SA_random_standard_seed());
 }
 
@@ -24,5 +26,8 @@ void SA_destroy(void)
         SA_print_error(" /!\\ WARNING /!\\ : Not all SA_malloc were freed\n");
     }
     #endif
-    _SA_socket_cleanup();
+
+    #ifndef SA_NETWORK_DISABLED
+        _SA_socket_cleanup();
+    #endif
 }

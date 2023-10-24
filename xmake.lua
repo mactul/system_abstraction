@@ -3,18 +3,24 @@ add_rules("mode.debug", "mode.release")
 set_policy("build.warning", true)
 set_warnings("all", "extra")
 
-if has_config("build_network") then
-    add_requires("openssl3", { alias = "openssl" })
-end
+if is_plat("windows", "mingw") then 
+    if has_config("build_network") then
+        add_requires("openssl")
+    end
+else 
+    if has_config("build_network") then
+        add_requires("openssl3", { alias = "openssl" })
+    end
+end 
 
 option("build_network")
     set_default(true)
     set_showmenu(true)
 
 option("build_tests")
-    set_default(true)
+    set_default(false)
     set_showmenu(true)
-    
+
 rule("flags_extras")
     if is_mode("debug") then
         on_config(function(target)
@@ -34,6 +40,7 @@ target("sa")
         add_headerfiles("(SA/**.h)")
         add_packages("openssl")
     else
+        add_defines("SA_NETWORK_DISABLED")
         remove_files("SA/network/*")
     end
 

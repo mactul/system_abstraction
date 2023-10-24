@@ -145,6 +145,8 @@ int main()
     SA_simplify_path(str2, "../.././.././././truc/chose/./bidule/./../machin/ttyy/eg/f/../../");
     assert(SA_strcmp(str2, "../../../truc/chose/machin/ttyy/") == 0);
 
+    assert(SA_str_search("bonjour fanfan la tulipe", "fanfan") == 8);
+
 
     /*
     ======================================
