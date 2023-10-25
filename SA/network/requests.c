@@ -41,6 +41,10 @@ static SA_bool send_headers(SA_RequestsHandler* handler, char* headers);
 static SA_bool connect_socket(SA_RequestsHandler* handler);
 
 
+#ifdef DEBUG
+static SA_bool is_first_call = SA_TRUE;
+#endif
+
 
 SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* method, const char* url, const char* data, const char* additional_headers)
 {
@@ -53,6 +57,20 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
     char content_length[30];
     const char* reference_url = url;
     char* headers = NULL;
+
+    #ifdef DEBUG
+    if(is_first_call && handler != NULL)
+    {
+        SA_print_error("DebugWarning: requests: handler pointer is non-null and it's the first time a request function is called\n"
+                       "Make sure to initialize the handler to NULL before calling the first requests function.");
+    }
+    is_first_call = SA_FALSE;
+    if(handler != NULL && (uint64_t)handler < 1000ULL)
+    {
+        SA_print_error("DebugWarning: requests: handler pointer is non-null and less than 1000, it may be uinitialized\n"
+                       "Make sure to initialize the handler to NULL before calling the first requests function.");
+    }
+    #endif
 
     _SA_set_error(SA_NOERROR);
 
