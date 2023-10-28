@@ -148,6 +148,25 @@ int main()
     assert(SA_str_search("bonjour fanfan la tulipe", "fanfan") == 8);
 
 
+    SA_Matrix* mat1 = SA_matrix_create(3, 5);
+    SA_Matrix* mat2 = NULL;
+    SA_mat_float array[5] = {1, 2, 3, 4, 5};
+    SA_mat_float array2[5] = {6792.6, 2, 3, 4, 5};
+
+    SA_matrix_add_line_from_array(mat1, 0, array);
+    SA_matrix_add_line_from_array(mat1, 1, array2);
+    SA_matrix_add_line_from_array(mat1, 2, array);
+
+    SA_matrix_print(mat1);
+
+    mat2 = SA_matrix_transpose(mat1);
+
+    SA_matrix_print(mat2);
+
+    SA_matrix_free(&mat1);
+    SA_matrix_free(&mat2);
+
+
     /*
     ======================================
     ============ Test network ============

@@ -1,4 +1,4 @@
-#include <malloc.h>
+#include <stdlib.h>
 #include "SA/memory/mem_alloc.h"
 
 #ifdef SA_MEMORY_DEBUG

@@ -12,3 +12,4 @@ This header include everything in the SA lib.
 #include "SA/parsing/parsing.h"
 #include "SA/path/path.h"
 #include "SA/maths/maths.h"
+#include "SA/maths/matrix.h"
