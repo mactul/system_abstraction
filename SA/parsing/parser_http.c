@@ -1,5 +1,9 @@
 #include "SA/parsing/parsing.h"
 
+/*
+This parse datas encoded like `key1=value1&key2=value2&...`
+It returns a ParserTree which can be read by `SA_ptree...` functions.
+*/
 SA_ParserTree* SA_parse_urlencoded_form(const char* data)
 {
     SA_ParserTree* tree = SA_ptree_init();
@@ -12,6 +16,7 @@ SA_ParserTree* SA_parse_urlencoded_form(const char* data)
         }
         if(data[i] == '\0')
         {
+            _SA_set_error(SA_ERROR_UNABLE_TO_PARSE_DATA);
             SA_ptree_abort(tree);
             SA_ptree_free(&tree);
             return NULL;

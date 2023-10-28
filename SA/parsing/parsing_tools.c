@@ -33,6 +33,10 @@ SA_bool SA_parser_search_occurence_in_bytes_stream(char stream_single_byte, cons
     return SA_FALSE;
 }
 
+/*
+Decode an urlencoded string in SRC to the buffer DEST.
+DEST should be at least the size of SRC (urlencoded string are equals or bigger than decoded ones).
+*/
 void SA_urldecode(char *dst, const char *src)
 {
     char a, b;
@@ -66,9 +70,4 @@ void SA_urldecode(char *dst, const char *src)
         }
     }
     *dst++ = '\0';
-}
-
-void SA_urldecode_inplace(char* data)
-{
-    SA_urldecode(data, data);
 }

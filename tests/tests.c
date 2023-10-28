@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
 #include "SA/SA.h"
-#include "SA/memory/hashmap.h"
 
 SA_bool cmp_int(void* int1, void* int2)
 {
@@ -186,6 +185,13 @@ int main()
     assert(SA_hashmap_get_value(hashmap, &k2, sizeof(int)) == &v2);
 
     SA_hashmap_free(&hashmap);
+
+    SA_ParserTree* tree = SA_parse_urlencoded_form("word=%C3%A9laborer&machin=truc&chose=bidule");
+    assert(SA_strcmp("élaborer", SA_ptree_get_value(tree, "word")) == 0);
+    assert(SA_strcmp("truc", SA_ptree_get_value(tree, "machin")) == 0);
+    assert(SA_strcmp("bidule", SA_ptree_get_value(tree, "chose")) == 0);
+
+    SA_ptree_free(&tree);
 
 
     /*

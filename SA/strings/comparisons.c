@@ -77,6 +77,11 @@ SA_bool SA_startswith_case_unsensitive(const char* str, const char* ref)
     return *ref == '\0';
 }
 
+/*
+Returns the position of the string EXPR in STR
+If EXPR is not in STR, it returns -1
+This function is case sensitive
+*/
 int SA_str_search(const char* str, const char* expr)
 {
     int i = 0;
@@ -101,6 +106,11 @@ int SA_str_search(const char* str, const char* expr)
     return pos;
 }
 
+/*
+Returns the position of the string EXPR in STR
+If EXPR is not in STR, it returns -1
+This function is case unsensitive
+*/
 int SA_str_search_case_unsensitive(const char* str, const char* expr)
 {
     int i = 0;

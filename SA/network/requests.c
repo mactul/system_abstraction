@@ -46,9 +46,11 @@ static SA_bool is_first_call = SA_TRUE;
 #endif
 
 
+/*
+This is not meant to be used directly, unless you have exotic HTTP methods.
+*/
 SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* method, const char* url, const char* data, const char* additional_headers)
 {
-    /* make a request with any method. Use the functions above instead. */
     int i;
 
     uint16_t port;
@@ -228,7 +230,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
 
     if(!req_parse_headers(handler))
     {
-        _SA_set_error(SA_ERROR_UNABLE_TO_PARSE_RESPONSE);
+        _SA_set_error(SA_ERROR_UNABLE_TO_PARSE_DATA);
         SA_req_close_connection(&handler);
         return NULL;
     }
@@ -251,7 +253,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
             handler->total_bytes = SA_str_to_uint64(response_content_length);
             if(handler->total_bytes == 0 && SA_get_last_error() == SA_ERROR_NAN)
             {
-                _SA_set_error(SA_ERROR_UNABLE_TO_PARSE_RESPONSE);
+                _SA_set_error(SA_ERROR_UNABLE_TO_PARSE_DATA);
                 SA_req_close_connection(&handler);
                 return NULL;
             }
@@ -400,16 +402,28 @@ static SA_bool req_parse_headers(SA_RequestsHandler* handler)
     return SA_TRUE;
 }
 
+/*
+Returns the HTTP status code of the page
+*/
 unsigned short int SA_req_get_status_code(SA_RequestsHandler* handler)
 {
     return handler->status_code;
 }
 
+/*
+Returns the value of a specific header.
+If HEADER_NAME is not in the server response headers, it returns NULL.
+If you have to modify this value, copy it before.
+*/
 const char* SA_req_get_header_value(SA_RequestsHandler* handler, const char* header_name)
 {
     return SA_ptree_get_value(handler->headers_tree, header_name);
 }
 
+/*
+This display all headers in server response.
+Used for debug purpose.
+*/
 void SA_req_display_headers(SA_RequestsHandler* handler)
 {
     printf("STATUS CODE: %hu\n\n", handler->status_code);
@@ -489,7 +503,9 @@ static int start_chunk_read(SA_RequestsHandler* handler, char* buffer, int bytes
 /*
     Skip the response header and fill the buffer with the server response
     Returns the number of bytes readed
-    Use this in a loop
+    Use this in a loop.
+    Note: This function reads binary datas.
+    If you are getting text, use `sizeof(buffer)-1` for buffer_size and add an '\0' at the end of the readed buffer.
 */
 int SA_req_read_output_body(SA_RequestsHandler* handler, char* buffer, int buffer_size)
 {
@@ -546,7 +562,7 @@ int SA_req_read_output_body(SA_RequestsHandler* handler, char* buffer, int buffe
 /*
     Fill the buffer with the http response
     Returns the numbers of bytes readed
-    Use this in a loop
+    Can block if there is no data left.
 */
 static int req_read_output(SA_RequestsHandler* handler, char* buffer, int n)
 {
@@ -610,7 +626,8 @@ static SA_bool send_headers(SA_RequestsHandler* handler, char* headers)
 }
 
 /*
-    Close the connection and free the ssl ctx
+    Close the connection and free the ssl ctx.
+    PPR must be the address of the socket handler.
 */
 void SA_req_close_connection(SA_RequestsHandler** ppr)
 {

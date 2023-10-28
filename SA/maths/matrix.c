@@ -12,6 +12,11 @@ struct _SA_matrix {
 };
 
 
+/*
+Allocate a new matrix of size ROW_SIZE * COL_SIZE.
+All elements of the matrix are set to 0 by default.
+After the use of this matrix, you have to free it with `SA_matrix_free`.
+*/
 SA_Matrix* SA_matrix_create(uint32_t row_size, uint32_t col_size)
 {
     SA_Matrix* mat = (SA_Matrix*) SA_malloc(sizeof(SA_Matrix));
@@ -22,7 +27,7 @@ SA_Matrix* SA_matrix_create(uint32_t row_size, uint32_t col_size)
     mat->row_size = row_size;
     mat->col_size = col_size;
 
-    mat->elements = (SA_mat_float*) SA_malloc(sizeof(SA_mat_float)*row_size*sizeof(SA_mat_float)*col_size);
+    mat->elements = (SA_mat_float*) SA_calloc(sizeof(SA_mat_float)*row_size*sizeof(SA_mat_float)*col_size);
     if(mat == NULL)
     {
         return NULL;
@@ -30,6 +35,10 @@ SA_Matrix* SA_matrix_create(uint32_t row_size, uint32_t col_size)
     return mat;
 }
 
+/*
+Fill the line n°ROW of the matrix MAT with the elements of ARRAY.
+ARRAY must be as long as the number of columns in mat.
+*/
 void SA_matrix_add_line_from_array(SA_Matrix* mat, uint32_t row, SA_mat_float* array)
 {
     SA_mat_float* line = mat->elements + row * mat->col_size;
@@ -39,6 +48,10 @@ void SA_matrix_add_line_from_array(SA_Matrix* mat, uint32_t row, SA_mat_float* a
     }
 }
 
+/*
+Returns a new matrix which is the transposition of the matrix mat.
+This new matrix must be freed by `SA_matrix_free`.
+*/
 SA_Matrix* SA_matrix_transpose(SA_Matrix* mat)
 {
     SA_Matrix* out_mat = SA_matrix_create(mat->col_size, mat->row_size);
@@ -56,6 +69,10 @@ SA_Matrix* SA_matrix_transpose(SA_Matrix* mat)
     return out_mat;
 }
 
+/*
+Create a new matrix which is a copy of the matrix MAT.
+This new matrix must be freed by `SA_matrix_free`.
+*/
 SA_Matrix* SA_Matrix_copy(SA_Matrix* mat)
 {
     SA_Matrix* out_mat = SA_matrix_create(mat->row_size, mat->col_size);
@@ -70,6 +87,10 @@ SA_Matrix* SA_Matrix_copy(SA_Matrix* mat)
     return out_mat;
 }
 
+/*
+Add the content of the matrix MAT_ADD to the content of the matrix MAT_DEST
+It returns SA_FALSE if the operation is not permitted (the matrix must have the same size)
+*/
 SA_bool SA_matrix_add(SA_Matrix* mat_dest, SA_Matrix* mat_add)
 {
     if(mat_add->col_size != mat_dest->col_size || mat_add->row_size != mat_dest->row_size)
@@ -83,6 +104,10 @@ SA_bool SA_matrix_add(SA_Matrix* mat_dest, SA_Matrix* mat_add)
     return SA_TRUE;
 }
 
+/*
+This display the matrix in a readable way.
+Use it in debug purpose.
+*/
 void SA_matrix_print(SA_Matrix* mat)
 {
     printf("┌");
@@ -111,6 +136,9 @@ void SA_matrix_print(SA_Matrix* mat)
     puts(" ┘");
 }
 
+/*
+Free the underlying matrix behind the pointer MAT and set the matrix handler to NULL.
+*/
 void SA_matrix_free(SA_Matrix** mat)
 {
     if(*mat == NULL)

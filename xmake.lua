@@ -37,7 +37,6 @@ target("sa")
     add_options("build_network")
     if has_config("build_network") then
         add_files("SA/network/*.c")
-        add_headerfiles("(SA/**.h)")
         add_packages("openssl")
     else
         add_defines("SA_NETWORK_DISABLED")

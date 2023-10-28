@@ -76,6 +76,19 @@ void SA_print_last_error(void)
         case SA_ERROR_SSL_CREATION_FAILED:
             SA_print_error("SSL_new returns NULL, check the openssl documentation\n");
             break;
+        case SA_ERROR_UNABLE_TO_FIND_ADDRESS:
+            SA_print_error("There is no reachable IP address associated with this domain\n");
+            break;
+        case SA_ERROR_WRONG_PROTOCOL:
+            SA_print_error("Wrong protocol, only http:// and https:// are currently supported\n");
+            break;
+        case SA_ERROR_WRITE_FAILED:
+            SA_print_error("Unable to write to the stream\n");
+            break;
+        case SA_ERROR_UNABLE_TO_PARSE_DATA:
+            SA_print_error("Unable to parse the response\n");
+            break;
+
         default:
             SA_print_error("Unknow error\n");
             break;

@@ -8,7 +8,7 @@
     extern "C"{
     #endif
 
-    SA_HashMap* SA_hashmap_create(SA_bool (*cmp_func)(void* str1, void* str2));
+    SA_HashMap* SA_WARN_UNUSED_RESULT SA_hashmap_create(SA_bool (*cmp_func)(void* key1, void* key2));
     SA_bool SA_hashmap_set_value(SA_HashMap* hashmap, void* key, int key_size, void* value);
     void* SA_hashmap_get_value(SA_HashMap* hashmap, void* key, int key_size);
     void SA_hashmap_free(SA_HashMap** hashmap);

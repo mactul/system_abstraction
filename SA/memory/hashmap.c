@@ -31,7 +31,12 @@ static uint16_t hashmap_calc_hash(void* key, int size)
     return hash;
 }
 
-SA_HashMap* SA_hashmap_create(SA_bool (*cmp_func)(void* str1, void* str2))
+/*
+Create a new hashmap.
+The cmp_func parameter is a pointer to a function that specify how to compare 2 keys.
+The cmp_function must returns SA_TRUE if key1 == key2 else SA_FALSE.
+*/
+SA_HashMap* SA_hashmap_create(SA_bool (*cmp_func)(void* key1, void* key2))
 {
     SA_HashMap* hashmap = SA_calloc(sizeof(SA_HashMap));
     if(hashmap == NULL)
@@ -42,6 +47,11 @@ SA_HashMap* SA_hashmap_create(SA_bool (*cmp_func)(void* str1, void* str2))
     return hashmap;
 }
 
+/*
+Links the pointer VALUE to the key under the pointer KEY in the HASHMAP.
+KEY_SIZE is the size of the key under the pointer KEY, in bytes.
+If the key is an uint64_t for example, KEY_SIZE should be 8.
+*/
 SA_bool SA_hashmap_set_value(SA_HashMap* hashmap, void* key, int key_size, void* value)
 {
     uint16_t hash = hashmap_calc_hash(key, key_size);
@@ -79,6 +89,13 @@ SA_bool SA_hashmap_set_value(SA_HashMap* hashmap, void* key, int key_size, void*
     return SA_TRUE;
 }
 
+/*
+Returns the pointer VALUE associated with the key under KEY.
+KEY_SIZE is the size of the key under the pointer KEY, in bytes.
+If the key is an uint64_t for example, KEY_SIZE should be 8.
+
+If the key isn't registered in the hashmap, then it returns NULL.
+*/
 void* SA_hashmap_get_value(SA_HashMap* hashmap, void* key, int key_size)
 {
     uint16_t hash = hashmap_calc_hash(key, key_size);
@@ -104,6 +121,9 @@ static void _free_list(HashmapNode* node)
     SA_free(&node);
 }
 
+/*
+Free the underlying hashmap behind the pointer HASHMAP and set the hashmap handler to NULL.
+*/
 void SA_hashmap_free(SA_HashMap** hashmap)
 {
     if(*hashmap == NULL)
