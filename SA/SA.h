@@ -13,3 +13,4 @@ This header include everything in the SA lib.
 #include "SA/path/path.h"
 #include "SA/maths/maths.h"
 #include "SA/maths/matrix.h"
+#include "SA/memory/hashmap.h"

@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <assert.h>
 #include "SA/SA.h"
+#include "SA/memory/hashmap.h"
+
+SA_bool cmp_int(void* int1, void* int2)
+{
+    return *((int*)int1) == *((int*)int2);
+}
 
 int main()
 {
@@ -165,6 +171,21 @@ int main()
 
     SA_matrix_free(&mat1);
     SA_matrix_free(&mat2);
+
+
+    SA_HashMap* hashmap = SA_hashmap_create(cmp_int);
+    int k1 = 56;
+    int k2 = 56 << 16;
+    int v1 = 578;
+    int v2 = 23460;
+
+    SA_hashmap_set_value(hashmap, &k1, sizeof(int), &v1);
+    SA_hashmap_set_value(hashmap, &k2, sizeof(int), &v2);
+
+    assert(SA_hashmap_get_value(hashmap, &k1, sizeof(int)) == &v1);
+    assert(SA_hashmap_get_value(hashmap, &k2, sizeof(int)) == &v2);
+
+    SA_hashmap_free(&hashmap);
 
 
     /*
