@@ -1,12 +1,25 @@
 <- [NETWORK](./README.md)
 
+- [Easy\_TCP\_TLS](#easy_tcp_tls)
+  - [__Functions__](#functions)
+    - [SA\_socket\_client\_init](#sa_socket_client_init)
+    - [SA\_socket\_ssl\_client\_init](#sa_socket_ssl_client_init)
+    - [SA\_socket\_server\_init](#sa_socket_server_init)
+    - [SA\_socket\_ssl\_server\_init](#sa_socket_ssl_server_init)
+    - [SA\_socket\_accept](#sa_socket_accept)
+    - [SA\_socket\_send](#sa_socket_send)
+    - [SA\_socket\_recv](#sa_socket_recv)
+    - [SA\_socket\_close](#sa_socket_close)
+  - [__Examples__](#examples)
+
+
 # Easy_TCP_TLS
 
 This library allows you to cypher all your code with ssl by only updating one line in your code.
 For client applications, you just have to rename [SA_socket_client_init](#sa_socket_client_init) into [SA_socket_ssl_client_init](#sa_socket_ssl_client_init).
 And for server applications, you have to rename [SA_socket_server_init](#sa_socket_server_init) into [SA_socket_ssl_server_init](#sa_socket_ssl_server_init) and add the `cert.pem` and `key.pem` arguments.
 
-## Functions
+## __Functions__
 
 ### SA_socket_client_init
 ```c
@@ -120,7 +133,7 @@ void SA_socket_close(SA_SocketHandler** pps)
     - In theorie, if the pointer pps passed is coherent, this function can't fail.
     - If it creates a runtime error, maybe the memory behind the pointer is not allocated properly.
 
-### __Examples__
+## __Examples__
 
 Here is a basic client example
 
