@@ -9,7 +9,9 @@ And for server applications, you have to rename [SA_socket_server_init](#sa_sock
 ## Functions
 
 ### SA_socket_client_init
-`SA_SocketHandler* SA_socket_client_init(const char* server_hostname, uint16_t server_port)`
+```c
+SA_SocketHandler* SA_socket_client_init(const char* server_hostname, uint16_t server_port)
+```
 - This function will create the socket and returns a socket handler.
 - **parameters:**
     - `server_hostname`: the targeted server host name, formated like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
@@ -19,7 +21,9 @@ And for server applications, you have to rename [SA_socket_server_init](#sa_sock
     - when it fails, it returns `NULL` and `SA_print_last_error()` can tell what happened
 
 ### SA_socket_ssl_client_init
-`SA_SocketHandler* SA_socket_ssl_client_init(const char* server_hostname, uint16_t server_port)`
+```c
+SA_SocketHandler* SA_socket_ssl_client_init(const char* server_hostname, uint16_t server_port)
+```
 - This function works like socket_client_init, but it will create an ssl secured socket connexion.
 - **parameters:**
     - `server_hostname`: the targeted server ip, formated like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
@@ -29,7 +33,9 @@ And for server applications, you have to rename [SA_socket_server_init](#sa_sock
     - when it fails, it returns `NULL` and `SA_print_last_error()` can tell what happened
 
 ### SA_socket_server_init
-`SA_SocketHandler* SA_socket_server_init(const char* server_hostname, uint16_t server_port, int backlog)`
+```c
+SA_SocketHandler* SA_socket_server_init(const char* server_hostname, uint16_t server_port, int backlog)
+```
 - This function will create a server instance
 - **parameters:**
     - `server_hostname`: this is always the hostname of your machine. For local applications it can be "127.0.0.1" or "localhost", in this case, the server will never listen to the outside world.
@@ -40,7 +46,9 @@ And for server applications, you have to rename [SA_socket_server_init](#sa_sock
     - when it fails, it returns `NULL` and `SA_print_last_error()` can tell what happened
 
 ### SA_socket_ssl_server_init
-`SA_SocketHandler* SA_socket_ssl_server_init(const char* server_hostname, uint16_t server_port, int backlog, const char* public_key_fp, const char* private_key_fp)`
+```c
+SA_SocketHandler* SA_socket_ssl_server_init(const char* server_hostname, uint16_t server_port, int backlog, const char* public_key_fp, const char* private_key_fp)
+```
 - This function will create an ssl secured server instance
 - You must generate a public and a private key with this command
     - `openssl req -x509 -newkey rsa:4096 -nodes -out ./cert.pem -keyout ./key.pem -days 365`
@@ -55,7 +63,9 @@ And for server applications, you have to rename [SA_socket_server_init](#sa_sock
     - when it fails, it returns `NULL` and `SA_print_last_error()` can tell what happened
 
 ### SA_socket_accept
-`SA_SocketHandler* SA_socket_accept(SA_SocketHandler* server, SA_ClientData* pclient_data)`
+```c
+SA_SocketHandler* SA_socket_accept(SA_SocketHandler* server, SA_ClientData* pclient_data)
+```
 - This function is used in a server application to wait and accept client connections.
 - **parameters:**
     - `server`: a pointer to a SA_SocketHandler, returned by - `SA_socket_server_init` or `SA_socket_ssl_server_init`
@@ -73,7 +83,9 @@ And for server applications, you have to rename [SA_socket_server_init](#sa_sock
     - when it fails, it returns `NULL` and `SA_socket_print_last_error()` can tell what happened
 
 ### SA_socket_send
-`int SA_socket_send(SA_SocketHandler* s, const char* buffer, int n)`
+```c
+int SA_socket_send(SA_SocketHandler* s, const char* buffer, int n)
+```
 - This function will send the datas contained in the buffer array through the socket
 - **parameters:**
     - `s`: a pointer to a SocketHandler. If you are in a client application, it's the handler returned by `SA_socket_client_init` or `SA_socket_ssl_client_init`. If you are in a server application, it's the handler returned by `SA_socket_accept`
@@ -84,7 +96,9 @@ And for server applications, you have to rename [SA_socket_server_init](#sa_sock
     - when it fails, it returns -1 and errno contains more information.
 
 ### SA_socket_recv
-`int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n)`
+```c
+int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n)
+```
 - This function will wait for data to arrive in the socket and fill a buffer with them.
 - **parameters:**
     - `s`: a pointer to a SocketHandler. If you are in a client application, it's the handler returned by `SA_socket_client_init` or `SA_socket_ssl_client_init`. If you are in a server application, it's the handler returned by `SA_socket_accept`.
@@ -95,7 +109,9 @@ And for server applications, you have to rename [SA_socket_server_init](#sa_sock
     - when it fails, it returns -1 and errno contains more information.
 
 ### SA_socket_close
-`void SA_socket_close(SA_SocketHandler** pps)`
+```c
+void SA_socket_close(SA_SocketHandler** pps)
+```
 - This function take the address of the pointer on the handler to release all the stuff and put the SA_Sockethandler pointer to NULL.
 - **parameters:**
     - `pps`: the address of the pointer on the socket

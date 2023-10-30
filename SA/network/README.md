@@ -4,8 +4,8 @@
 
 This section contains all functions related to network interactions.
 
-[easy_tcp_tls.h](./easy_tcp_tls.md) provides some functions to easily make TCP socket; on top of an SSL layer or not.  
-`requests.h` provides methods to make client HTTP(S) requests in a much easier way than libcurl.
+[easy_tcp_tls](./easy_tcp_tls.md) provides some functions to easily make TCP socket; on top of an SSL layer or not.  
+`requests` provides methods to make client HTTP(S) requests in a much easier way than libcurl.
 
 ## Compilation
 
