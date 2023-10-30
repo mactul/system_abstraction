@@ -357,14 +357,14 @@ PRIVATE_KEY_FP: the path for your key.pem file
 - when it succeeds, it returns a pointer to a structure handler.
 - when it fails, it returns NULL and SA_print_last_error() can tell what happened
 */
-SA_SocketHandler* SA_socket_ssl_server_init(const char* server_hostname, uint16_t server_port, int max_connections, const char* public_key_fp, const char* private_key_fp)
+SA_SocketHandler* SA_socket_ssl_server_init(const char* server_hostname, uint16_t server_port, int backlog, const char* public_key_fp, const char* private_key_fp)
 {
     SA_SocketHandler* server;
     SSL_library_init();
     OpenSSL_add_all_algorithms();  /* Load cryptos, et.al. */
     SSL_load_error_strings();   /* Bring in and register error messages */
 
-    server = SA_socket_server_init(server_hostname, server_port, max_connections);
+    server = SA_socket_server_init(server_hostname, server_port, backlog);
     if(server == NULL)
         return NULL;
 

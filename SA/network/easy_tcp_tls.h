@@ -17,10 +17,10 @@
 
     void _SA_socket_start(void);
     void _SA_socket_cleanup(void);
-    SA_SocketHandler* SA_WARN_UNUSED_RESULT SA_socket_ssl_server_init(const char* server_hostname, uint16_t server_port, int max_connections, const char* public_key_fp, const char* private_key_fp);
+    SA_SocketHandler* SA_WARN_UNUSED_RESULT SA_socket_ssl_server_init(const char* server_hostname, uint16_t server_port, int backlog, const char* public_key_fp, const char* private_key_fp);
     SA_SocketHandler* SA_WARN_UNUSED_RESULT SA_socket_ssl_client_init(const char* server_hostname, uint16_t server_port);
     SA_SocketHandler* SA_WARN_UNUSED_RESULT SA_socket_client_init(const char* server_hostname, uint16_t server_port);
-    SA_SocketHandler* SA_WARN_UNUSED_RESULT SA_socket_server_init(const char* server_hostname, uint16_t server_port, int max_connections);
+    SA_SocketHandler* SA_WARN_UNUSED_RESULT SA_socket_server_init(const char* server_hostname, uint16_t server_port, int backlog);
     SA_SocketHandler* SA_WARN_UNUSED_RESULT SA_socket_accept(SA_SocketHandler* server, SA_ClientData* pclient_data);
     int SA_socket_send(SA_SocketHandler* s, const char* buffer, int n);
     int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n);
