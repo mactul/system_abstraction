@@ -242,7 +242,7 @@ SNI_HOSTNAME: this is especially for web applications, when a single ip adress c
 - when it succeeds, it returns a pointer to a structure handler.
 - when it fails, it returns NULL and SA_print_last_error() can tell what happened
 */
-SA_SocketHandler* SA_socket_ssl_client_init(const char* server_hostname, uint16_t server_port, const char* sni_hostname)
+SA_SocketHandler* SA_socket_ssl_client_init(const char* server_hostname, uint16_t server_port)
 {
     SA_SocketHandler* client;
     SSL_library_init();
@@ -268,14 +268,7 @@ SA_SocketHandler* SA_socket_ssl_client_init(const char* server_hostname, uint16_
         return NULL;
     }
 
-    if(sni_hostname == NULL)
-    {
-        SSL_set_tlsext_host_name(client->ssl, server_hostname);
-    }
-    else
-    {
-        SSL_set_tlsext_host_name(client->ssl, sni_hostname);
-    }
+    SSL_set_tlsext_host_name(client->ssl, server_hostname);
     SSL_set_fd(client->ssl, client->fd);
 
     if (SSL_connect(client->ssl) == -1)
@@ -486,11 +479,11 @@ FLAGS: I recommand you to let this parameter to 0, but you can see the man page 
 - when it fails, it returns -1 and errno contains more information.
 
 */
-int SA_socket_send(SA_SocketHandler* s, const char* buffer, int n, int flags)
+int SA_socket_send(SA_SocketHandler* s, const char* buffer, int n)
 {
     if(s->ssl == NULL)
     {
-        return send(s->fd, buffer, n, flags);
+        return send(s->fd, buffer, n, 0);
     }
     else
     {
@@ -510,11 +503,11 @@ FLAGS: I recommand you to let this parameter to 0, but you can see the man page 
 - when it succeeds, it returns the number of bytes readed
 - when it fails, it returns -1 and errno contains more information.
 */
-int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n, int flags)
+int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n)
 {
     if(s->ssl == NULL)
     {
-        return recv(s->fd, buffer, n, flags);
+        return recv(s->fd, buffer, n, 0);
     }
     else
     {

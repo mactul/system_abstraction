@@ -39,7 +39,7 @@ void* SA_calloc(uint64_t size)
 /*
 Add SIZE bytes of memory in the previously allocated ptr block
 */
-void* SA_realloc (void* ptr, uint64_t size)
+void* SA_realloc(void* ptr, uint64_t size)
 {
     return realloc(ptr, size);
 }

@@ -7,7 +7,7 @@ if is_plat("windows", "mingw") then
     if has_config("build_network") then
         add_requires("openssl")
     end
-else 
+else
     if has_config("build_network") then
         add_requires("openssl3", { alias = "openssl" })
     end

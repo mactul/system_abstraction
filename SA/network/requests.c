@@ -2,14 +2,6 @@
 #include <stdio.h>
 #include "SA/SA.h"
 
-#if defined(_WIN32) || defined(WIN32)
-    #include <winsock2.h>  // for MSG_PEEK
-
-#else // Linux / MacOS
-    #include <sys/socket.h>  // for MSG_PEEK
-
-#endif
-
 #define MAX_CHAR_ON_HOST 253  /* this is exact, don't change */
 #define HEADERS_LENGTH   300  /* this is exact, don't change */
 
@@ -178,7 +170,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
         SA_ptree_free(&(handler->headers_tree));
         SA_free(&(handler->reading_residue));
 
-        if(!send_headers(handler, headers) || SA_socket_recv(handler->handler, &c, 1, MSG_PEEK) <= 0)
+        if(!send_headers(handler, headers) || SA_socket_recv(handler->handler, &c, 1) <= 0)
         {
             SA_req_close_connection(&handler);  // connexion expired
         }
@@ -580,7 +572,7 @@ static int req_read_output(SA_RequestsHandler* handler, char* buffer, int n)
     }
     else
     {
-        readed = SA_socket_recv(handler->handler, buffer, n, 0);
+        readed = SA_socket_recv(handler->handler, buffer, n);
     }
 
     return readed;
@@ -598,7 +590,7 @@ static SA_bool connect_socket(SA_RequestsHandler* handler)
     }
     else // Only 2 protocols are supported
     {
-        handler->handler = SA_socket_ssl_client_init(handler->host, 443, NULL);
+        handler->handler = SA_socket_ssl_client_init(handler->host, 443);
         if(handler->handler == NULL)
         {
             return SA_FALSE;
@@ -612,7 +604,7 @@ static SA_bool send_headers(SA_RequestsHandler* handler, char* headers)
     int total = SA_strlen(headers);
     int sent = 0;
     do {
-        int bytes = SA_socket_send(handler->handler, headers+sent, total-sent, 0);
+        int bytes = SA_socket_send(handler->handler, headers+sent, total-sent);
         if (bytes < 0)
         {
             return SA_FALSE;
