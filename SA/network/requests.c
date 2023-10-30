@@ -20,6 +20,7 @@ struct _SA_requests_handler {
     unsigned short int status_code;
     SA_bool read_finished;
     SA_bool chunked;
+    char keep_alive_readed;
 };
 
 static int64_t min64(int64_t a, int64_t b)
@@ -161,7 +162,6 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
     if(handler != NULL && SA_strcasecmp(handler->host, host) == 0 && handler->port == port)
     {
         char trash_buffer[2048];
-        char c;
         //clean the socket
         while(SA_req_read_output_body(handler, trash_buffer, 2048) > 0)
         {
@@ -170,7 +170,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
         SA_ptree_free(&(handler->headers_tree));
         SA_free(&(handler->reading_residue));
 
-        if(!send_headers(handler, headers) || SA_socket_recv(handler->handler, &c, 1) <= 0)
+        if(!send_headers(handler, headers) || SA_socket_recv(handler->handler, &(handler->keep_alive_readed), 1) <= 0)
         {
             SA_req_close_connection(&handler);  // connexion expired
         }
@@ -190,6 +190,8 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
             _SA_set_error(SA_ERROR_MALLOC);
             return NULL;
         }
+
+        handler->keep_alive_readed = '\0';
 
         SA_strncpy(handler->host, host, MAX_CHAR_ON_HOST);
         handler->port = port;
@@ -270,13 +272,13 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
     return handler;
 }
 
-static unsigned short parse_status(char* key_value)
+static unsigned short parse_status(char* key_value, char keep_alive_readed)
 {   
     int k = 0;
     char status_code[4];
     int l = 0;
 
-    if(!SA_startswith(key_value, "HTTP/"))
+    if(!SA_startswith(key_value, "HTTP/") && (keep_alive_readed != 'H' || !SA_startswith(key_value, "TTP/")))
     {
         return 0;
     }
@@ -359,7 +361,7 @@ static SA_bool req_parse_headers(SA_RequestsHandler* handler)
                 }
                 else
                 {
-                    unsigned short status_code = parse_status(key_value);
+                    unsigned short status_code = parse_status(key_value, handler->keep_alive_readed);
                     if(status_code != 0)
                     {
                         handler->status_code = status_code;
