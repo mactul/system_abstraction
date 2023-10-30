@@ -11,6 +11,13 @@ Allocate SIZE bytes of memory
 void* SA_malloc(uint64_t size)
 {
     void* ptr = malloc(size);
+    #ifdef DEBUG
+        if(!_SA_is_init)
+        {
+            SA_print_error("DebugWarning: SA was never initialized\n");
+            _SA_is_init = SA_TRUE;
+        }
+    #endif
     #ifdef SA_MEMORY_DEBUG
         if(ptr != NULL)
         {

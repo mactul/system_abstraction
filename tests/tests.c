@@ -213,7 +213,7 @@ int main()
             SA_print_last_error();
             continue;
         }
-        
+
         SA_req_display_headers(handler);
 
         while((n = SA_req_read_output_body(handler, buffer, 1023)))

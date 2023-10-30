@@ -5,10 +5,16 @@
     #include <stddef.h>
     #include "SA/global/errors.h"
 
+    #define SA_TRUE 1
+    #define SA_FALSE 0
+
+    typedef char SA_bool;
+
     /*
     Set here the flags you want to use in debug mode
     */
     #ifdef DEBUG
+        extern SA_bool _SA_is_init;
         #define SA_MEMORY_DEBUG
     #endif
 
@@ -23,11 +29,6 @@
     #else
         #define SA_WARN_UNUSED_RESULT
     #endif
-
-    #define SA_TRUE 1
-    #define SA_FALSE 0
-
-    typedef char SA_bool;
 
     #ifdef __cplusplus
     extern "C"{
