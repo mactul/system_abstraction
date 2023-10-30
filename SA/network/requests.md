@@ -89,7 +89,7 @@ SA_RequestsHandler* SA_req_head(SA_RequestsHandler* handler, const char* url, co
 
 ### SA_req_request
 ```c
-SA_RequestsHandler* req_request(RequestsHandler* handler, const char* method, const char* url, const char* data, const char* additional_headers);
+SA_RequestsHandler* SA_req_request(RequestsHandler* handler, const char* method, const char* url, const char* data, const char* additional_headers);
 ```
 - **This is not meant to be used directly**, unless you have exotic HTTP methods.  
 It's the generic method for all other HTTP methods.
