@@ -11,6 +11,8 @@
     - [SA\_socket\_recv](#sa_socket_recv)
     - [SA\_socket\_close](#sa_socket_close)
   - [__Examples__](#examples)
+    - [Basic client](#basic-client)
+    - [Basic server](#basic-server)
 
 
 # Easy_TCP_TLS
@@ -135,7 +137,7 @@ void SA_socket_close(SA_SocketHandler** pps)
 
 ## __Examples__
 
-Here is a basic client example
+### Basic client
 
 ```c
 #include "SA/SA.h"  // this will include everything from SA, but the only headers files you need are "SA/network/easy_tcp_tls.h" and "SA/strings/strings.h"
@@ -164,7 +166,8 @@ int main()
 }
 ```
 
-And is basic server correspondant.
+### Basic server
+(It's the server corresponding with the client below).
 
 ```c
 #include "SA/SA.h"  // this will include everything from SA, but the only headers files you need are "SA/network/easy_tcp_tls.h" and "SA/strings/strings.h"
