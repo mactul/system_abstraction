@@ -88,7 +88,15 @@ void SA_print_last_error(void)
         case SA_ERROR_UNABLE_TO_PARSE_DATA:
             SA_print_error("Unable to parse the response\n");
             break;
-
+        case SA_ERROR_PORT_NUMBER_TO_BIG:
+            SA_print_error("The port number specified is to big to fit in an uint16_t\n");
+            break;
+        case SA_ERROR_URL_SYNTAX:
+            SA_print_error("The syntax of the url specified is wrong\n");
+            break;
+        case SA_ERROR_URL_TOO_LONG:
+            SA_print_error("The url provided is too long, please update the #define SA_MAX_URI_LENGTH in SA/parsing/parsing.h\n");
+            break;
         default:
             SA_print_error("Unknow error\n");
             break;

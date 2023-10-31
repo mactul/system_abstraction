@@ -38,7 +38,7 @@ SA_RequestsHandler* SA_req_get(SA_RequestsHandler* handler, const char* url, con
 - send a GET request.
 - **parameters**
     - `handler`: must be NULL if it's the first connection, otherwise, it should be an old handler (see [keep-alive](#keep-alive) for more information).
-    - `url`: It's the url you want to request, it should start with `http://` or `https://`. Currently, port number in the url isn't supported.
+    - `url`: It's the url you want to request, it should start with `http://` or `https://`.
     - `additional_headers`: the headers you want to specify, they are separeted by `\r\n` and __they needs__ to finish by `\r\n`.
 - **returns**
     - When it succededs, it returns a pointer to a structure handler.
@@ -51,7 +51,7 @@ SA_RequestsHandler* SA_req_post(SA_RequestsHandler* handler, const char* url, co
 - send a POST request.
 - **parameters**
     - `handler`: must be NULL if it's the first connection, otherwise, it should be an old handler (see [keep-alive](#keep-alive) for more information).
-    - `url`: It's the url you want to request, it should start with `http://` or `https://`. Currently, port number in the url isn't supported.
+    - `url`: It's the url you want to request, it should start with `http://` or `https://`.
     - `data`: it's the body of the request.
     - `additional_headers`: the headers you want to specify, they are separeted by `\r\n` and __they needs__ to finish by `\r\n`.
 - **returns**
@@ -96,7 +96,7 @@ It's the generic method for all other HTTP methods.
 - **parameters**
     - `handler`: must be NULL if it's the first connection, otherwise, it should be an old handler (see [keep-alive](#keep-alive) for more information).
     - `method`: This parameter must be in CAPS LOCK, followed by a space, like `"GET "`, `"POST "`, etc...
-    - `url`: It's the url you want to request, it should start with `http://` or `https://`. Currently, port number in the url isn't supported.
+    - `url`: It's the url you want to request, it should start with `http://` or `https://`.
     - `data`: it's the body of the request.
     - `additional_headers`: the headers you want to specify, they are separeted by `\r\n` and __they needs__ to finish by `\r\n`.
 - **returns**
@@ -173,9 +173,12 @@ unsigned short int SA_req_get_status_code(SA_RequestsHandler* handler);
 
 ### Url formating
 
-Requests is able to automatically parse urls, extract the domain and the relative uri.  
+Requests is able to automatically parse urls, extract the domain the port, and the relative uri.  
 However, to work, url needs to start with `http://` or `https://`.  
-Actually, you cannot set the port in the url (This will probably be the futur update).
+Url starting with https:// use a layer of SSL cyphering.
+You can change the default port of the url (which is 80 for http and 443 for https)
+`https://example.com:7890/test` will use the port 7890 and will be secured over SSL.
+`http://example.com:4706/test` will use the port 4706 and will **not** be secured over SSL.
 
 ### Data formating
 

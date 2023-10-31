@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "SA/SA.h"
 
-#define MAX_CHAR_ON_HOST 253  /* this is exact, don't change */
 #define HEADERS_LENGTH   300  /* this is exact, don't change */
 
 #define PARSER_BUFFER_SIZE 1024
@@ -12,7 +11,7 @@ struct _SA_requests_handler {
     SA_ParserTree* headers_tree;
     int64_t total_bytes;
     uint64_t bytes_readed;
-    char host[MAX_CHAR_ON_HOST + 1];
+    char host[SA_MAX_CHAR_ON_HOST + 1];
     uint16_t port;
     char* reading_residue;
     int residue_size;
@@ -20,6 +19,7 @@ struct _SA_requests_handler {
     unsigned short int status_code;
     SA_bool read_finished;
     SA_bool chunked;
+    SA_bool secured;
     char keep_alive_readed;
 };
 
@@ -44,13 +44,8 @@ This is not meant to be used directly, unless you have exotic HTTP methods.
 */
 SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* method, const char* url, const char* data, const char* additional_headers)
 {
-    int i;
-
-    uint16_t port;
-    char host[MAX_CHAR_ON_HOST + 1];
-    char uri[MAX_URI_LENGTH];
+    SA_UrlSplitted url_splitted;
     char content_length[30];
-    const char* reference_url = url;
     char* headers = NULL;
 
     #ifdef DEBUG
@@ -67,57 +62,16 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
     }
     #endif
 
-    _SA_set_error(SA_NOERROR);
-
-    if(SA_startswith(url, "https:"))
+    if(!SA_parse_url(url, &url_splitted))
     {
-        port = 443;
-        url += 8;
-    }
-    else if(SA_startswith(url, "http:"))
-    {
-        port = 80;
-        url += 7;
-    }
-    else
-    {
-        _SA_set_error(SA_ERROR_WRONG_PROTOCOL);
         return NULL;
     }
-
-
-    // get the host from url
-    i = 0;
-    while(*url != '\0' && *url != '/' && *url != '?' && *url != '#')
-    {
-        host[i] = *url;
-        i++;
-        url++;
-    }
-    host[i] = '\0';
-
-
-    // get the relative url from url
-    i = 0;
-    while(*url != '\0' && *url != '#')
-    {
-        uri[i] = *url;
-        i++;
-        url++;
-    }
-    if(i == 0)
-    {
-        // There is no relative url
-        uri[i] = '/';
-        i++;
-    }
-    uri[i] = '\0';
 
     SA_uint64_to_str(content_length, SA_strlen(data));
     
 
     // reserves the exact memory space for the request
-    headers = (char*) SA_malloc((HEADERS_LENGTH + SA_strlen(method) + SA_strlen(uri) + SA_strlen(host) + SA_strlen(content_length) + SA_strlen(data) + SA_strlen(additional_headers))*sizeof(char));
+    headers = (char*) SA_malloc((HEADERS_LENGTH + SA_strlen(method) + SA_strlen(url_splitted.uri) + SA_strlen(url_splitted.host) + SA_strlen(content_length) + SA_strlen(data) + SA_strlen(additional_headers))*sizeof(char));
     if(headers == NULL)
     {
         _SA_set_error(SA_ERROR_MALLOC);
@@ -127,9 +81,9 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
 
     // build the request with all the datas
     SA_strcpy(headers, method);
-    SA_strcat(headers, uri);
+    SA_strcat(headers, url_splitted.uri);
     SA_strcat(headers, " HTTP/1.1\r\nHost: ");
-    SA_strcat(headers, host);
+    SA_strcat(headers, url_splitted.host);
     SA_strcat(headers, "\r\nContent-Length: ");
     SA_strcat(headers, content_length);
     SA_strcat(headers, "\r\n");
@@ -159,7 +113,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
     SA_strcat(headers, "\r\n");
     SA_strcat(headers, data);
 
-    if(handler != NULL && SA_strcasecmp(handler->host, host) == 0 && handler->port == port)
+    if(handler != NULL && SA_strcasecmp(handler->host, url_splitted.host) == 0 && handler->port == url_splitted.port && handler->secured == url_splitted.secured)
     {
         char trash_buffer[2048];
         //clean the socket
@@ -193,8 +147,9 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
 
         handler->keep_alive_readed = '\0';
 
-        SA_strncpy(handler->host, host, MAX_CHAR_ON_HOST);
-        handler->port = port;
+        SA_strncpy(handler->host, url_splitted.host, SA_MAX_CHAR_ON_HOST+1);
+        handler->port = url_splitted.port;
+        handler->secured = url_splitted.secured;
 
         if(connect_socket(handler) == 0)
         {
@@ -258,13 +213,36 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
     const char* location = SA_ptree_get_value(handler->headers_tree, "location");
     if(location != NULL)
     {
-        char temp_url[2*MAX_URI_LENGTH];
-        char location_url[2*MAX_URI_LENGTH];
+        char temp_url[2*SA_MAX_URI_LENGTH];
+        char location_url[2*SA_MAX_URI_LENGTH];
+        char port_str[8] = "";
+        char protocol[] = "https://";
+        int n;
         if(SA_startswith(location, "http://") || SA_startswith(location, "https://"))
         {
             return SA_req_request(handler, method, location, data, additional_headers);
         }
-        SA_path_join(temp_url, 2*MAX_URI_LENGTH, 2, reference_url, location_url);
+
+        n = SA_strlen(url_splitted.uri);
+        while(n > 0 && url_splitted.uri[n] != '/')
+        {
+            n--;
+        }
+        url_splitted.uri[n] = '\0';
+
+        if((url_splitted.secured && url_splitted.port != 443) || (!url_splitted.secured && url_splitted.port != 80))
+        {
+            port_str[0] = ':';
+            SA_uint64_to_str(port_str+1, url_splitted.port);
+        }
+        if(!url_splitted.secured)
+        {
+            SA_strcpy(protocol, "http://");
+        }
+
+        SA_strcpy(SA_strcpy(SA_strcpy(location_url, protocol), url_splitted.host), port_str);
+
+        SA_path_join(temp_url, 2*SA_MAX_URI_LENGTH, 3, location_url, url_splitted.uri, location);
         SA_simplify_path(location_url, temp_url);
         return SA_req_request(handler, method, location_url, data, additional_headers);
     }
@@ -582,17 +560,17 @@ static int req_read_output(SA_RequestsHandler* handler, char* buffer, int n)
 
 static SA_bool connect_socket(SA_RequestsHandler* handler)
 {
-    if(handler->port == 80)
+    if(!handler->secured)
     {
-        handler->handler = SA_socket_client_init(handler->host, 80);
+        handler->handler = SA_socket_client_init(handler->host, handler->port);
         if(handler->handler == NULL)
         {
             return SA_FALSE;
         }
     }
-    else // Only 2 protocols are supported
+    else
     {
-        handler->handler = SA_socket_ssl_client_init(handler->host, 443);
+        handler->handler = SA_socket_ssl_client_init(handler->host, handler->port);
         if(handler->handler == NULL)
         {
             return SA_FALSE;

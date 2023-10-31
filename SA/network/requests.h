@@ -2,8 +2,6 @@
     #define SA_REQUESTS
     #include "SA/global/global.h"
 
-    #define MAX_URI_LENGTH  1024 /* this can be changed, it's the maximum length a url can have */
-
     typedef struct _SA_requests_handler SA_RequestsHandler;
 
     #ifdef __cplusplus

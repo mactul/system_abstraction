@@ -206,7 +206,7 @@ int main()
 
     for(int i =0; i < 3; i++)
     {
-        handler = SA_req_get(handler, "https://api.coindesdevs.fr/get-exercice?difficulty=2&liked=0&disliked=45&beginners=0&topics_left=0", "");
+        handler = SA_req_get(handler, "http://coindesdevs.fr/test.bidule/test.php", "");
 
         if(handler == NULL)
         {
