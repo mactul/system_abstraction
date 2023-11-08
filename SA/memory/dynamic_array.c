@@ -5,7 +5,7 @@
 #define DEFAULT_SIZE 256
 
 struct _SA_dynamic_array {
-    byte* elements;
+    SA_byte* elements;
     uint32_t element_size;
     uint64_t nb_elements;
     uint64_t nb_slots;
@@ -15,7 +15,7 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray* dyn_array, uint64_t 
 {
     if(nb_slots > dyn_array->nb_slots)
     {
-        byte* temp_elements;
+        SA_byte* temp_elements;
         while(nb_slots > dyn_array->nb_slots)  // This loop will probably only be executed once.
         {
             if(dyn_array->nb_slots >= (1ULL << (8*sizeof(dyn_array->nb_slots)-1)))
@@ -63,7 +63,7 @@ SA_DynamicArray* _SA_dynarray_create(uint32_t element_size)
     {
         return NULL;
     }
-    dyn_array->elements = (byte*) SA_malloc(element_size*DEFAULT_SIZE);
+    dyn_array->elements = (SA_byte*) SA_malloc(element_size*DEFAULT_SIZE);
     if(dyn_array->elements == NULL)
     {
         SA_free(&dyn_array);
@@ -84,7 +84,7 @@ uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array)
 void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr)
 {
     SA_dynarray_ensure_nb_slots(dyn_array, index+1);
-    SA_memcpy(dyn_array->elements + index * dyn_array->element_size, value_ptr, sizeof(byte) * dyn_array->element_size);
+    SA_memcpy(dyn_array->elements + index * dyn_array->element_size, value_ptr, sizeof(SA_byte) * dyn_array->element_size);
 }
 
 void* _SA_dynarray_get_element_ptr(SA_DynamicArray* dyn_array, uint64_t index)

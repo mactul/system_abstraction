@@ -209,9 +209,9 @@ void SA_reverse_string(char* str, int len_str)
 Set the COUNT first bytes under PTR with VALUE
 Returns the pointer PTR.
 */
-void* SA_memset(void* ptr, byte value, uint64_t count)
+void* SA_memset(void* ptr, SA_byte value, uint64_t count)
 {
-    byte* p = (byte*) ptr;
+    SA_byte* p = (SA_byte*) ptr;
     for(uint64_t i = 0; i < count; i++)
     {
         p[i] = value;
@@ -225,8 +225,8 @@ Returns the pointer DEST.
 */
 void* SA_memcpy(void* dest, void* source, uint64_t size)
 {
-    byte* d = (byte*) dest;
-    byte* s = (byte*) source;
+    SA_byte* d = (SA_byte*) dest;
+    SA_byte* s = (SA_byte*) source;
     for(uint64_t i = 0; i < size; i++)
     {
         d[i] = s[i];
