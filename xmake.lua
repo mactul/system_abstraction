@@ -3,12 +3,10 @@ add_rules("mode.debug", "mode.release")
 set_policy("build.warning", true)
 set_warnings("all", "extra")
 
-if is_plat("windows", "mingw") then 
-    if has_config("build_network") then
+if has_config("build_network") then
+    if is_plat("windows", "mingw") then
         add_requires("openssl")
-    end
-else
-    if has_config("build_network") then
+    else
         add_requires("openssl3", { alias = "openssl" })
     end
 end 
@@ -45,8 +43,7 @@ target("sa")
 
 if has_config("build_tests") then
     target("tests")
-        add_files("tests/tests.c")
+        add_files("tests/*.c")
         add_rules("flags_extras")
-        add_cxflags("-O3", "-pedantic")
         add_deps("sa")
 end

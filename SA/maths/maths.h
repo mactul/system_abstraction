@@ -26,6 +26,8 @@
     uint64_t SA_int_pow(uint32_t base, unsigned char e);
     double SA_logistic(double x);
 
+    SA_bool SA_float_equals(double a, double b);
+
     #ifdef __cplusplus
     }
     #endif

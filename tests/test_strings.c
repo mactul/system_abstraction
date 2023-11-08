@@ -1,19 +1,9 @@
-#include <stdio.h>
-#include <assert.h>
-#include "SA/SA.h"
+#include "test.h"
 
-SA_bool cmp_int(void* int1, void* int2)
-{
-    return *((int*)int1) == *((int*)int2);
-}
-
-int main()
+void test_strings(void)
 {
     char str1[] = "bonjour";
     char str2[256];
-    int i;
-
-    SA_init();
 
     assert(SA_CHAR_IS_LOWERCASE('c') == SA_TRUE);
     assert(SA_CHAR_IS_LOWERCASE('H') == SA_FALSE);
@@ -97,15 +87,6 @@ int main()
     SA_strncpy(str2, "trucs", 4);
     assert(SA_strcmp(str2, "tru") == 0);
 
-    SA_path_join(str2, 256, 3, "machin", "chose", "bidule");
-    assert(SA_strcmp(str2, "machin/chose/bidule") == 0);
-
-    SA_path_join(str2, 256, 3, "machin/", "chose/", "bidule");
-    assert(SA_strcmp(str2, "machin/chose/bidule") == 0);
-
-    SA_path_join(str1, 8, 2, "cc", "bonjour");
-    assert(SA_strcmp(str1, "cc/bonj") == 0);
-
     assert(SA_startswith("bonjour", "bon") == SA_TRUE);
     assert(SA_startswith("bonjour", "fon") == SA_FALSE);
     assert(SA_startswith("bonjour", "bonjour") == SA_TRUE);
@@ -118,114 +99,11 @@ int main()
     assert(SA_startswith_case_unsensitive("bonjour", "bonjours") == SA_FALSE);
     assert(SA_startswith_case_unsensitive("bonjour", "BON") == SA_TRUE);
 
-    SA_strncpy(str2, "vive les gnus", 256);
-    for(i = 0; str2[i] != '\0'; i++)
-    {
-        if(SA_parser_search_occurence_in_bytes_stream(str2[i], "les"))
-        {
-            assert(SA_strcmp(str2+i, "s gnus") == 0);
-        }
-    }
-
-    assert(SA_int_pow(5, 7) == 78125);
-    assert(SA_int_pow(5, 0) == 1);
-    assert(SA_int_pow(0, 7) == 0);
-    assert(SA_int_pow(0, 0) == 1);
-
-    assert(SA_RELU(5) == 5);
-    assert(SA_RELU(-5) == 0);
-    assert(SA_RELU(6.7) == 6.7);
-
-    for(int i = 0; i < 100; i++)
-    {
-        double x = SA_logistic(SA_random_unsecure_float(-1000, 1000));
-        assert(x >= 0 && x <= 1.0);
-    }
-    for(int i = 0; i < 100; i++)
-    {
-        double x = SA_logistic(SA_random_unsecure_float(-10, 10));
-        assert(x > 0 && x < 1.0);
-    }
-
-    SA_simplify_path(str2, "../.././.././././truc/chose/./bidule/./../machin/ttyy/eg/f/../../");
-    assert(SA_strcmp(str2, "../../../truc/chose/machin/ttyy/") == 0);
-
     assert(SA_str_search("bonjour fanfan la tulipe", "fanfan") == 8);
+    assert(SA_str_search("bonjour fanfan la tulipe", "Fanfan") == -1);
+    assert(SA_str_search("bonjour fanfan la tulipe", "") == 0);
 
-
-    SA_Matrix* mat1 = SA_matrix_create(3, 5);
-    SA_Matrix* mat2 = NULL;
-    SA_mat_float array[5] = {1, 2, 3, 4, 5};
-    SA_mat_float array2[5] = {6792.6, 2, 3, 4, 5};
-
-    SA_matrix_add_line_from_array(mat1, 0, array);
-    SA_matrix_add_line_from_array(mat1, 1, array2);
-    SA_matrix_add_line_from_array(mat1, 2, array);
-
-    SA_matrix_print(mat1);
-
-    mat2 = SA_matrix_transpose(mat1);
-
-    SA_matrix_print(mat2);
-
-    SA_matrix_free(&mat1);
-    SA_matrix_free(&mat2);
-
-
-    SA_HashMap* hashmap = SA_hashmap_create(cmp_int);
-    int k1 = 56;
-    int k2 = 56 << 16;
-    int v1 = 578;
-    int v2 = 23460;
-
-    SA_hashmap_set_value(hashmap, &k1, sizeof(int), &v1);
-    SA_hashmap_set_value(hashmap, &k2, sizeof(int), &v2);
-
-    assert(SA_hashmap_get_value(hashmap, &k1, sizeof(int)) == &v1);
-    assert(SA_hashmap_get_value(hashmap, &k2, sizeof(int)) == &v2);
-
-    SA_hashmap_free(&hashmap);
-
-    SA_ParserTree* tree = SA_parse_urlencoded_form("word=%C3%A9laborer&machin=truc&chose=bidule");
-    assert(SA_strcmp("élaborer", SA_ptree_get_value(tree, "word")) == 0);
-    assert(SA_strcmp("truc", SA_ptree_get_value(tree, "machin")) == 0);
-    assert(SA_strcmp("bidule", SA_ptree_get_value(tree, "chose")) == 0);
-
-    SA_ptree_free(&tree);
-
-
-    /*
-    ======================================
-    ============ Test network ============
-    ======================================
-    */
-
-    SA_RequestsHandler* handler = NULL;
-    char buffer[1024];
-    int n;
-
-    for(int i =0; i < 3; i++)
-    {
-        handler = SA_req_get(handler, "http://coindesdevs.fr/test.bidule/test.php", "");
-
-        if(handler == NULL)
-        {
-            SA_print_last_error();
-            continue;
-        }
-
-        SA_req_display_headers(handler);
-
-        while((n = SA_req_read_output_body(handler, buffer, 1023)))
-        {
-            buffer[n] = '\0';
-            printf("%s", buffer);
-        }
-
-        putchar('\n');
-    }
-
-    SA_req_close_connection(&handler);
-    
-    SA_destroy();
+    assert(SA_str_search_case_unsensitive("bonjour fanfan la tulipe", "fanfan") == 8);
+    assert(SA_str_search_case_unsensitive("bonjour fanfan la tulipe", "FaNfAn") == 8);
+    assert(SA_str_search_case_unsensitive("bonjour fanfan la tulipe", "camion") == -1);
 }

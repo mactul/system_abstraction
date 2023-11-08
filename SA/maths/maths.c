@@ -1,6 +1,8 @@
 #include <math.h>
 #include "SA/maths/maths.h"
 
+#define SA_EPSILON 1e-8
+
 /*
 Compute base^e.
 */
@@ -38,4 +40,9 @@ Returns the logstic (sometimes called sigmoid) function
 double SA_logistic(double x)
 {
     return 0.5 + 0.5*tanh(x/2.0);
+}
+
+SA_bool SA_float_equals(double a, double b)
+{
+    return fabs(a - b) < SA_EPSILON;
 }
