@@ -59,8 +59,13 @@
 
 
     SA_bool SA_dynarray_insert_uinitiliazed_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements);
-    SA_DynamicArray* _SA_dynarray_create(uint32_t element_size);
+    SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements);
+    uint64_t SA_dynarray_size(SA_DynamicArray* dyn_array);
     uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array);
+
+    // Internals
+
+    SA_DynamicArray* _SA_dynarray_create(uint32_t element_size);
     void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr);
     void* _SA_dynarray_get_element_ptr(SA_DynamicArray* dyn_array, uint64_t index);
     void _SA_dynarray_append(SA_DynamicArray* dyn_array, void* value_ptr);

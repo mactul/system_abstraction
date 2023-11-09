@@ -50,5 +50,13 @@ void test_memory(void)
     assert(SA_dynarray_get(int, dyn_array, 12) == 2);
     assert(SA_dynarray_get(int, dyn_array, 90) == 88);
 
+    SA_dynarray_remove_block(dyn_array, 3, 2);
+
+    assert(SA_dynarray_get(int, dyn_array, 90) == 90);
+
+    SA_dynarray_remove_block(dyn_array, 3, 2000);
+
+    assert(SA_dynarray_size(dyn_array) == 3);
+
     SA_dynarray_free(&dyn_array);
 }

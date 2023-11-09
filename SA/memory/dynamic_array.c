@@ -11,6 +11,22 @@ struct _SA_dynamic_array {
     uint64_t nb_slots;
 };
 
+/*
+Returns the size of the type used in the array.
+*/
+uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array)
+{
+    return dyn_array->element_size;
+}
+
+/*
+Returns the number of elements in the array.
+*/
+uint64_t SA_dynarray_size(SA_DynamicArray* dyn_array)
+{
+    return dyn_array->nb_elements;
+}
+
 static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray* dyn_array, uint64_t nb_slots)
 {
     if(nb_slots > dyn_array->nb_slots)
@@ -56,6 +72,34 @@ SA_bool SA_dynarray_insert_uinitiliazed_block(SA_DynamicArray* dyn_array, uint64
     return SA_TRUE;
 }
 
+/*
+Remove NB_BLOCK_ELEMENTS from the DynamicArray starting at position INDEX.
+If nothing was removed, the function returns SA_FALSE, else it returns SA_TRUE.
+
+This doesn't free any memory, the remaining memory is used for futur use in the DynamicArray.
+*/
+SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements)
+{
+    if(index >= dyn_array->nb_elements)
+    {
+        return SA_FALSE;
+    }
+    if(dyn_array->nb_elements-index < nb_block_elements)
+    {
+        dyn_array->nb_elements = index;
+        return SA_TRUE;
+    }
+    
+    dyn_array->nb_elements -= nb_block_elements;
+    
+    for(uint64_t i = index; i < dyn_array->nb_elements; i++)
+    {
+        uint64_t n = i * dyn_array->element_size;
+        dyn_array->elements[n] = dyn_array->elements[n + nb_block_elements * dyn_array->element_size];
+    }
+    return SA_TRUE;
+}
+
 SA_DynamicArray* _SA_dynarray_create(uint32_t element_size)
 {
     SA_DynamicArray* dyn_array = (SA_DynamicArray*) SA_malloc(sizeof(SA_DynamicArray));
@@ -74,11 +118,6 @@ SA_DynamicArray* _SA_dynarray_create(uint32_t element_size)
     dyn_array->nb_slots = DEFAULT_SIZE;
 
     return dyn_array;
-}
-
-uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array)
-{
-    return dyn_array->element_size;
 }
 
 void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr)
