@@ -44,7 +44,7 @@
     
     /*
     Returns the value at the INDEX position of a DynamicArray.
-    /!\ WARNING: If the index is bigger than the size of the array, you will have a segfault
+    /!\ WARNING /!\: If the index is bigger than the size of the array, you will have a segfault
     TYPE: should be the same as specified in SA_dynarray_create.
     DYN_ARRAY: should be the SA_DynamicArray* pointer returned by SA_dynarray_create.
     INDEX: an uint64_t which is the index of the column you want to read.
@@ -58,10 +58,11 @@
     #endif
 
 
-    SA_bool SA_dynarray_insert_uinitiliazed_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements);
+    SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements);
     SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements);
     uint64_t SA_dynarray_size(SA_DynamicArray* dyn_array);
     uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array);
+    void SA_dynarray_free(SA_DynamicArray** dyn_array);
 
     // Internals
 
@@ -70,7 +71,6 @@
     void* _SA_dynarray_get_element_ptr(SA_DynamicArray* dyn_array, uint64_t index);
     void _SA_dynarray_append(SA_DynamicArray* dyn_array, void* value_ptr);
     void _SA_dynarray_insert(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr);
-    void SA_dynarray_free(SA_DynamicArray** dyn_array);
 
     #ifdef __cplusplus
     }

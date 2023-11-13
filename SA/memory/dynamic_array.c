@@ -38,6 +38,7 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray* dyn_array, uint64_t 
             {
                 // We can't double this without an overflow.
                 // at this moment, the memory sould be completly saturated, but who knows...
+                _SA_set_error(SA_ERROR_OVERFLOW);
                 return SA_FALSE;
             }
             dyn_array->nb_slots <<= 1;  // We use the double of the actual size
@@ -45,6 +46,7 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray* dyn_array, uint64_t 
         temp_elements = SA_realloc(dyn_array->elements, dyn_array->element_size * dyn_array->nb_slots);
         if(temp_elements == NULL)
         {
+            _SA_set_error(SA_ERROR_MALLOC);
             return SA_FALSE;
         }
         dyn_array->elements = temp_elements;
@@ -56,7 +58,7 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray* dyn_array, uint64_t 
 Insert a space of NB_BLOCK_ELEMENTS in the DynamicArray.
 The space created is uinitiliazed, so filled with garbage.
 */
-SA_bool SA_dynarray_insert_uinitiliazed_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements)
+SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements)
 {
     if(!SA_dynarray_ensure_nb_slots(dyn_array, dyn_array->nb_elements+nb_block_elements))
     {
@@ -105,11 +107,13 @@ SA_DynamicArray* _SA_dynarray_create(uint32_t element_size)
     SA_DynamicArray* dyn_array = (SA_DynamicArray*) SA_malloc(sizeof(SA_DynamicArray));
     if(dyn_array == NULL)
     {
+        _SA_set_error(SA_ERROR_MALLOC);
         return NULL;
     }
     dyn_array->elements = (SA_byte*) SA_malloc(element_size*DEFAULT_SIZE);
     if(dyn_array->elements == NULL)
     {
+        _SA_set_error(SA_ERROR_MALLOC);
         SA_free(&dyn_array);
         return NULL;
     }
@@ -122,7 +126,10 @@ SA_DynamicArray* _SA_dynarray_create(uint32_t element_size)
 
 void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr)
 {
-    SA_dynarray_ensure_nb_slots(dyn_array, index+1);
+    if(!SA_dynarray_ensure_nb_slots(dyn_array, index+1))
+    {
+        return;
+    }
     SA_memcpy(dyn_array->elements + index * dyn_array->element_size, value_ptr, sizeof(SA_byte) * dyn_array->element_size);
 }
 
@@ -143,7 +150,7 @@ void _SA_dynarray_append(SA_DynamicArray* dyn_array, void* value_ptr)
 
 void _SA_dynarray_insert(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr)
 {
-    if(!SA_dynarray_insert_uinitiliazed_block(dyn_array, index, 1))
+    if(!SA_dynarray_insert_uninitialized_block(dyn_array, index, 1))
     {
         return;
     }

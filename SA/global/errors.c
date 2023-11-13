@@ -97,6 +97,9 @@ void SA_print_last_error(void)
         case SA_ERROR_URL_TOO_LONG:
             SA_print_error("The url provided is too long, please update the #define SA_MAX_URI_LENGTH in SA/parsing/parsing.h\n");
             break;
+        case SA_ERROR_OVERFLOW:
+            SA_print_error("An overflow was detected\n");
+            break;
         default:
             SA_print_error("Unknow error\n");
             break;

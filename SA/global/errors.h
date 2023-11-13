@@ -25,7 +25,8 @@
         SA_ERROR_UNABLE_TO_PARSE_DATA,
         SA_ERROR_PORT_NUMBER_TO_BIG,
         SA_ERROR_URL_SYNTAX,
-        SA_ERROR_URL_TOO_LONG
+        SA_ERROR_URL_TOO_LONG,
+        SA_ERROR_OVERFLOW
     };
 
     #ifdef __cplusplus
