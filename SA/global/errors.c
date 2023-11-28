@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "SA/global/errors.h"
 
+
 static int _SA_last_error = SA_NOERROR;
 
 /*

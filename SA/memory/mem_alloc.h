@@ -6,8 +6,8 @@
     extern "C"{
     #endif
 
-    void* SA_malloc(uint64_t size);
-    void* SA_calloc(uint64_t size);
+    void* SA_WARN_UNUSED_RESULT SA_malloc(uint64_t size);
+    void* SA_WARN_UNUSED_RESULT SA_calloc(uint64_t size);
     void* SA_WARN_UNUSED_RESULT SA_realloc(void* ptr, uint64_t size);
 
     void _SA_free(void** pptr);

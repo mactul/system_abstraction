@@ -12,8 +12,8 @@
 
 This section contains all functions related to memory interactions.
 
-[dynamic_array](./dynamic_array.md) provides some functions to make an abstracted DynamicArray.
-[hashmap](./hashmap.md) provides some functions to map key and values;
+[dynamic_array](./dynamic_array.md) provides some functions to make an abstracted DynamicArray.  
+[hashmap](./hashmap.md) provides some functions to map key and values.  
 [mem_alloc](./mem_alloc.md) provides an overlay to malloc.
 
 ## Compilation

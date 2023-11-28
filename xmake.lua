@@ -9,7 +9,7 @@ if has_config("build_network") then
     else
         add_requires("openssl3", { alias = "openssl" })
     end
-end 
+end
 
 option("build_network")
     set_default(true)
