@@ -11,6 +11,7 @@
     - [SA\_dynarray\_remove\_block](#sa_dynarray_remove_block)
     - [SA\_dynarray\_size](#sa_dynarray_size)
     - [SA\_dynarray\_get\_element\_size](#sa_dynarray_get_element_size)
+    - [SA\_dynarray\_qsort](#sa_dynarray_qsort)
     - [SA\_dynarray\_free](#sa_dynarray_free)
   - [__Examples__](#examples)
 
@@ -175,6 +176,19 @@ uint64_t SA_dynarray_size(SA_DynamicArray* dyn_array)
 uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array)
 ```
 - Returns the size of the type used in the array.
+
+
+### SA_dynarray_qsort
+```c
+void SA_dynarray_qsort(SA_DynamicArray* dyn_array, int (*cmp_func)(const void* el1, const void* el2))
+```
+- Sort the dynamic array by comparing each element with the `cmp_func` callback.
+- **parameters**
+    - `dyn_array`: the address of the pointer returned by `SA_dynarray_create`.
+    - `cmp_func`: a callback to compare 2 elements. Should returns:
+        - 0 if *el1 == *el2
+        - < 0 if *el1 < *el2
+        - > 0 if *el1 > *el2
 
 
 ### SA_dynarray_free

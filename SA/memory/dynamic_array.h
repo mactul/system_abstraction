@@ -62,6 +62,7 @@
     SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements);
     uint64_t SA_dynarray_size(SA_DynamicArray* dyn_array);
     uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array);
+    void SA_dynarray_qsort(SA_DynamicArray* dyn_array, int (*cmp_func)(const void*, const void*));
     void SA_dynarray_free(SA_DynamicArray** dyn_array);
 
     // Internals

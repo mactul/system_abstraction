@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "SA/memory/mem_alloc.h"
 #include "SA/strings/strings.h"
 #include "SA/memory/dynamic_array.h"
@@ -100,6 +101,14 @@ SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, uint64_t index, uin
         dyn_array->elements[n] = dyn_array->elements[n + nb_block_elements * dyn_array->element_size];
     }
     return SA_TRUE;
+}
+
+/*
+Sort the dynamic array by comparing each element with the CMP_FUNC callback
+*/
+void SA_dynarray_qsort(SA_DynamicArray* dyn_array, int (*cmp_func)(const void*, const void*))
+{
+    qsort(dyn_array->elements, dyn_array->nb_elements, dyn_array->element_size, cmp_func);
 }
 
 SA_DynamicArray* _SA_dynarray_create(uint32_t element_size)
