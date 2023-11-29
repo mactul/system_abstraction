@@ -2,11 +2,21 @@
     #define SA_DYNAMIC_ARRAY
     #include "SA/global/global.h"
 
+    #define SA_DYNARRAY_DEFAULT_SIZE 256
+
     /*
     Create a DynamicArray for the type specified
     It returns a SA_DynamicArray*, which can be passed to other SA_dynarray... functions.
     */
-    #define SA_dynarray_create(type) _SA_dynarray_create(sizeof(type))
+    #define SA_dynarray_create(type) _SA_dynarray_create(sizeof(type), SA_DYNARRAY_DEFAULT_SIZE)
+
+    /*
+    Create a DynamicArray for the type specified
+    The default size arguments is a hint to avoid to many reallocations if you know approximatively the size of the final array.
+    The bigger this parameter is the faster it is to reallocate but it can also take more RAM than needed.
+    It returns a SA_DynamicArray*, which can be passed to other SA_dynarray... functions.
+    */
+    #define SA_dynarray_create_size_hint(type, default_array_size) _SA_dynarray_create(sizeof(type), default_array_size)
 
     // this strange syntax is to be able to use const like 123 or "azerty"
     // if the value is not constant, the compiler will optimize away the variable v (I have verified in the asm generated)
@@ -67,7 +77,7 @@
 
     // Internals
 
-    SA_DynamicArray* _SA_dynarray_create(uint32_t element_size);
+    SA_DynamicArray* _SA_dynarray_create(uint32_t element_size, uint32_t default_array_size);
     void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr);
     void* _SA_dynarray_get_element_ptr(SA_DynamicArray* dyn_array, uint64_t index);
     void _SA_dynarray_append(SA_DynamicArray* dyn_array, void* value_ptr);

@@ -3,6 +3,7 @@
 - [DynamicArray](#dynamicarray)
   - [__Functions__](#functions)
     - [SA\_dynarray\_create](#sa_dynarray_create)
+    - [SA\_dynarray\_create\_size\_hint](#sa_dynarray_create_size_hint)
     - [SA\_dynarray\_append](#sa_dynarray_append)
     - [SA\_dynarray\_set](#sa_dynarray_set)
     - [SA\_dynarray\_insert](#sa_dynarray_insert)
@@ -40,6 +41,24 @@ SA_DynamicArray* SA_dynarray_create(type)
     ```c
     SA_DynamicArray* dyn_array = SA_dynarray_create(int);
     ```
+
+
+### SA_dynarray_create_size_hint
+```c
+SA_DynamicArray* SA_dynarray_create_size_hint(type, uint32_t default_array_size)
+```
+- This function works exactly like [SA_dynarray_create](#SA_dynarray_create)
+- In addition, you can pass the default size of the array. This size will be the first size of the memory allocated by the array and when this will no longer be sufficient, the array will be extended.
+- **parameters:**
+    - `type`: any type on which you can call `sizeof`, for example `int`, `float`, `struct vector`, etc... It will be the type used in the whole DynamicArray.
+    - `default_array_size`: A hint for the compiler. The bigger this parameter is the faster it is to reallocate memory but it can also take more RAM than needed.  
+    You should set this parameter to the approximative final size you expect for the dynamic array.
+- **returns:**
+    - when it succeeds, it returns a pointer to a structure handler.
+    - when it fails, it returns `NULL` and `SA_print_last_error()` can tell what happened
+- **example:**
+    ```c
+    SA_DynamicArray* dyn_array = SA_dynarray_create(int);
 
 
 ### SA_dynarray_append

@@ -3,7 +3,6 @@
 #include "SA/strings/strings.h"
 #include "SA/memory/dynamic_array.h"
 
-#define DEFAULT_SIZE 256
 
 struct _SA_dynamic_array {
     SA_byte* elements;
@@ -111,7 +110,7 @@ void SA_dynarray_qsort(SA_DynamicArray* dyn_array, int (*cmp_func)(const void*, 
     qsort(dyn_array->elements, dyn_array->nb_elements, dyn_array->element_size, cmp_func);
 }
 
-SA_DynamicArray* _SA_dynarray_create(uint32_t element_size)
+SA_DynamicArray* _SA_dynarray_create(uint32_t element_size, uint32_t default_array_size)
 {
     SA_DynamicArray* dyn_array = (SA_DynamicArray*) SA_malloc(sizeof(SA_DynamicArray));
     if(dyn_array == NULL)
@@ -119,7 +118,7 @@ SA_DynamicArray* _SA_dynarray_create(uint32_t element_size)
         _SA_set_error(SA_ERROR_MALLOC);
         return NULL;
     }
-    dyn_array->elements = (SA_byte*) SA_malloc(element_size*DEFAULT_SIZE);
+    dyn_array->elements = (SA_byte*) SA_malloc(element_size*default_array_size);
     if(dyn_array->elements == NULL)
     {
         _SA_set_error(SA_ERROR_MALLOC);
@@ -128,7 +127,7 @@ SA_DynamicArray* _SA_dynarray_create(uint32_t element_size)
     }
     dyn_array->element_size = element_size;
     dyn_array->nb_elements = 0;
-    dyn_array->nb_slots = DEFAULT_SIZE;
+    dyn_array->nb_slots = default_array_size;
 
     return dyn_array;
 }
