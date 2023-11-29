@@ -9,6 +9,8 @@ int main()
         fprintf(stderr, "/!\\ WARNING /!\\ : This program is useless in release mode, compile it in debug mode\n");
     #endif
 
+    SA_recursive_mkdir("bidule/machin/chose");
+
     test_strings();
     test_path();
     test_parser();

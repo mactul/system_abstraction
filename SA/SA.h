@@ -15,3 +15,4 @@ This header include everything in the SA lib.
 #include "SA/maths/matrix.h"
 #include "SA/memory/hashmap.h"
 #include "SA/memory/dynamic_array.h"
+#include "SA/path/directories.h"
