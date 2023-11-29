@@ -34,6 +34,6 @@ Then, restart your environment.
 
 
 ## Features
-    - [Memory](https://github.com/mactul/system_abstraction/tree/main/SA/memory)
-    - [Network](https://github.com/mactul/system_abstraction/tree/main/SA/network)
-    - Documentation in progress...
+- [Memory](https://github.com/mactul/system_abstraction/tree/main/SA/memory)
+- [Network](https://github.com/mactul/system_abstraction/tree/main/SA/network)
+- Documentation in progress...
