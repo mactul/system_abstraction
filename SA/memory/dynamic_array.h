@@ -74,6 +74,7 @@
     uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array);
     void SA_dynarray_qsort(SA_DynamicArray* dyn_array, int (*cmp_func)(const void*, const void*));
     void SA_dynarray_free(SA_DynamicArray** dyn_array);
+    void SA_activate_zero_filling(SA_DynamicArray* dyn_array);
 
     // Internals
 

@@ -5,10 +5,11 @@
 
 
 struct _SA_dynamic_array {
-    SA_byte* elements;
-    uint32_t element_size;
     uint64_t nb_elements;
     uint64_t nb_slots;
+    SA_byte* elements;
+    uint32_t element_size;
+    SA_bool init_to_zero;
 };
 
 /*
@@ -50,6 +51,10 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray* dyn_array, uint64_t 
             return SA_FALSE;
         }
         dyn_array->elements = temp_elements;
+        if(dyn_array->init_to_zero)
+        {
+            SA_memset(dyn_array->elements + dyn_array->element_size * dyn_array->nb_elements, 0, (dyn_array->nb_slots - dyn_array->nb_elements) * dyn_array->nb_elements);
+        }
     }
     return SA_TRUE;
 }
@@ -110,6 +115,11 @@ void SA_dynarray_qsort(SA_DynamicArray* dyn_array, int (*cmp_func)(const void*, 
     qsort(dyn_array->elements, dyn_array->nb_elements, dyn_array->element_size, cmp_func);
 }
 
+void SA_activate_zero_filling(SA_DynamicArray* dyn_array)
+{
+    dyn_array->init_to_zero = SA_TRUE;
+}
+
 SA_DynamicArray* _SA_dynarray_create(uint32_t element_size, uint32_t default_array_size)
 {
     SA_DynamicArray* dyn_array = (SA_DynamicArray*) SA_malloc(sizeof(SA_DynamicArray));
@@ -128,15 +138,21 @@ SA_DynamicArray* _SA_dynarray_create(uint32_t element_size, uint32_t default_arr
     dyn_array->element_size = element_size;
     dyn_array->nb_elements = 0;
     dyn_array->nb_slots = default_array_size;
+    dyn_array->init_to_zero = SA_FALSE;
 
     return dyn_array;
 }
 
 void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr)
 {
+    uint64_t old_nb_slots = dyn_array->nb_slots;
     if(!SA_dynarray_ensure_nb_slots(dyn_array, index+1))
     {
         return;
+    }
+    if(old_nb_slots < dyn_array->nb_slots)
+    {
+        dyn_array->nb_elements++;
     }
     SA_memcpy(dyn_array->elements + index * dyn_array->element_size, value_ptr, sizeof(SA_byte) * dyn_array->element_size);
 }
