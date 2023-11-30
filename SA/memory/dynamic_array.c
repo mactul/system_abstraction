@@ -151,7 +151,7 @@ void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_pt
     {
         return;
     }
-    if(dyn_array->nb_elements < index)
+    if(dyn_array->nb_elements <= index)
     {
         dyn_array->nb_elements = index+1;
     }
