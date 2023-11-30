@@ -122,13 +122,13 @@ void SA_activate_zero_filling(SA_DynamicArray* dyn_array)
 
 SA_DynamicArray* _SA_dynarray_create(uint32_t element_size, uint32_t default_array_size)
 {
-    SA_DynamicArray* dyn_array = (SA_DynamicArray*) SA_malloc(sizeof(SA_DynamicArray));
+    SA_DynamicArray* dyn_array = (SA_DynamicArray*) SA_calloc(sizeof(SA_DynamicArray));
     if(dyn_array == NULL)
     {
         _SA_set_error(SA_ERROR_MALLOC);
         return NULL;
     }
-    dyn_array->elements = (SA_byte*) SA_malloc(element_size*default_array_size);
+    dyn_array->elements = (SA_byte*) SA_calloc(element_size*default_array_size);
     if(dyn_array->elements == NULL)
     {
         _SA_set_error(SA_ERROR_MALLOC);
