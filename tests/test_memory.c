@@ -7,6 +7,9 @@ SA_bool cmp_int(void* int1, void* int2)
     return *((int*)int1) == *((int*)int2);
 }
 
+
+void test_memory2();
+
 void test_memory(void)
 {
     SA_DynamicArray* dyn_array;
@@ -59,4 +62,17 @@ void test_memory(void)
     assert(SA_dynarray_size(dyn_array) == 3);
 
     SA_dynarray_free(&dyn_array);
+
+    test_memory2();
+}
+
+void test_memory2()
+{
+    SA_DynamicArray* dyn_array = SA_dynarray_create_size_hint(int, 10);
+
+    SA_activate_zero_filling(dyn_array);
+
+    SA_dynarray_set(int, dyn_array, 100, 45);
+
+    return;
 }

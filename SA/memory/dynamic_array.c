@@ -53,7 +53,9 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray* dyn_array, uint64_t 
         dyn_array->elements = temp_elements;
         if(dyn_array->init_to_zero)
         {
-            SA_memset(dyn_array->elements + dyn_array->element_size * dyn_array->nb_elements, 0, (dyn_array->nb_slots - dyn_array->nb_elements) * dyn_array->nb_elements);
+            void* ptr = dyn_array->elements + dyn_array->element_size * dyn_array->nb_elements;
+            uint64_t size = (dyn_array->nb_slots - dyn_array->nb_elements) * dyn_array->element_size;
+            SA_memset(ptr, 0, size);
         }
     }
     return SA_TRUE;
@@ -128,7 +130,7 @@ SA_DynamicArray* _SA_dynarray_create(uint32_t element_size, uint32_t default_arr
         _SA_set_error(SA_ERROR_MALLOC);
         return NULL;
     }
-    dyn_array->elements = (SA_byte*) SA_calloc(element_size*default_array_size);
+    dyn_array->elements = (SA_byte*) SA_calloc(default_array_size * element_size);
     if(dyn_array->elements == NULL)
     {
         _SA_set_error(SA_ERROR_MALLOC);
