@@ -15,7 +15,7 @@ struct _SA_dynamic_array {
 /*
 Returns the size of the type used in the array.
 */
-uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array)
+uint32_t SA_dynarray_get_element_size(const SA_DynamicArray* dyn_array)
 {
     return dyn_array->element_size;
 }
@@ -23,7 +23,7 @@ uint32_t SA_dynarray_get_element_size(SA_DynamicArray* dyn_array)
 /*
 Returns the number of elements in the array.
 */
-uint64_t SA_dynarray_size(SA_DynamicArray* dyn_array)
+uint64_t SA_dynarray_size(const SA_DynamicArray* dyn_array)
 {
     return dyn_array->nb_elements;
 }
@@ -158,7 +158,7 @@ void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_pt
     SA_memcpy(dyn_array->elements + index * dyn_array->element_size, value_ptr, sizeof(SA_byte) * dyn_array->element_size);
 }
 
-void* _SA_dynarray_get_element_ptr(SA_DynamicArray* dyn_array, uint64_t index)
+void* _SA_dynarray_get_element_ptr(const SA_DynamicArray* dyn_array, uint64_t index)
 {
     if(index >= dyn_array->nb_elements)
     {
