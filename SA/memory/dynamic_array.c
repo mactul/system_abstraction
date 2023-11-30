@@ -147,14 +147,13 @@ SA_DynamicArray* _SA_dynarray_create(uint32_t element_size, uint32_t default_arr
 
 void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr)
 {
-    uint64_t old_nb_slots = dyn_array->nb_slots;
     if(!SA_dynarray_ensure_nb_slots(dyn_array, index+1))
     {
         return;
     }
-    if(old_nb_slots < dyn_array->nb_slots)
+    if(dyn_array->nb_elements < index)
     {
-        dyn_array->nb_elements++;
+        dyn_array->nb_elements = index+1;
     }
     SA_memcpy(dyn_array->elements + index * dyn_array->element_size, value_ptr, sizeof(SA_byte) * dyn_array->element_size);
 }
@@ -171,7 +170,6 @@ void* _SA_dynarray_get_element_ptr(SA_DynamicArray* dyn_array, uint64_t index)
 void _SA_dynarray_append(SA_DynamicArray* dyn_array, void* value_ptr)
 {
     _SA_dynarray_set(dyn_array, dyn_array->nb_elements, value_ptr);
-    dyn_array->nb_elements++;
 }
 
 void _SA_dynarray_insert(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr)
