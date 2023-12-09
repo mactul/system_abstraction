@@ -29,7 +29,7 @@
     INDEX: an uint64_t which is the index of the column you want to set.
     VALUE: The variable you want to put in the DynamicArray. should be the same type as TYPE.
     */
-    #define SA_dynarray_set(type, dyn_array, index, value) {type v = value; _SA_dynarray_set(dyn_array, index, &(v));}
+    #define SA_dynarray_set(type, dyn_array, index, value) {type _SA_v_0x382fa5612 = value; _SA_dynarray_set(dyn_array, index, &(_SA_v_0x382fa5612));}
     
     /*
     Append the value to the DynamicArray.
@@ -37,7 +37,7 @@
     DYN_ARRAY: should be the SA_DynamicArray* pointer returned by SA_dynarray_create.
     VALUE: The variable you want to put in the DynamicArray. should be the same type as TYPE.
     */
-    #define SA_dynarray_append(type, dyn_array, value) {type v = value; _SA_dynarray_append(dyn_array, &(v));}
+    #define SA_dynarray_append(type, dyn_array, value) {type _SA_v_0x382fa5612 = value; _SA_dynarray_append(dyn_array, &(_SA_v_0x382fa5612));}
     
     /*
     Insert a value at the INDEX position of a DynamicArray.
@@ -50,7 +50,7 @@
     This is very costly, if you have multiple values to insert, use SA_dynarray_insert_uinitiliazed_block to create the space required,
     then, use SA_dynarray_set to fill the space with your values.
     */
-    #define SA_dynarray_insert(type, dyn_array, index, value) {type v = value; _SA_dynarray_insert(dyn_array, index, &(v));}
+    #define SA_dynarray_insert(type, dyn_array, index, value) {type _SA_v_0x382fa5612 = value; _SA_dynarray_insert(dyn_array, index, &(_SA_v_0x382fa5612));}
     
     /*
     Returns the value at the INDEX position of a DynamicArray.

@@ -43,7 +43,7 @@
     void* SA_memset(void* ptr, char value, uint64_t count);
     void* SA_memcpy(void* dest, void* source, uint64_t size);
 
-    char* SA_strtrim_inplace(char* str);
+    char* SA_WARN_UNUSED_RESULT SA_strtrim_inplace(char* str);
     void SA_strtrim(char* dest, const char* src);
 
     char* SA_int64_to_str(char* result, int64_t n);

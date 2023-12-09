@@ -74,5 +74,7 @@ void test_memory2()
 
     SA_dynarray_set(int, dyn_array, 100, 45);
 
+    SA_dynarray_free(&dyn_array);
+
     return;
 }

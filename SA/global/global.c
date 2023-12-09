@@ -2,6 +2,7 @@
 #include "SA/memory/mem_alloc.h"
 #include "SA/network/easy_tcp_tls.h"
 #include "SA/random/random.h"
+#include "SA/graphics/internal_init.h"
 
 #ifdef DEBUG
 #include <stdlib.h>
@@ -30,6 +31,12 @@ void SA_init(void)
     #ifndef SA_NETWORK_DISABLED
         _SA_socket_start();
     #endif
+
+    #ifndef SA_GRAPHICS_DISABLED
+        #ifdef SA_GRAPHICS_SDL2
+            _SA_graphics_init();
+        #endif
+    #endif
     SA_set_unsecure_seed(SA_random_standard_seed());
 }
 
@@ -52,5 +59,11 @@ void SA_destroy(void)
 
     #ifndef SA_NETWORK_DISABLED
         _SA_socket_cleanup();
+    #endif
+
+    #ifndef SA_GRAPHICS_DISABLED
+        #ifdef SA_GRAPHICS_SDL2
+            _SA_graphics_destroy();
+        #endif
     #endif
 }
