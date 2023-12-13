@@ -14,6 +14,7 @@
     void test_math(void);
     void test_memory(void);
     void test_network(void);
+    void test_graphics(void);
 
     #ifdef __cplusplus
     }

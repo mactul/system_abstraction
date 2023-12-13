@@ -17,7 +17,11 @@ void SA_recursive_mkdir(const char* path)
         }
         j += i;
         temp_path[j] = '\0';
-        mkdir(temp_path, 0755);
+        #ifdef SA_OS_IS_WINDOWS
+            mkdir(temp_path);
+        #else
+            mkdir(temp_path, 0755);
+        #endif
         j++;
     }
 
@@ -26,7 +30,11 @@ void SA_recursive_mkdir(const char* path)
         temp_path[j-1] = '/';
     }
 
-    mkdir(temp_path, 0755);
+    #ifdef SA_OS_IS_WINDOWS
+        mkdir(temp_path);
+    #else
+        mkdir(temp_path, 0755);
+    #endif
 
     SA_free(&temp_path);
 }

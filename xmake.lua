@@ -30,7 +30,15 @@ option("build_graphics")
     set_showmenu(true)
 
 option("graphics_sdl2")
-    set_default(true)
+    set_default(false)
+    set_showmenu(true)
+
+option("graphics_windows_gdi")
+    set_default(false)
+    set_showmenu(true)
+
+option("graphics_x11")
+    set_default(false)
     set_showmenu(true)
 
 rule("flags_extras")
@@ -58,11 +66,28 @@ target("sa")
 
     if has_config("build_graphics") then
         add_links("pthread")
-        add_defines("Linux")
+
         if has_config("graphics_sdl2") then
             add_files("SA/graphics/SDL2/*.c")
             add_packages("sdl2")
             add_defines("SA_GRAPHICS_SDL2")
+        else
+            remove_files("SA/graphics/SDL2/*.c")
+        end
+
+        if has_config("graphics_windows_gdi") then
+            add_links("gdi32");
+            add_files("SA/graphics/windows_gdi/*.c")
+            add_defines("SA_GRAPHICS_WINDOWS_GDI")
+        else
+            remove_files("SA/graphics/windows_gdi/*.c")
+        end
+
+        if has_config("graphics_x11") then
+            add_files("SA/graphics/x11/*.c")
+            add_defines("SA_GRAPHICS_X11")
+        else
+            remove_files("SA/graphics/x11/*.c")
         end
     else
         add_defines("SA_GRAPHICS_DISABLED")
