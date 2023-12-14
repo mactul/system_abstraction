@@ -18,7 +18,9 @@ void callback(SA_GraphicsWindow* window)
 
 void* other_window(void*)
 {
-    SA_graphics_create_window("le carré bleu !", 300, 200, 200, 200, 0, callback);
+    SA_graphics_create_window("Hello world - threaded", 300, 200, 400, 400, 0, callback);
+
+    return NULL;
 }
 
 void test_graphics(void)

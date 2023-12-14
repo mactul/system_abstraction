@@ -74,7 +74,7 @@ void init_x() {
 
 	dis=XOpenDisplay((char *)0);
    	screen=DefaultScreen(dis);
-	black=BlackPixel(dis,screen),
+	black=BlackPixel(dis,screen);
 	white=WhitePixel(dis, screen);
    	win=XCreateSimpleWindow(dis,DefaultRootWindow(dis),0,0,	
 		300, 300, 5,black, white);
@@ -91,7 +91,7 @@ void close_x() {
 	XFreeGC(dis, gc);
 	XDestroyWindow(dis,win);
 	XCloseDisplay(dis);	
-	exit(1);				
+	exit(1);
 };
 
 void redraw() {

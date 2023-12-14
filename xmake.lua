@@ -84,6 +84,7 @@ target("sa")
         end
 
         if has_config("graphics_x11") then
+            add_links("X11");
             add_files("SA/graphics/x11/*.c")
             add_defines("SA_GRAPHICS_X11")
         else

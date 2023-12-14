@@ -1,78 +1,134 @@
-#include <X11/Xlib.h>
+#include <sys/select.h>
 #include <pthread.h>
 #include "SA/memory/mem_alloc.h"
 #include "SA/graphics/graphics.h"
+#include "SA/graphics/x11/internal.h"
 
-struct _SA_graphics_window {
-    Display* display;
-    Window window;
-    GC gc;
-    pthread_mutex_t mutex;
-};
+#define min(a, b) ((a) < (b) ? (a): (b))
 
+typedef struct _thread_data {
+    SA_GraphicsWindow* window;
+    void (*draw_callback)(SA_GraphicsWindow* window);
+} ThreadData;
 
-void* eventHandler(void* data)
+static void* callback_runner(void* data)
 {
-    SA_GraphicsWindow* windows = (SA_GraphicsWindow*)data;
-    
-    pthread_mutex_lock(&(windows->mutex));
-        SDL_SetRenderDrawColor(windows->renderer, 0, 0, 0, 255);
-        SDL_RenderDrawLine(windows->renderer, 10, 10, 100, 100);
-        SDL_SetRenderDrawColor(windows->renderer, 255, 255, 255, 255);
-    pthread_mutex_unlock(&(windows->mutex));
+    ThreadData* thread_data = (ThreadData*)data;
 
-    return 0;
+    thread_data->draw_callback(thread_data->window);
+
+    thread_data->window->is_killed = SA_TRUE;
+
+    return NULL;
 }
 
-void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags)
+
+static int wait_fd(int fd, int ms)
 {
-    SA_GraphicsWindow windows;
+    struct timeval tv;
+    fd_set in_fds;
+    FD_ZERO(&in_fds);
+    FD_SET(fd, &in_fds);
+    tv.tv_sec = ms / 1000;
+    tv.tv_usec = (ms % 1000)*1000;
+    return select(fd+1, &in_fds, 0, 0, &tv);
+}
+
+SA_bool XNextEventTimeout(Display *display, XEvent *event, int ms)
+{
+    if (XPending(display) || wait_fd(ConnectionNumber(display), ms))
+    {
+        XNextEvent(display, event);
+        return SA_TRUE;
+    }
+    return SA_FALSE;
+}
+
+static void change_bitmap_size(SA_GraphicsWindow* window, int new_width, int new_height)
+{
+    pthread_mutex_lock(&(window->mutex));
+
+    if(new_height <= window->height && new_width <= window->width)
+    {
+        goto LABEL_END;
+    }
+    Drawable new_vram;
+    Drawable new_renderer;
+    new_vram = XCreatePixmap(window->display, window->window, new_width, new_height, 24);
+    new_renderer = XCreatePixmap(window->display, window->window, new_width, new_height, 24);
+
+    XCopyArea(window->display, window->vram, new_vram, window->gc, 0, 0, min(new_width, window->width), min(new_height, window->height), 0, 0);
+    XCopyArea(window->display, window->renderer, new_renderer, window->gc, 0, 0, min(new_width, window->width), min(new_height, window->height), 0, 0);
     
-    windows.window = SDL_CreateWindow(title, pos_x, pos_y, width, height, flags | SDL_WINDOW_SHOWN);
-    if(windows.window == NULL)
-    {
-        return;
-    }
-    windows.renderer = SDL_CreateRenderer(windows.window, -1, SDL_RENDERER_SOFTWARE);
-    if(windows.renderer == NULL)
-    {
-        SDL_DestroyWindow(windows.window);
-        return;
-    }
+    XFreePixmap(window->display, window->vram);
+    XFreePixmap(window->display, window->renderer);
 
-    pthread_mutex_init(&(windows.mutex), NULL);
+    window->renderer = new_renderer;
+    window->vram = new_vram;
 
-    SDL_Event events;
-    SA_bool isOpen = SA_TRUE;
+LABEL_END:
 
-    SDL_SetRenderDrawColor(windows.renderer, 255, 255, 255, 255);
-    SDL_RenderClear(windows.renderer);
+    window->width = new_width;
+    window->height = new_height;
+
+    pthread_mutex_unlock(&(window->mutex));
+}
+
+void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window))
+{
+    SA_GraphicsWindow window = {.is_killed = SA_FALSE, .width = width, .height = height, .mutex = PTHREAD_MUTEX_INITIALIZER};
 
     pthread_t thread;
+    ThreadData thread_data = {.window = &window, .draw_callback = draw_callback};
 
-    pthread_create(&thread, NULL, eventHandler, &windows);
+    window.display = XOpenDisplay(NULL);
 
-    while (isOpen)
+    window.window = XCreateSimpleWindow(window.display, DefaultRootWindow(window.display), pos_x, pos_y, width, height, 0, 0x000000, 0xFF7000);
+    XSetStandardProperties(window.display, window.window, title, "Hi", 0, NULL, 0, NULL);
+    XSelectInput(window.display, window.window, ExposureMask | ResizeRedirectMask | ButtonPressMask | KeyPressMask);
+    Atom wmDeleteMessage = XInternAtom(window.display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(window.display, window.window, &wmDeleteMessage, 1);
+    window.gc = XCreateGC(window.display, window.window, 0, NULL);
+    /*XSetBackground(window.display, window.gc, 0x);
+    XSetForeground(window.display, window.gc, black);*/
+    XClearWindow(window.display, window.window);
+    XMapRaised(window.display, window.window);
+
+    window.renderer = XCreatePixmap(window.display, window.window, window.width, window.height, 24);
+    window.vram = XCreatePixmap(window.display, window.window, window.width, window.height, 24);
+
+    XSetForeground(window.display, window.gc, 0);
+    XFillRectangle(window.display, window.renderer, window.gc, 0, 0, window.width, window.height);
+    XFillRectangle(window.display, window.vram, window.gc, 0, 0, window.width, window.height);
+
+    pthread_create(&thread, NULL, callback_runner, &thread_data);
+
+    while(!window.is_killed)
     {
-        pthread_mutex_lock(&(windows.mutex));
-        while (SDL_PollEvent(&events))
+        XEvent event;
+
+        if(!XNextEventTimeout(window.display, &event, 100))
         {
-            switch (events.type)
-            {
-            case SDL_QUIT:
-                isOpen = SA_FALSE;
-                break;
-            }
+            continue;
         }
-
-        SDL_RenderPresent(windows.renderer);
-
-        pthread_mutex_unlock(&(windows.mutex));
+    
+        if (event.type==Expose && event.xexpose.count==0)
+        {
+            pthread_mutex_lock(&(window.mutex));
+            XCopyArea(window.display, window.renderer, window.window, window.gc, 0, 0, window.width, window.height, 0, 0);
+            pthread_mutex_unlock(&(window.mutex));
+        }
+        if(event.type == ResizeRequest)
+        {
+            printf("resize\n");
+            change_bitmap_size(&window, event.xresizerequest.width, event.xresizerequest.height);
+        }
+        if ((Atom)(event.xclient.data.l[0]) == wmDeleteMessage)
+        {
+            window.is_killed = SA_TRUE;
+        }
     }
-
-    pthread_mutex_destroy(&(windows.mutex));
-    SDL_DestroyRenderer(windows.renderer);
-    SDL_DestroyWindow(windows.window);
-
-    return;
+    XCloseDisplay(window.display);
+    
+    pthread_join(thread, NULL);
 }

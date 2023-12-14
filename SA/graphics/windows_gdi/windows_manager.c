@@ -71,7 +71,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
     return 0;
 }
 
-void* callback_runner(void* data)
+static void* callback_runner(void* data)
 {
     ThreadData* thread_data = (ThreadData*)data;
 
@@ -83,7 +83,7 @@ void* callback_runner(void* data)
 
 void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window))
 {
-    SA_GraphicsWindow window = {.is_killed = SA_FALSE, .width = width, .height = height};
+    SA_GraphicsWindow window = {.is_killed = SA_FALSE, .width = width, .height = height, .mutex = PTHREAD_MUTEX_INITIALIZER};
 
     HINSTANCE hThisInstance = GetModuleHandle(NULL);
     MSG messages;            /* Here messages to the application are saved */

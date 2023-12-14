@@ -33,9 +33,7 @@ void SA_init(void)
     #endif
 
     #ifndef SA_GRAPHICS_DISABLED
-        #ifdef SA_GRAPHICS_SDL2
-            _SA_graphics_init();
-        #endif
+        _SA_graphics_init();
     #endif
     SA_set_unsecure_seed(SA_random_standard_seed());
 }
