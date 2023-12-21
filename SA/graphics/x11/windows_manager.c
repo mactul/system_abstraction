@@ -84,6 +84,11 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
     window.display = XOpenDisplay(NULL);
 
     window.window = XCreateSimpleWindow(window.display, DefaultRootWindow(window.display), pos_x, pos_y, width, height, 0, 0x000000, 0xFF7000);
+    if(flags & WINDOW_NORESIZE)
+    {
+        XSizeHints size = {.min_width = 100, .min_height = 100};
+        XSetWMNormalHints(window.display, window.window, &size);
+    }
     XSetStandardProperties(window.display, window.window, title, "Hi", 0, NULL, 0, NULL);
     XSelectInput(window.display, window.window, ExposureMask | ResizeRedirectMask | ButtonPressMask | KeyPressMask);
     Atom wmDeleteMessage = XInternAtom(window.display, "WM_DELETE_WINDOW", False);

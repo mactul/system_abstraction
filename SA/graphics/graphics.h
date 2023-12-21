@@ -5,6 +5,10 @@
 
     typedef struct _SA_graphics_window SA_GraphicsWindow;
 
+    enum SA_GRAPHICS_WINDOW_FLAGS {
+        WINDOW_NORESIZE = 1 << 0,
+    };
+
     #ifdef __cplusplus
     extern "C"{
     #endif

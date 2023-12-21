@@ -48,6 +48,12 @@ void SA_destroy(void)
         _SA_is_init = SA_FALSE;
     #endif
 
+    #ifndef SA_GRAPHICS_DISABLED
+        #ifdef SA_GRAPHICS_SDL2
+            _SA_graphics_destroy();
+        #endif
+    #endif
+
     #ifdef SA_MEMORY_DEBUG
     if(!_SA_is_everything_freed())
     {
@@ -57,11 +63,5 @@ void SA_destroy(void)
 
     #ifndef SA_NETWORK_DISABLED
         _SA_socket_cleanup();
-    #endif
-
-    #ifndef SA_GRAPHICS_DISABLED
-        #ifdef SA_GRAPHICS_SDL2
-            _SA_graphics_destroy();
-        #endif
     #endif
 }

@@ -1,77 +1,22 @@
 #include <SDL2/SDL.h>
-#include <pthread.h>
+#include <SA/SA.h>
 #include "SA/memory/mem_alloc.h"
-#include "SA/graphics/graphics.h"
-
-struct _SA_graphics_window {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    pthread_mutex_t mutex;
-};
+#include "SA/graphics/SDL2/sdl2_server.h"
+#include "SA/graphics/SDL2/internal.h"
 
 
-void* eventHandler(void* data)
+void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window))
 {
-    SA_GraphicsWindow* windows = (SA_GraphicsWindow*)data;
-    
-    pthread_mutex_lock(&(windows->mutex));
-        SDL_SetRenderDrawColor(windows->renderer, 0, 0, 0, 255);
-        SDL_RenderDrawLine(windows->renderer, 10, 10, 100, 100);
-        SDL_SetRenderDrawColor(windows->renderer, 255, 255, 255, 255);
-    pthread_mutex_unlock(&(windows->mutex));
+    SA_GraphicsWindow window = {.is_killed = SA_FALSE, .height = height, .width = width, .mutex = PTHREAD_MUTEX_INITIALIZER};
+    SA_SDL_MsgCreateWindow msg = {.title = title, .pos_x = pos_x, .pos_y = pos_y, .width = width, .height = height, .flags = flags, .draw_callback = draw_callback};
+    SA_SDL_Message message = {.message_type = SA_SDL_CREATE_WINDOW, .window = &window, .msgs.create_window = msg};
 
-    return 0;
-}
+    pthread_mutex_init(&(window.mutex), NULL);
+    SA_sdl_post_event(&message);
 
-void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags)
-{
-    SA_GraphicsWindow windows;
-    
-    windows.window = SDL_CreateWindow(title, pos_x, pos_y, width, height, flags | SDL_WINDOW_SHOWN);
-    if(windows.window == NULL)
-    {
-        return;
-    }
-    windows.renderer = SDL_CreateRenderer(windows.window, -1, SDL_RENDERER_SOFTWARE);
-    if(windows.renderer == NULL)
-    {
-        SDL_DestroyWindow(windows.window);
-        return;
-    }
+    draw_callback(&window);
 
-    pthread_mutex_init(&(windows.mutex), NULL);
-
-    SDL_Event events;
-    SA_bool isOpen = SA_TRUE;
-
-    SDL_SetRenderDrawColor(windows.renderer, 255, 255, 255, 255);
-    SDL_RenderClear(windows.renderer);
-
-    pthread_t thread;
-
-    pthread_create(&thread, NULL, eventHandler, &windows);
-
-    while (isOpen)
-    {
-        pthread_mutex_lock(&(windows.mutex));
-        while (SDL_PollEvent(&events))
-        {
-            switch (events.type)
-            {
-            case SDL_QUIT:
-                isOpen = SA_FALSE;
-                break;
-            }
-        }
-
-        SDL_RenderPresent(windows.renderer);
-
-        pthread_mutex_unlock(&(windows.mutex));
-    }
-
-    pthread_mutex_destroy(&(windows.mutex));
-    SDL_DestroyRenderer(windows.renderer);
-    SDL_DestroyWindow(windows.window);
+    SA_sdl_destroy_window(&window);
 
     return;
 }

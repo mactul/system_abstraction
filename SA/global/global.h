@@ -27,8 +27,10 @@
 
     #ifdef __GNUC__
         #define SA_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+        #define SA_FALLTROUGH __attribute__((falltrough))
     #else
         #define SA_WARN_UNUSED_RESULT
+        #define SA_FALLTROUGH
     #endif
 
     #ifdef __cplusplus
