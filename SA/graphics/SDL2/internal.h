@@ -12,12 +12,14 @@
     enum SA_SDL_MESSAGES_TYPES {
         SA_SDL_STOP_THREAD,
         SA_SDL_CREATE_WINDOW,
-        SA_SDL_DESTROY_WINDOW
+        SA_SDL_DESTROY_WINDOW,
+        SA_SDL_REDRAW_WINDOW
     };
 
     struct _SA_graphics_window {
         SDL_Window* window;
-        SDL_Renderer* renderer;
+        SDL_Surface* renderer;  // This backbuffer is required to handle the "expose" event.
+        SDL_Surface* vram;
         pthread_mutex_t mutex;
         int width;
         int height;
@@ -25,18 +27,20 @@
     };
 
     typedef struct _sa_sdl_msg_create_window {
+        sem_t* window_is_created;
         const char* title;
         int pos_x;
         int pos_y;
-        int width;
-        int height;
         uint32_t flags;
-        void (*draw_callback)(SA_GraphicsWindow* window);
     } SA_SDL_MsgCreateWindow;
 
     typedef struct _sa_sdl_msg_destroy_window {
         sem_t* window_is_destroyed;
     } SA_SDL_MsgDestroyWindow;
+
+    typedef struct _sa_sdl_msg_redraw_window {
+        sem_t* window_is_redrawn;
+    } SA_SDL_MsgRedrawWindow;
 
     typedef struct _sa_sdl_message {
         enum SA_SDL_MESSAGES_TYPES message_type;
@@ -44,6 +48,7 @@
         union msgs {
             SA_SDL_MsgCreateWindow create_window;
             SA_SDL_MsgDestroyWindow destroy_window;
+            SA_SDL_MsgRedrawWindow redraw_window;
         } msgs;
     } SA_SDL_Message;
 

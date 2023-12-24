@@ -7,10 +7,10 @@ void callback(SA_GraphicsWindow* window)
     {
         for(int j = 0; j < 100; j++)
         {
-            //SA_graphics_vram_draw_pixel(window, 100+i, 100+j, 0x00FFFF);
+            SA_graphics_vram_draw_pixel(window, 100+i, 100+j, 0x00FFFF);
         }
     }
-    //SA_graphics_vram_flush(window);
+    SA_graphics_vram_flush(window);
 
     SA_sleep(5e6);
 }

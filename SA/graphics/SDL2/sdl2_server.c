@@ -59,32 +59,66 @@ void SA_sdl_destroy_window(SA_GraphicsWindow* window)
     sem_destroy(&window_is_destroyed);
 }
 
+void SA_sdl_create_window(SA_SDL_Message* message)
+{
+    sem_t window_is_created;
+    sem_init(&window_is_created, 0, 0);
+    message->msgs.create_window.window_is_created = &window_is_created;
+    SA_sdl_post_event(message);
+
+    sem_wait(&window_is_created);
+
+    sem_destroy(&window_is_created);
+}
+
+void SA_sdl_redraw_window(SA_GraphicsWindow* window)
+{
+    sem_t window_is_redrawn;
+    SA_SDL_Message message = {.message_type = SA_SDL_REDRAW_WINDOW, .window = window, .msgs.redraw_window = {.window_is_redrawn = &window_is_redrawn}};
+    
+    sem_init(&window_is_redrawn, 0, 0);
+    SA_sdl_post_event(&message);
+
+    sem_wait(&window_is_redrawn);
+
+    sem_destroy(&window_is_redrawn);
+}
+
 static void create_window(SA_GraphicsWindow* window, SA_SDL_MsgCreateWindow* msg)
 {
-    window->window = SDL_CreateWindow(msg->title, msg->pos_x, msg->pos_y, msg->width, msg->height, msg->flags | SDL_WINDOW_SHOWN);
+    window->window = SDL_CreateWindow(msg->title, msg->pos_x, msg->pos_y, window->width, window->height, msg->flags | SDL_WINDOW_SHOWN);
     if(window->window == NULL)
     {
         window->is_killed = SA_TRUE;
         return;
     }
-    window->renderer = SDL_CreateRenderer(window->window, -1, SDL_RENDERER_SOFTWARE);
+    window->renderer = SDL_GetWindowSurface(window->window);
     if(window->renderer == NULL)
     {
         SDL_DestroyWindow(window->window);
         window->window = NULL;
         window->is_killed = SA_TRUE;
     }
+    window->vram = SDL_CreateRGBSurface(0, window->width, window->height, 32, 0, 0, 0, 0);
+    if(window->vram == NULL)
+    {
+        SDL_DestroyWindow(window->window);
+        window->window = NULL;
+        window->renderer = NULL;
+        window->is_killed = SA_TRUE;
+    }
     SA_dynarray_set(SA_GraphicsWindow*, _SA_windows, SDL_GetWindowID(window->window), window);
-    SDL_RenderClear(window->renderer);
+    SDL_FillRect(window->renderer, NULL, 0x000000);
 }
 
 static void destroy_window(SA_GraphicsWindow* window)
 {
     pthread_mutex_lock(&(window->mutex));
-    SDL_DestroyRenderer(window->renderer);
-    window->renderer = NULL;
     SDL_DestroyWindow(window->window);
+    SDL_FreeSurface(window->vram);
     window->window = NULL;
+    window->renderer = NULL;
+    window->vram = NULL;
     window->height = 0;
     window->width = 0;
     window->is_killed = SA_TRUE;
@@ -105,9 +139,16 @@ static SA_bool custom_event_switch(void)
             pthread_mutex_lock(&(message.window->mutex));
             create_window(message.window, &(message.msgs.create_window));
             pthread_mutex_unlock(&(message.window->mutex));
+            sem_post(message.msgs.create_window.window_is_created);
             break;
         case SA_SDL_DESTROY_WINDOW:
             destroy_window(message.window);
+            sem_post(message.msgs.destroy_window.window_is_destroyed);
+            break;
+        case SA_SDL_REDRAW_WINDOW:
+            pthread_mutex_lock(&(message.window->mutex));
+            SDL_UpdateWindowSurface(message.window->window);
+            pthread_mutex_unlock(&(message.window->mutex));
             sem_post(message.msgs.destroy_window.window_is_destroyed);
             break;
         case SA_SDL_STOP_THREAD:
@@ -132,7 +173,7 @@ static SA_bool sdl_event_switch(SDL_Event* event)
             {
                 case SDL_WINDOWEVENT_EXPOSED:
                     pthread_mutex_lock(&(window->mutex));
-                    SDL_RenderPresent(window->renderer);
+                    SDL_UpdateWindowSurface(window->window);
                     pthread_mutex_unlock(&(window->mutex));
                     break;
                 case SDL_WINDOWEVENT_CLOSE:

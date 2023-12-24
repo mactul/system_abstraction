@@ -11,5 +11,7 @@
     void SA_sdl_stop_thread(void);
     void* SA_sdl_server_thread(void* data);
     void SA_sdl_destroy_window(SA_GraphicsWindow* window);
-
+    void SA_sdl_redraw_window(SA_GraphicsWindow* window);
+    void SA_sdl_create_window(SA_SDL_Message* message);
+    
 #endif
