@@ -220,6 +220,19 @@ void* SA_memset(void* ptr, SA_byte value, uint64_t count)
 }
 
 /*
+Set the COUNT first uint32 under PTR with VALUE
+Returns the pointer PTR.
+*/
+uint32_t* SA_memset32(uint32_t* dest, uint32_t value, size_t array_len)
+{
+    for(size_t i = 0; i < array_len; i++)
+    {
+        dest[i] = value;
+    }
+    return dest;
+}
+
+/*
 Copy the SIZE first bytes of SOURCE into DEST
 Returns the pointer DEST.
 */

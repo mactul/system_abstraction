@@ -3,9 +3,9 @@
 #include "SA/graphics/xcb/internal.h"
 
 
-void SA_graphics_vram_draw_pixel(SA_GraphicsWindow* window, int x, int y, uint32_t color)
+SA_bool SA_graphics_vram_draw_pixel(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t color)
 {
-    ;
+    return SA_FALSE;
 }
 
 

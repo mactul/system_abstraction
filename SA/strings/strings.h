@@ -41,6 +41,7 @@
     void SA_strcat(char* dest, const char* add);
 
     void* SA_memset(void* ptr, char value, uint64_t count);
+    uint32_t* SA_memset32(uint32_t* dest, uint32_t value, size_t array_len);
     void* SA_memcpy(void* dest, void* source, uint64_t size);
 
     char* SA_WARN_UNUSED_RESULT SA_strtrim_inplace(char* str);

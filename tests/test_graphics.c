@@ -3,13 +3,7 @@
 
 void callback(SA_GraphicsWindow* window)
 {
-    for(int i = 0; i < 100; i++)
-    {
-        for(int j = 0; j < 100; j++)
-        {
-            SA_graphics_vram_draw_pixel(window, 100+i, 100+j, 0x00FFFF);
-        }
-    }
+    SA_graphics_vram_draw_line(window, 5, 5, 100, 100, 0xff7000, 3);
     SA_graphics_vram_flush(window);
 
     SA_sleep(5e6);

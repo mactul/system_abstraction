@@ -21,8 +21,8 @@
         SDL_Surface* renderer;  // This backbuffer is required to handle the "expose" event.
         SDL_Surface* vram;
         pthread_mutex_t mutex;
-        int width;
-        int height;
+        uint32_t width;
+        uint32_t height;
         SA_bool is_killed;
     };
 

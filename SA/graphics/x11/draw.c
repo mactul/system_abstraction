@@ -3,12 +3,14 @@
 #include "SA/graphics/x11/internal.h"
 
 
-void SA_graphics_vram_draw_pixel(SA_GraphicsWindow* window, int x, int y, uint32_t color)
+SA_bool SA_graphics_vram_draw_pixel(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t color)
 {
     pthread_mutex_lock(&(window->mutex));
     XSetForeground(window->display, window->gc, color);
     XDrawPoint(window->display, window->vram, window->gc, x, y);
     pthread_mutex_unlock(&(window->mutex));
+
+    return SA_TRUE;
 }
 
 
