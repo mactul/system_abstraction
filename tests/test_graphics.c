@@ -10,7 +10,7 @@ void callback(SA_GraphicsWindow* window)
     for(int i = 0; i < 10; i++)
     {
         SA_GraphicsEvent event;
-        if(SA_graphics_wait_next_event(&event))
+        if(SA_graphics_wait_next_event(window, &event))
         {
             printf("%d %d\n", event.events.click.x, event.events.click.y);
         }

@@ -21,7 +21,7 @@
 
     typedef struct _sa_graphics_event {
         enum SA_GRAPHICS_EVENTS event_type;
-        SA_GraphicsWindow* window;
+        // SA_GraphicsWindow* window;
         union events {
             SA_EventClick click;
         } events;
@@ -33,9 +33,9 @@
 
     void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window));
     
-    void SA_graphics_post_event(SA_GraphicsEvent* event);
-    SA_bool SA_graphics_poll_next_event(SA_GraphicsEvent* event);
-    SA_bool SA_graphics_wait_next_event(SA_GraphicsEvent* event);
+    //void SA_graphics_post_event(SA_GraphicsEvent* event);
+    SA_bool SA_graphics_poll_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event);
+    SA_bool SA_graphics_wait_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event);
     
     SA_bool SA_graphics_vram_draw_pixel(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t color);
     SA_bool SA_graphics_vram_draw_horizontal_line(SA_GraphicsWindow* window, uint32_t x1, uint32_t x2, uint32_t y, uint32_t color, uint16_t thickness);
