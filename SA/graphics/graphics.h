@@ -6,10 +6,19 @@
     typedef struct _SA_graphics_window SA_GraphicsWindow;
 
     enum SA_GRAPHICS_WINDOW_FLAGS {
-        SA_GRAPHICS_WINDOW_NORESIZE = 1 << 0,
+        SA_GRAPHICS_WINDOW_RESIZE = 1 << 0,
+    };
+
+    enum SA_GRAPHICS_TO_HANDLE {
+        SA_GRAPHICS_HANDLE_MOUSE    = 1 << 0,
+        SA_GRAPHICS_HANDLE_KEYBOARD = 1 << 1,
+
+
+        SA_GRAPHICS_HANDLE_EVERYTHING = (uint32_t)(-1)
     };
 
     enum SA_GRAPHICS_EVENTS {
+        SA_GRAPHICS_EVENT_CLOSE_WINDOW,
         SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_DOWN,
         SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_UP,
     };
@@ -21,7 +30,6 @@
 
     typedef struct _sa_graphics_event {
         enum SA_GRAPHICS_EVENTS event_type;
-        // SA_GraphicsWindow* window;
         union events {
             SA_EventClick click;
         } events;
@@ -31,7 +39,7 @@
     extern "C"{
     #endif
 
-    void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window));
+    void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window), uint32_t events_to_handle);
     
     //void SA_graphics_post_event(SA_GraphicsEvent* event);
     SA_bool SA_graphics_poll_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event);

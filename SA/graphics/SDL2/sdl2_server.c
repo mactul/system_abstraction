@@ -192,6 +192,8 @@ static SA_bool sdl_event_switch(SDL_Event* event)
                     pthread_mutex_unlock(&(window->mutex));
                     break;
                 case SDL_WINDOWEVENT_CLOSE:
+                    graphics_event.event_type = SA_GRAPHICS_EVENT_CLOSE_WINDOW;
+                    SA_graphics_post_event(window, &graphics_event);
                     destroy_window(window);
                     break;
             }
@@ -200,6 +202,11 @@ static SA_bool sdl_event_switch(SDL_Event* event)
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
             window = SA_dynarray_get(SA_GraphicsWindow*, _SA_windows, event->button.windowID);
+            if((window->events_to_handle & SA_GRAPHICS_HANDLE_MOUSE) == 0)
+            {
+                break;
+            }
+            
             graphics_event.events.click.x = event->button.x;
             graphics_event.events.click.y = event->button.y;
             

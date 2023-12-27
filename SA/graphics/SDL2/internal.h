@@ -25,6 +25,7 @@
         pthread_mutex_t mutex;
         uint32_t width;
         uint32_t height;
+        uint32_t events_to_handle;
         SA_bool is_killed;
     };
 
