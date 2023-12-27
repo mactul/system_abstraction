@@ -2,17 +2,54 @@
 /* SDL2 is a BIG PIECE OF SHIT, so this file is required to synchronise everything */
 /***********************************************************************************/
 
-#include "SA/memory/dynamic_array.h"
 #include "SA/graphics/SDL2/internal.h"
 #include "SA/graphics/SDL2/sdl2_server.h"
 #include <SA/SA.h>
 
 
 static SA_DynamicArray* _SA_SDL_messages = NULL;
+static SA_DynamicArray* _SA_event_queue = NULL;
 static pthread_mutex_t _SA_SDL_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t _SA_event_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
 static uint32_t SDL_CUSTOM_EVENT;
+static sem_t _SA_event_sem;
 
 static SA_DynamicArray* _SA_windows = NULL;  // SA_GraphicsWindow* indexed by windowID
+
+
+void SA_graphics_post_event(SA_GraphicsEvent* event)
+{
+    pthread_mutex_lock(&_SA_event_queue_mutex);
+    if(_SA_event_queue != NULL)
+    {
+        SA_dynarray_append(SA_GraphicsEvent, _SA_event_queue, *event);
+        sem_post(&_SA_event_sem);
+    }
+    pthread_mutex_unlock(&_SA_event_queue_mutex);
+}
+
+SA_bool SA_graphics_poll_next_event(SA_GraphicsEvent* event)
+{
+    SA_bool ret = SA_TRUE;
+    pthread_mutex_lock(&_SA_event_queue_mutex);
+    if(SA_dynarray_size(_SA_event_queue) <= 0)
+    {
+        ret = SA_FALSE;
+        goto UNLOCK;
+    }
+    *event = SA_dynarray_get(SA_GraphicsEvent, _SA_event_queue, 0);
+    SA_dynarray_remove_block(_SA_event_queue, 0, 1);
+
+UNLOCK:
+    pthread_mutex_unlock(&_SA_event_queue_mutex);
+    return ret;
+}
+
+SA_bool SA_graphics_wait_next_event(SA_GraphicsEvent* event)
+{
+    sem_wait(&_SA_event_sem);
+    return SA_graphics_poll_next_event(event);
+}
 
 
 void SA_sdl_post_event(SA_SDL_Message* message)
@@ -165,10 +202,13 @@ UNLOCK:
 
 static SA_bool sdl_event_switch(SDL_Event* event)
 {
+    SA_GraphicsWindow* window;
+    SA_GraphicsEvent graphics_event;
+
     switch (event->type)
     {
         case SDL_WINDOWEVENT:
-            SA_GraphicsWindow* window = SA_dynarray_get(SA_GraphicsWindow*, _SA_windows, event->window.windowID);
+            window = SA_dynarray_get(SA_GraphicsWindow*, _SA_windows, event->window.windowID);
             switch(event->window.event)
             {
                 case SDL_WINDOWEVENT_EXPOSED:
@@ -180,6 +220,29 @@ static SA_bool sdl_event_switch(SDL_Event* event)
                     destroy_window(window);
                     break;
             }
+            break;
+        
+        case SDL_MOUSEBUTTONUP:
+        case SDL_MOUSEBUTTONDOWN:
+            window = SA_dynarray_get(SA_GraphicsWindow*, _SA_windows, event->button.windowID);
+            graphics_event.window = window;
+            graphics_event.events.click.x = event->button.x;
+            graphics_event.events.click.y = event->button.y;
+            
+            switch(event->button.button)
+            {
+                case SDL_BUTTON_LEFT:
+                    if(event->button.type == SDL_MOUSEBUTTONDOWN)
+                    {
+                        graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_DOWN;
+                    }
+                    else
+                    {
+                        graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_UP;
+                    }
+                    break;
+            }
+            SA_graphics_post_event(&graphics_event);
             break;
         
         case SDL_QUIT:
@@ -198,7 +261,9 @@ void* SA_sdl_server_thread(void* init_finished)
 
     (void)SDL_Init(SDL_INIT_VIDEO);
     _SA_SDL_messages = SA_dynarray_create_size_hint(SA_SDL_Message, 10);
+    _SA_event_queue = SA_dynarray_create_size_hint(SA_SDL_Message, 10);
     _SA_windows = SA_dynarray_create(SA_GraphicsWindow*);
+    sem_init(&_SA_event_sem, 0, 0);
     SDL_CUSTOM_EVENT = SDL_RegisterEvents(1);
 
     sem_post((sem_t*)init_finished);
@@ -217,8 +282,11 @@ void* SA_sdl_server_thread(void* init_finished)
         
     }
     pthread_mutex_destroy(&_SA_SDL_queue_mutex);
+    pthread_mutex_destroy(&_SA_event_queue_mutex);
+    sem_destroy(&_SA_event_sem);
     SA_dynarray_free(&_SA_SDL_messages);
     SA_dynarray_free(&_SA_windows);
+    SA_dynarray_free(&_SA_event_queue);
 
     SDL_Quit();
 

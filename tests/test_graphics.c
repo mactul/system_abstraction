@@ -1,4 +1,5 @@
 #include "test.h"
+#include <stdio.h>
 #include <pthread.h>
 
 void callback(SA_GraphicsWindow* window)
@@ -6,7 +7,14 @@ void callback(SA_GraphicsWindow* window)
     SA_graphics_vram_draw_line(window, 5, 5, 100, 100, 0xff7000, 3);
     SA_graphics_vram_flush(window);
 
-    SA_sleep(5e6);
+    for(int i = 0; i < 10; i++)
+    {
+        SA_GraphicsEvent event;
+        if(SA_graphics_wait_next_event(&event))
+        {
+            printf("%d %d\n", event.events.click.x, event.events.click.y);
+        }
+    }
 }
 
 

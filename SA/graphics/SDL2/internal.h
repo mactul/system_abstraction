@@ -6,6 +6,7 @@
     #include <SDL2/SDL.h>
     #include <pthread.h>
     #include <semaphore.h>
+    #include "SA/memory/dynamic_array.h"
     #include "SA/graphics/graphics.h"
 
 
@@ -20,6 +21,7 @@
         SDL_Window* window;
         SDL_Surface* renderer;  // This backbuffer is required to handle the "expose" event.
         SDL_Surface* vram;
+        SA_DynamicArray* event_queue;
         pthread_mutex_t mutex;
         uint32_t width;
         uint32_t height;
