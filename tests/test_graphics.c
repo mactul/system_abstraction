@@ -13,7 +13,21 @@ void callback(SA_GraphicsWindow* window)
     {
         if((event_readed = SA_graphics_wait_next_event(window, &event)))
         {
-            printf("%d %d\n", event.events.click.x, event.events.click.y);
+            switch(event.event_type)
+            {
+                case SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_DOWN:
+                    printf("click down: %d %d\n", event.events.click.x, event.events.click.y);
+                    break;
+                case SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_UP:
+                    printf("click up: %d %d\n", event.events.click.x, event.events.click.y);
+                    break;
+                case SA_GRAPHICS_EVENT_CLOSE_WINDOW:
+                    printf("close window\n");
+                    break;
+                default:
+                    printf("unknown event\n");
+                    break;
+            }
         }
     } while (!event_readed || event.event_type != SA_GRAPHICS_EVENT_CLOSE_WINDOW);
 }

@@ -3,6 +3,8 @@
 
     #include "SA/global/global.h"
 
+    #define SA_GRAPHICS_EVENT_QUEUE_LENGTH 1024
+
     typedef struct _SA_graphics_window SA_GraphicsWindow;
 
     enum SA_GRAPHICS_WINDOW_FLAGS {

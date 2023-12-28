@@ -11,7 +11,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
     SA_SDL_MsgCreateWindow msg = {.title = title, .pos_x = pos_x, .pos_y = pos_y, .flags = flags};
     SA_SDL_Message message = {.message_type = SA_SDL_CREATE_WINDOW, .window = &window, .msgs.create_window = msg};
 
-    window.event_queue = SA_queue_create(sizeof(SA_GraphicsEvent), 1024);
+    window.event_queue = SA_queue_create(sizeof(SA_GraphicsEvent), SA_GRAPHICS_EVENT_QUEUE_LENGTH);
     SA_sdl_create_window(&message);
 
     draw_callback(&window);
