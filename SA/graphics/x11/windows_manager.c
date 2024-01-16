@@ -37,7 +37,7 @@ UNLOCK:
 
 static inline void SA_graphics_post_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event)
 {
-    if(window != NULL && window->event_queue != NULL && !window->is_killed)
+    if(window != NULL && window->event_queue != NULL && !window->is_killed && event->event_type != SA_GRAPHICS_EVENT_NOTHING)
     {
         SA_queue_push(window->event_queue, event);
     }
@@ -138,7 +138,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
         XFree(sh);
     }
     XSetStandardProperties(window.display, window.window, title, NULL, 0, NULL, 0, NULL);
-    XSelectInput(window.display, window.window, ExposureMask | ResizeRedirectMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask);
+    XSelectInput(window.display, window.window, ExposureMask | ResizeRedirectMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | PointerMotionMask);
     Atom wmDeleteMessage = XInternAtom(window.display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(window.display, window.window, &wmDeleteMessage, 1);
     window.gc = XCreateGC(window.display, window.window, 0, NULL);
@@ -192,29 +192,58 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
                 break;
 
             case ButtonPress:
-            case ButtonRelease:
-                
-                graphics_event.events.click.x = event.xbutton.x;
-                graphics_event.events.click.y = event.xbutton.y;
-                
                 switch(event.xbutton.button)
                 {
                     case Button1:
-                        if(event.type == ButtonPress)
+                        graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_DOWN;
+                        graphics_event.events.mouse.x = event.xbutton.x;
+                        graphics_event.events.mouse.y = event.xbutton.y;
+                        if((window.events_to_queue & SA_GRAPHICS_QUEUE_MOUSE_CLICK) == SA_GRAPHICS_QUEUE_MOUSE_CLICK)
                         {
-                            graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_DOWN;
+                            SA_graphics_post_event(&window, &graphics_event);
                         }
-                        else
+                        break;
+                    
+                    case Button4:
+                        graphics_event.event_type = SA_GRAPHICS_EVENT_SCROLL_UP;
+                        if((window.events_to_queue & SA_GRAPHICS_QUEUE_SCROLL) == SA_GRAPHICS_QUEUE_SCROLL)
                         {
-                            graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_UP;
+                            SA_graphics_post_event(&window, &graphics_event);
+                        }
+                        break;
+                    case Button5:
+                        graphics_event.event_type = SA_GRAPHICS_EVENT_SCROLL_DOWN;
+                        if((window.events_to_queue & SA_GRAPHICS_QUEUE_SCROLL) == SA_GRAPHICS_QUEUE_SCROLL)
+                        {
+                            SA_graphics_post_event(&window, &graphics_event);
+                        }
+                        break;
+
+                }
+                break;
+            case ButtonRelease:
+                switch(event.xbutton.button)
+                {
+                    case Button1:
+                        graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_UP;
+                        graphics_event.events.mouse.x = event.xbutton.x;
+                        graphics_event.events.mouse.y = event.xbutton.y;
+                        if((window.events_to_queue & SA_GRAPHICS_QUEUE_MOUSE_CLICK) == SA_GRAPHICS_QUEUE_MOUSE_CLICK)
+                        {
+                            SA_graphics_post_event(&window, &graphics_event);
                         }
                         break;
                 }
-                if((window.events_to_queue & SA_GRAPHICS_QUEUE_MOUSE) == SA_GRAPHICS_QUEUE_MOUSE)
+                break;
+            case MotionNotify:
+                graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_MOVE;
+                graphics_event.events.mouse.x = event.xbutton.x;
+                graphics_event.events.mouse.y = event.xbutton.y;
+                if((window.events_to_queue & SA_GRAPHICS_QUEUE_MOUSE_MOVE) == SA_GRAPHICS_QUEUE_MOUSE_MOVE)
                 {
                     SA_graphics_post_event(&window, &graphics_event);
                 }
-            break;
+                break;
         }
 
         if(graphics_event.event_type == SA_GRAPHICS_EVENT_NOTHING)

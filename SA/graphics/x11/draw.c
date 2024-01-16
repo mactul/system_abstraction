@@ -1,4 +1,5 @@
 #include <X11/Xlib.h>
+#include "SA/strings/strings.h"
 #include "SA/graphics/graphics.h"
 #include "SA/graphics/x11/internal.h"
 
@@ -31,6 +32,16 @@ SA_bool SA_graphics_vram_draw_line(SA_GraphicsWindow* window, int32_t x1, int32_
     XDrawLine(window->display, window->vram, window->gc, x1, y1, x2, y2);
     pthread_mutex_unlock(&(window->mutex));
 
+    return SA_TRUE;
+}
+
+SA_bool SA_graphics_vram_draw_text(SA_GraphicsWindow* window, uint32_t x, uint32_t y, const char* str, uint32_t color)
+{
+    pthread_mutex_lock(&(window->mutex));
+    XSetForeground(window->display, window->gc, color);
+    XDrawString(window->display, window->vram, window->gc, x, y, str, SA_strlen(str));
+    pthread_mutex_unlock(&(window->mutex));
+    
     return SA_TRUE;
 }
 

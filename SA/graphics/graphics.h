@@ -12,11 +12,12 @@
     };
 
     enum SA_GRAPHICS_TO_QUEUE {
-        SA_GRAPHICS_QUEUE_MOUSE    = 1 << 0,
-        SA_GRAPHICS_QUEUE_KEYBOARD = 1 << 1,
+        SA_GRAPHICS_QUEUE_MOUSE_CLICK = 1 << 0,
+        SA_GRAPHICS_QUEUE_KEYBOARD    = 1 << 1,
+        SA_GRAPHICS_QUEUE_MOUSE_MOVE  = 1 << 2,
+        SA_GRAPHICS_QUEUE_SCROLL      = 1 << 3,
 
-
-        SA_GRAPHICS_QUEUE_EVERYTHING = (uint32_t)(-1)
+        SA_GRAPHICS_QUEUE_EVERYTHING  = (uint32_t)(-1)
     };
 
     enum SA_GRAPHICS_EVENTS {
@@ -24,17 +25,20 @@
         SA_GRAPHICS_EVENT_CLOSE_WINDOW = 0,
         SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_DOWN,
         SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_UP,
+        SA_GRAPHICS_EVENT_MOUSE_MOVE,
+        SA_GRAPHICS_EVENT_SCROLL_UP,
+        SA_GRAPHICS_EVENT_SCROLL_DOWN
     };
 
     typedef struct _SA_event_click {
         uint32_t x;
         uint32_t y;
-    } SA_EventClick;
+    } SA_EventMouse;
 
     typedef struct _sa_graphics_event {
         enum SA_GRAPHICS_EVENTS event_type;
         union events {
-            SA_EventClick click;
+            SA_EventMouse mouse;
         } events;
     } SA_GraphicsEvent;
 
@@ -52,7 +56,9 @@
     SA_bool SA_graphics_vram_draw_horizontal_line(SA_GraphicsWindow* window, uint32_t x1, uint32_t x2, uint32_t y, uint32_t color, uint16_t thickness);
     SA_bool SA_graphics_vram_draw_vertical_line(SA_GraphicsWindow* window, uint32_t x, uint32_t y1, uint32_t y2, uint32_t color, uint16_t thickness);
     SA_bool SA_graphics_vram_draw_line(SA_GraphicsWindow* window, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint32_t color, uint16_t thickness);
-    
+
+    SA_bool SA_graphics_vram_draw_text(SA_GraphicsWindow* window, uint32_t x, uint32_t y, const char* str, uint32_t color);
+
     void SA_graphics_vram_flush(SA_GraphicsWindow* window);
     
     #ifdef __cplusplus

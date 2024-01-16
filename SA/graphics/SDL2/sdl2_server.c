@@ -207,8 +207,8 @@ static void sdl_event_switch(SDL_Event* event)
         case SDL_MOUSEBUTTONDOWN:
             window = SA_dynarray_get(SA_GraphicsWindow*, _SA_windows, event->button.windowID);
             
-            graphics_event.events.click.x = event->button.x;
-            graphics_event.events.click.y = event->button.y;
+            graphics_event.events.mouse.x = event->button.x;
+            graphics_event.events.mouse.y = event->button.y;
             
             switch(event->button.button)
             {
@@ -223,11 +223,36 @@ static void sdl_event_switch(SDL_Event* event)
                     }
                     break;
             }
-            if((window->events_to_queue & SA_GRAPHICS_QUEUE_MOUSE) == SA_GRAPHICS_QUEUE_MOUSE)
+            if((window->events_to_queue & SA_GRAPHICS_QUEUE_MOUSE_CLICK) == SA_GRAPHICS_QUEUE_MOUSE_CLICK)
             {
                 SA_graphics_post_event(window, &graphics_event);
             }
             break;
+        
+        case SDL_MOUSEWHEEL:
+            window = SA_dynarray_get(SA_GraphicsWindow*, _SA_windows, event->wheel.windowID);
+
+            if(event->wheel.y > 0) // scroll up
+            {
+                graphics_event.event_type = SA_GRAPHICS_EVENT_SCROLL_UP;
+            }
+            else if(event->wheel.y < 0) // scroll down
+            {
+                graphics_event.event_type = SA_GRAPHICS_EVENT_SCROLL_DOWN;
+            }
+
+            if((window->events_to_queue & SA_GRAPHICS_QUEUE_SCROLL) == SA_GRAPHICS_QUEUE_SCROLL)
+            {
+                SA_graphics_post_event(window, &graphics_event);
+            }
+            break;
+        
+        case SDL_MOUSEMOTION:
+            window = SA_dynarray_get(SA_GraphicsWindow*, _SA_windows, event->motion.windowID);
+            
+            graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_MOVE;
+            graphics_event.events.mouse.x = event->motion.x;
+            graphics_event.events.mouse.y = event->motion.y;
         
         default:
             break;
