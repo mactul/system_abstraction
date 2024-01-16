@@ -13,6 +13,16 @@ SA_bool SA_graphics_vram_draw_pixel(SA_GraphicsWindow* window, uint32_t x, uint3
     return SA_TRUE;
 }
 
+SA_bool SA_graphics_vram_draw_horizontal_line(SA_GraphicsWindow* window, uint32_t x1, uint32_t x2, uint32_t y, uint32_t color, uint16_t thickness)
+{
+    return SA_graphics_vram_draw_line(window, x1, y, x2, y, color, thickness);
+}
+
+SA_bool SA_graphics_vram_draw_vertical_line(SA_GraphicsWindow* window, uint32_t x, uint32_t y1, uint32_t y2, uint32_t color, uint16_t thickness)
+{
+    return SA_graphics_vram_draw_line(window, x, y1, x, y2, color, thickness);
+}
+
 SA_bool SA_graphics_vram_draw_line(SA_GraphicsWindow* window, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint32_t color, uint16_t thickness)
 {
     pthread_mutex_lock(&(window->mutex));

@@ -46,12 +46,14 @@ function configure(target)
         import("lib.detect.find_library")
 
         if get_config("graphics_renderer") == "autoconfig" then
-            if find_library("SDL2", {"/usr/lib", "/usr/local/lib", "./"}) then
-                graphics_renderer = "sdl2"
-            elseif is_plat("windows", "mingw") then
+            if is_plat("windows", "mingw") then
                 graphics_renderer = "windows_gdi"
-            else
+            elseif find_library("X11", {"/usr/lib", "/usr/local/lib", "./"}) then
                 graphics_renderer = "x11"
+            elseif find_library("SDL2", {"/usr/lib", "/usr/local/lib", "./"}) then
+                graphics_renderer = "sdl2"
+            else
+                graphics_renderer = "ERROR"
             end
         else
             graphics_renderer = get_config("graphics_renderer")
@@ -124,6 +126,8 @@ target("sa")
         add_defines("SA_NETWORK_DISABLED")
         remove_files("SA/network/*")
     end
+
+    remove_files("SA/graphics/universal_font/*")
 
 if has_config("build_tests") then
     target("tests")

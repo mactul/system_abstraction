@@ -15,7 +15,9 @@
         Drawable vram;
         Drawable renderer;  // This backbuffer is needed to handle the "Expose" event
         pthread_mutex_t mutex;
+        uint32_t events_to_queue;
         SA_Queue* event_queue;
+        void (*event_callback)(SA_GraphicsWindow* window, SA_GraphicsEvent* event);
         int width;
         int height;
         SA_bool is_killed;

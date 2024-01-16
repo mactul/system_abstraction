@@ -11,13 +11,56 @@ typedef struct _thread_data {
     void (*draw_callback)(SA_GraphicsWindow* window);
 } ThreadData;
 
+static void destroy_window(SA_GraphicsWindow* window)
+{
+    pthread_mutex_lock(&(window->mutex));
+    if(window->display == 0)
+    {
+        goto UNLOCK;
+    }
+    XFreePixmap(window->display, window->vram);
+    XFreePixmap(window->display, window->renderer);
+    XFreeGC(window->display, window->gc);
+    XCloseDisplay(window->display);
+    window->window = 0;
+    window->display = 0;
+    window->gc = 0;
+    window->renderer = 0;
+    window->vram = 0;
+    window->height = 0;
+    window->width = 0;
+    window->is_killed = SA_TRUE;
+
+UNLOCK:
+    pthread_mutex_unlock(&(window->mutex));
+}
+
+static inline void SA_graphics_post_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event)
+{
+    if(window != NULL && window->event_queue != NULL && !window->is_killed)
+    {
+        SA_queue_push(window->event_queue, event);
+    }
+}
+
+SA_bool SA_graphics_poll_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event)
+{
+    return SA_queue_pull(window->event_queue, event, SA_FALSE);
+}
+
+SA_bool SA_graphics_wait_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event)
+{
+    return SA_queue_pull(window->event_queue, event, SA_TRUE);
+}
+
+
 static void* callback_runner(void* data)
 {
     ThreadData* thread_data = (ThreadData*)data;
 
     thread_data->draw_callback(thread_data->window);
 
-    thread_data->window->is_killed = SA_TRUE;
+    destroy_window(thread_data->window);
 
     return NULL;
 }
@@ -76,12 +119,13 @@ LABEL_END:
 
 void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window), uint32_t events_to_queue, void (*event_callback)(SA_GraphicsWindow* window, SA_GraphicsEvent* event))
 {
-    SA_GraphicsWindow window = {.is_killed = SA_FALSE, .width = width, .height = height, .mutex = PTHREAD_MUTEX_INITIALIZER};
-
+    SA_GraphicsWindow window = {.is_killed = SA_FALSE, .width = width, .height = height, .mutex = PTHREAD_MUTEX_INITIALIZER, .events_to_queue = events_to_queue, .event_callback = event_callback};
     pthread_t thread;
     ThreadData thread_data = {.window = &window, .draw_callback = draw_callback};
 
     window.display = XOpenDisplay(NULL);
+
+    window.event_queue = SA_queue_create(sizeof(SA_GraphicsEvent), SA_GRAPHICS_EVENT_QUEUE_LENGTH);
 
     window.window = XCreateSimpleWindow(window.display, DefaultRootWindow(window.display), pos_x, pos_y, width, height, 0, 0x000000, 0xFF7000);
     if(!(flags & SA_GRAPHICS_WINDOW_RESIZE))
@@ -94,7 +138,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
         XFree(sh);
     }
     XSetStandardProperties(window.display, window.window, title, NULL, 0, NULL, 0, NULL);
-    XSelectInput(window.display, window.window, ExposureMask | ResizeRedirectMask | ButtonPressMask | KeyPressMask);
+    XSelectInput(window.display, window.window, ExposureMask | ResizeRedirectMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask);
     Atom wmDeleteMessage = XInternAtom(window.display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(window.display, window.window, &wmDeleteMessage, 1);
     window.gc = XCreateGC(window.display, window.window, 0, NULL);
@@ -102,6 +146,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
     XSetForeground(window.display, window.gc, black);*/
     XClearWindow(window.display, window.window);
     XMapRaised(window.display, window.window);
+    XMoveWindow(window.display, window.window, pos_x, pos_y);
 
     window.renderer = XCreatePixmap(window.display, window.window, window.width, window.height, 24);
     window.vram = XCreatePixmap(window.display, window.window, window.width, window.height, 24);
@@ -114,29 +159,73 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
 
     while(!window.is_killed)
     {
+        SA_GraphicsEvent graphics_event = {.event_type = SA_GRAPHICS_EVENT_NOTHING};
         XEvent event;
 
         if(!XNextEventTimeout(window.display, &event, 100))
         {
             continue;
         }
-    
-        if (event.type==Expose && event.xexpose.count==0)
+
+        switch(event.type)
         {
-            pthread_mutex_lock(&(window.mutex));
-            XCopyArea(window.display, window.renderer, window.window, window.gc, 0, 0, window.width, window.height, 0, 0);
-            pthread_mutex_unlock(&(window.mutex));
+            case ClientMessage:
+                if ((Atom)(event.xclient.data.l[0]) == wmDeleteMessage)
+                {
+                    graphics_event.event_type = SA_GRAPHICS_EVENT_CLOSE_WINDOW;
+                    SA_graphics_post_event(&window, &graphics_event);
+                    destroy_window(&window);
+                }
+                break;
+
+            case Expose:
+                if (event.xexpose.count == 0)
+                {
+                    pthread_mutex_lock(&(window.mutex));
+                    XCopyArea(window.display, window.renderer, window.window, window.gc, 0, 0, window.width, window.height, 0, 0);
+                    pthread_mutex_unlock(&(window.mutex));
+                }
+                break;
+
+            case ResizeRequest:
+                change_bitmap_size(&window, event.xresizerequest.width, event.xresizerequest.height);
+                break;
+
+            case ButtonPress:
+            case ButtonRelease:
+                
+                graphics_event.events.click.x = event.xbutton.x;
+                graphics_event.events.click.y = event.xbutton.y;
+                
+                switch(event.xbutton.button)
+                {
+                    case Button1:
+                        if(event.type == ButtonPress)
+                        {
+                            graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_DOWN;
+                        }
+                        else
+                        {
+                            graphics_event.event_type = SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_UP;
+                        }
+                        break;
+                }
+                if((window.events_to_queue & SA_GRAPHICS_QUEUE_MOUSE) == SA_GRAPHICS_QUEUE_MOUSE)
+                {
+                    SA_graphics_post_event(&window, &graphics_event);
+                }
+            break;
         }
-        if(event.type == ResizeRequest)
-        {
-            change_bitmap_size(&window, event.xresizerequest.width, event.xresizerequest.height);
-        }
-        if ((Atom)(event.xclient.data.l[0]) == wmDeleteMessage)
-        {
-            window.is_killed = SA_TRUE;
-        }
+
+        if(graphics_event.event_type == SA_GRAPHICS_EVENT_NOTHING)
+            continue;
+        
+        
+        if(window.event_callback != NULL)
+            window.event_callback(&window, &graphics_event);
     }
-    XCloseDisplay(window.display);
     
     pthread_join(thread, NULL);
+
+    SA_queue_free(&(window.event_queue));
 }

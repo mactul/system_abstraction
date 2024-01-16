@@ -15,7 +15,7 @@ static uint32_t SDL_CUSTOM_EVENT;
 static SA_DynamicArray* _SA_windows = NULL;  // SA_GraphicsWindow* indexed by windowID
 
 
-static void SA_graphics_post_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event)
+static inline void SA_graphics_post_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event)
 {
     if(window != NULL && window->event_queue != NULL && !window->is_killed)
     {
