@@ -2,6 +2,7 @@
     #define SA_GRAPHICS_X11_INTERNAL
 
     #include "SA/global/global.h"
+    #include "SA/memory/queue.h"
 
     #include <X11/Xlib.h>
     #include <X11/Xutil.h>
@@ -14,6 +15,7 @@
         Drawable vram;
         Drawable renderer;  // This backbuffer is needed to handle the "Expose" event
         pthread_mutex_t mutex;
+        SA_Queue* event_queue;
         int width;
         int height;
         SA_bool is_killed;

@@ -74,7 +74,7 @@ LABEL_END:
     pthread_mutex_unlock(&(window->mutex));
 }
 
-void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window))
+void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window), uint32_t events_to_queue, void (*event_callback)(SA_GraphicsWindow* window, SA_GraphicsEvent* event))
 {
     SA_GraphicsWindow window = {.is_killed = SA_FALSE, .width = width, .height = height, .mutex = PTHREAD_MUTEX_INITIALIZER};
 
@@ -84,12 +84,16 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
     window.display = XOpenDisplay(NULL);
 
     window.window = XCreateSimpleWindow(window.display, DefaultRootWindow(window.display), pos_x, pos_y, width, height, 0, 0x000000, 0xFF7000);
-    if(flags & WINDOW_NORESIZE)
+    if(!(flags & SA_GRAPHICS_WINDOW_RESIZE))
     {
-        XSizeHints size = {.min_width = 100, .min_height = 100};
-        XSetWMNormalHints(window.display, window.window, &size);
+        XSizeHints* sh = XAllocSizeHints();
+        sh->flags = PMinSize | PMaxSize;
+        sh->min_width = sh->max_width = width;
+        sh->min_height = sh->max_height = height;
+        XSetWMNormalHints(window.display, window.window, sh);
+        XFree(sh);
     }
-    XSetStandardProperties(window.display, window.window, title, "Hi", 0, NULL, 0, NULL);
+    XSetStandardProperties(window.display, window.window, title, NULL, 0, NULL, 0, NULL);
     XSelectInput(window.display, window.window, ExposureMask | ResizeRedirectMask | ButtonPressMask | KeyPressMask);
     Atom wmDeleteMessage = XInternAtom(window.display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(window.display, window.window, &wmDeleteMessage, 1);
@@ -125,7 +129,6 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
         }
         if(event.type == ResizeRequest)
         {
-            printf("resize\n");
             change_bitmap_size(&window, event.xresizerequest.width, event.xresizerequest.height);
         }
         if ((Atom)(event.xclient.data.l[0]) == wmDeleteMessage)

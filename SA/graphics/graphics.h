@@ -11,16 +11,17 @@
         SA_GRAPHICS_WINDOW_RESIZE = 1 << 0,
     };
 
-    enum SA_GRAPHICS_TO_HANDLE {
-        SA_GRAPHICS_HANDLE_MOUSE    = 1 << 0,
-        SA_GRAPHICS_HANDLE_KEYBOARD = 1 << 1,
+    enum SA_GRAPHICS_TO_QUEUE {
+        SA_GRAPHICS_QUEUE_MOUSE    = 1 << 0,
+        SA_GRAPHICS_QUEUE_KEYBOARD = 1 << 1,
 
 
-        SA_GRAPHICS_HANDLE_EVERYTHING = (uint32_t)(-1)
+        SA_GRAPHICS_QUEUE_EVERYTHING = (uint32_t)(-1)
     };
 
     enum SA_GRAPHICS_EVENTS {
-        SA_GRAPHICS_EVENT_CLOSE_WINDOW,
+        SA_GRAPHICS_EVENT_NOTHING = -1,
+        SA_GRAPHICS_EVENT_CLOSE_WINDOW = 0,
         SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_DOWN,
         SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_UP,
     };
@@ -41,7 +42,7 @@
     extern "C"{
     #endif
 
-    void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window), uint32_t events_to_handle);
+    void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window), uint32_t events_to_queue, void (*event_callback)(SA_GraphicsWindow* window, SA_GraphicsEvent* event));
     
     //void SA_graphics_post_event(SA_GraphicsEvent* event);
     SA_bool SA_graphics_poll_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event);

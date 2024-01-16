@@ -3,6 +3,18 @@
     #include "SA/global/global.h"
 
     /*
+    Take the maximum value between x and y
+    /!\\ WARNING ! /!\\ One parameter will be evaluated twice.
+    */
+    #define SA_MAX(x, y) ((x) > (y) ? (x): (y))
+
+    /*
+    Take the minimum value between x and y
+    /!\\ WARNING ! /!\\ One parameter will be evaluated twice.
+    */
+    #define SA_MIN(x, y) ((x) < (y) ? (x): (y))
+
+    /*
     Warning, the expression entered will be evaluated twice by the macro.
     Returns 0 if x is negative, x otherwise.
     ```

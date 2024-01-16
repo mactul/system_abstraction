@@ -98,7 +98,11 @@ void SA_sdl_redraw_window(SA_GraphicsWindow* window)
 
 static void create_window(SA_GraphicsWindow* window, SA_SDL_MsgCreateWindow* msg)
 {
-    window->window = SDL_CreateWindow(msg->title, msg->pos_x, msg->pos_y, window->width, window->height, msg->flags | SDL_WINDOW_SHOWN);
+    uint32_t sdl_flags = 0;
+    if(msg->flags & SA_GRAPHICS_WINDOW_RESIZE)
+        sdl_flags |= SDL_WINDOW_RESIZABLE;
+    
+    window->window = SDL_CreateWindow(msg->title, msg->pos_x, msg->pos_y, window->width, window->height, sdl_flags | SDL_WINDOW_SHOWN);
     if(window->window == NULL)
     {
         window->is_killed = SA_TRUE;
@@ -175,10 +179,10 @@ UNLOCK:
     return ret;
 }
 
-static SA_bool sdl_event_switch(SDL_Event* event)
+static void sdl_event_switch(SDL_Event* event)
 {
-    SA_GraphicsWindow* window;
-    SA_GraphicsEvent graphics_event;
+    SA_GraphicsWindow* window = NULL;
+    SA_GraphicsEvent graphics_event = {.event_type = SA_GRAPHICS_EVENT_NOTHING};
 
     switch (event->type)
     {
@@ -202,10 +206,6 @@ static SA_bool sdl_event_switch(SDL_Event* event)
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
             window = SA_dynarray_get(SA_GraphicsWindow*, _SA_windows, event->button.windowID);
-            if((window->events_to_handle & SA_GRAPHICS_HANDLE_MOUSE) == 0)
-            {
-                break;
-            }
             
             graphics_event.events.click.x = event->button.x;
             graphics_event.events.click.y = event->button.y;
@@ -223,16 +223,30 @@ static SA_bool sdl_event_switch(SDL_Event* event)
                     }
                     break;
             }
-            SA_graphics_post_event(window, &graphics_event);
+            if((window->events_to_queue & SA_GRAPHICS_QUEUE_MOUSE) == SA_GRAPHICS_QUEUE_MOUSE)
+            {
+                SA_graphics_post_event(window, &graphics_event);
+            }
             break;
         
-        case SDL_QUIT:
-            return SA_TRUE;
         default:
             break;
     }
 
-    return SA_TRUE;
+    if(graphics_event.event_type == SA_GRAPHICS_EVENT_NOTHING)
+        return;
+    
+    if(window == NULL)
+        return;
+    
+    
+    if(window->event_callback != NULL)
+        window->event_callback(window, &graphics_event);
+
+    if(graphics_event.event_type == SA_GRAPHICS_EVENT_CLOSE_WINDOW)
+    {
+        sem_post(window->is_completly_destroyed);
+    }
 }
 
 void* SA_sdl_server_thread(void* init_finished)
@@ -256,7 +270,7 @@ void* SA_sdl_server_thread(void* init_finished)
         }
         else
         {
-            server_running = sdl_event_switch(&sdl_event);
+            sdl_event_switch(&sdl_event);
         }
         
     }
