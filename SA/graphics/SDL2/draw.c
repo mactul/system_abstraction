@@ -98,6 +98,8 @@ SA_bool SA_graphics_vram_draw_vertical_line(SA_GraphicsWindow* window, uint32_t 
     SDL_UnlockSurface(window->vram);
 
 UNLOCK:
+    pthread_mutex_unlock(&(window->mutex));
+    
     return ret;
 }
 
