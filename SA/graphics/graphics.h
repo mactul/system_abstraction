@@ -6,6 +6,7 @@
     #define SA_GRAPHICS_EVENT_QUEUE_LENGTH 1024
 
     typedef struct _SA_graphics_window SA_GraphicsWindow;
+    typedef struct _SA_graphics_text_input SA_GraphicsTextInput;
 
     enum SA_GRAPHICS_WINDOW_FLAGS {
         SA_GRAPHICS_WINDOW_RESIZE = 1 << 0,
@@ -30,6 +31,11 @@
         SA_GRAPHICS_EVENT_SCROLL_DOWN,
         SA_GRAPHICS_EVENT_KEY_DOWN,
         SA_GRAPHICS_EVENT_KEY_UP,
+    };
+
+    enum SA_GRAPHICS_KEYCODES {
+        SA_GRAPHICS_KEYCODE_BACKSPACE = 22,
+        SA_GRAPHICS_KEYCODE_ENTER     = 36,
     };
 
     typedef struct _sa_graphics_rectangle {
@@ -63,7 +69,6 @@
 
     void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int width, int height, uint32_t flags, void (*draw_callback)(SA_GraphicsWindow* window), uint32_t events_to_queue, void (*event_callback)(SA_GraphicsWindow* window, SA_GraphicsEvent* event));
     
-    //void SA_graphics_post_event(SA_GraphicsEvent* event);
     SA_bool SA_graphics_poll_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event);
     SA_bool SA_graphics_wait_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event);
     
@@ -76,6 +81,17 @@
     SA_bool SA_graphics_vram_draw_text(SA_GraphicsWindow* window, uint32_t x, uint32_t y, const char* str, uint32_t color);
 
     void SA_graphics_vram_flush(SA_GraphicsWindow* window);
+
+    SA_GraphicsTextInput* SA_graphics_create_text_input(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t background_color, uint32_t text_color, uint32_t max_text_size, uint32_t padding_x, uint32_t padding_y);
+    SA_bool SA_graphics_handle_text_input_events(SA_GraphicsTextInput* text_input, const SA_GraphicsEvent* event);
+    const char* SA_graphics_get_text_input_value(SA_GraphicsTextInput* text_input);
+    void SA_graphics_get_text_input_rectangle(SA_GraphicsTextInput* text_input, SA_GraphicsRectangle* rectangle);
+    void SA_graphics_free_text_input(SA_GraphicsTextInput** text_input);
+
+    static inline SA_bool SA_graphics_vram_draw_rectangle_from_rectangle(SA_GraphicsWindow* window, SA_GraphicsRectangle* rectangle, uint32_t color)
+    {
+        return SA_graphics_vram_draw_rectangle(window, rectangle->top_left_corner_x, rectangle->top_left_corner_y, rectangle->width, rectangle->height, color);
+    }
     
     #ifdef __cplusplus
     }

@@ -26,12 +26,14 @@ void callback(SA_GraphicsWindow* window)
 
     SA_graphics_plot_continuous_graph(window, x_array, y_array, sizeof(x_array)/sizeof(double), &draw_area, 0x000000, 0xff0000, 0xffffff);
     
+    SA_GraphicsTextInput* text_input = SA_graphics_create_text_input(window, 10, 10, 0xffffff, 0xff0000, 50, 10, 6);
 
     SA_graphics_vram_flush(window);
     do
     {
         if((event_readed = SA_graphics_wait_next_event(window, &event)))
         {
+            printf("%d\n", SA_graphics_handle_text_input_events(text_input, &event));
             switch(event.event_type)
             {
                 case SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_DOWN:
@@ -58,6 +60,8 @@ void callback(SA_GraphicsWindow* window)
             }
         }
     } while (!event_readed || event.event_type != SA_GRAPHICS_EVENT_CLOSE_WINDOW);
+
+    SA_graphics_free_text_input(&text_input);
 }
 
 
@@ -91,7 +95,7 @@ void event_callback(SA_GraphicsWindow*, SA_GraphicsEvent* event)
             printf("event_callback: move: %d %d\n", event->events.mouse.x, event->events.mouse.y);
             break;
         case SA_GRAPHICS_EVENT_KEY_DOWN:
-            printf("event_callback: key down: %s\n", event->events.key.str);
+            printf("event_callback: key down: %d %s\n", event->events.key.keycode, event->events.key.str);
             break;
         default:
             printf("event_callback: unknown event\n");

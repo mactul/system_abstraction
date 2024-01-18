@@ -22,4 +22,5 @@
         int height;
         SA_bool is_killed;
     };
+
 #endif
