@@ -10,7 +10,7 @@ void callback(SA_GraphicsWindow* window)
 {
     SA_bool event_readed;
     SA_GraphicsEvent event;
-    SA_GraphicsRectangle draw_area = {.top_left_corner_x = 0, .top_left_corner_y = 0, .height = 500, .width = 500};
+    SA_GraphicsRectangle draw_area = {.top_left_corner_x = 100, .top_left_corner_y = 100, .height = 300, .width = 300};
     double x_array[200];
     double y_array[200];
 
@@ -104,10 +104,10 @@ void test_graphics(void)
     //SA_UniversalFont font;
     //SA_UF_load_psf_font_from_file(&font, "font_psf1.psf");
 
-    SA_graphics_create_window("Hello world", 100, 100, 500, 500, 0, callback, SA_GRAPHICS_QUEUE_MOUSE_CLICK | SA_GRAPHICS_QUEUE_SCROLL, NULL);
+    SA_graphics_create_window("Hello world", 100, 100, 600, 600, 0, callback, SA_GRAPHICS_QUEUE_MOUSE_CLICK | SA_GRAPHICS_QUEUE_SCROLL, NULL);
 
 
     //pthread_join(thread, NULL);
 
-    SA_graphics_create_window("machin", 0, 0, 500, 500, 0, callback, 0, event_callback);
+    SA_graphics_create_window("machin", 0, 0, 600, 600, 0, callback, 0, event_callback);
 }

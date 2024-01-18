@@ -203,28 +203,28 @@ static double plot_axis_values(SA_GraphicsWindow* window, double* array, unsigne
         while(xy < draw_area->width-MARGIN_X-xy_step)
         {
             display_maximum_digits(str, current, 4);
-            SA_graphics_vram_draw_text(window, xy-10, draw_area->height - MARGIN_Y + 20, str, axis_color);
-            SA_graphics_vram_draw_vertical_line(window, xy, draw_area->height-MARGIN_Y-3, draw_area->height-MARGIN_X+3, axis_color, 2);
+            SA_graphics_vram_draw_text(window, draw_area->top_left_corner_x + xy-10, draw_area->top_left_corner_y + draw_area->height - MARGIN_Y + 20, str, axis_color);
+            SA_graphics_vram_draw_vertical_line(window, draw_area->top_left_corner_x + xy, draw_area->top_left_corner_y + draw_area->height-MARGIN_Y-3, draw_area->top_left_corner_y + draw_area->height-MARGIN_X+3, axis_color, 2);
             current += step;
             xy += xy_step;
         }
         display_maximum_digits(str, current, 4);
-        SA_graphics_vram_draw_text(window, xy-10, draw_area->height - MARGIN_Y + 20, str, axis_color);
-        SA_graphics_vram_draw_vertical_line(window, xy, draw_area->height-MARGIN_Y-3, draw_area->height-MARGIN_X+3, axis_color, 2);
+        SA_graphics_vram_draw_text(window, draw_area->top_left_corner_x + xy-10, draw_area->top_left_corner_y + draw_area->height - MARGIN_Y + 20, str, axis_color);
+        SA_graphics_vram_draw_vertical_line(window, draw_area->top_left_corner_x + xy, draw_area->top_left_corner_y + draw_area->height-MARGIN_Y-3, draw_area->top_left_corner_y + draw_area->height-MARGIN_X+3, axis_color, 2);
     }
     else
     {
         while(xy > MARGIN_X+xy_step)
         {
             display_maximum_digits(str, current, 5);
-            SA_graphics_vram_draw_text(window, 5, xy + 4, str, axis_color);
-            SA_graphics_vram_draw_horizontal_line(window, MARGIN_X-3, MARGIN_X+3, xy, axis_color, 2);
+            SA_graphics_vram_draw_text(window, draw_area->top_left_corner_x + 5, draw_area->top_left_corner_y + xy + 4, str, axis_color);
+            SA_graphics_vram_draw_horizontal_line(window, draw_area->top_left_corner_x + MARGIN_X-3, draw_area->top_left_corner_x + MARGIN_X+3, draw_area->top_left_corner_y + xy, axis_color, 2);
             current += step;
             xy -= xy_step;
         }
         display_maximum_digits(str, current, 5);
-        SA_graphics_vram_draw_text(window, 5, xy + 4, str, axis_color);
-        SA_graphics_vram_draw_horizontal_line(window, MARGIN_X-3, MARGIN_X+3, xy, axis_color, 2);
+        SA_graphics_vram_draw_text(window, draw_area->top_left_corner_x + 5, draw_area->top_left_corner_y + xy + 4, str, axis_color);
+        SA_graphics_vram_draw_horizontal_line(window, draw_area->top_left_corner_x + MARGIN_X-3, draw_area->top_left_corner_x + MARGIN_X+3, draw_area->top_left_corner_y + xy, axis_color, 2);
     }
 
     return xy_step / step;
@@ -244,6 +244,6 @@ void SA_graphics_plot_continuous_graph(SA_GraphicsWindow* window, double* x_arra
 
     for(unsigned int i = 0; i < array_size-1; i++)
     {
-        SA_graphics_vram_draw_line(window, MARGIN_X + (x_array[i]-min_x)*x_factor, y_bottom - (y_array[i] - min_y)*y_factor, MARGIN_X + (x_array[i+1]-min_x)*x_factor, y_bottom - (y_array[i+1] - min_y)*y_factor, graph_color, 2);
+        SA_graphics_vram_draw_line(window, draw_area->top_left_corner_x + MARGIN_X + (x_array[i]-min_x)*x_factor, y_bottom - (y_array[i] - min_y)*y_factor, draw_area->top_left_corner_x + MARGIN_X + (x_array[i+1]-min_x)*x_factor, y_bottom - (y_array[i+1] - min_y)*y_factor, graph_color, 2);
     }
 }
