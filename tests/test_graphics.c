@@ -10,11 +10,11 @@ void callback(SA_GraphicsWindow* window)
 {
     SA_bool event_readed;
     SA_GraphicsEvent event;
-    SA_GraphicsRectangle draw_area = {.top_left_corner_x = 100, .top_left_corner_y = 100, .height = 300, .width = 300};
+    SA_GraphicsRectangle draw_area = {.top_left_corner_x = 50, .top_left_corner_y = 100, .height = 300, .width = 300};
     double x_array[200];
     double y_array[200];
 
-    for(int i = 0; i < sizeof(x_array)/sizeof(double); i++)
+    for(unsigned int i = 0; i < sizeof(x_array)/sizeof(double); i++)
     {
         x_array[i] = 0.05*i;
         y_array[i] = sin(0.05*i);
@@ -48,6 +48,9 @@ void callback(SA_GraphicsWindow* window)
                     break;
                 case SA_GRAPHICS_EVENT_CLOSE_WINDOW:
                     printf("close window\n");
+                    break;
+                case SA_GRAPHICS_EVENT_KEY_DOWN:
+                    printf("key down: %s\n", event.events.key.str);
                     break;
                 default:
                     printf("unknown event\n");
@@ -87,6 +90,9 @@ void event_callback(SA_GraphicsWindow*, SA_GraphicsEvent* event)
         case SA_GRAPHICS_EVENT_MOUSE_MOVE:
             printf("event_callback: move: %d %d\n", event->events.mouse.x, event->events.mouse.y);
             break;
+        case SA_GRAPHICS_EVENT_KEY_DOWN:
+            printf("event_callback: key down: %s\n", event->events.key.str);
+            break;
         default:
             printf("event_callback: unknown event\n");
             break;
@@ -104,7 +110,7 @@ void test_graphics(void)
     //SA_UniversalFont font;
     //SA_UF_load_psf_font_from_file(&font, "font_psf1.psf");
 
-    SA_graphics_create_window("Hello world", 100, 100, 600, 600, 0, callback, SA_GRAPHICS_QUEUE_MOUSE_CLICK | SA_GRAPHICS_QUEUE_SCROLL, NULL);
+    SA_graphics_create_window("Hello world", 100, 100, 600, 600, 0, callback, SA_GRAPHICS_QUEUE_MOUSE_CLICK | SA_GRAPHICS_QUEUE_SCROLL | SA_GRAPHICS_QUEUE_KEYBOARD, NULL);
 
 
     //pthread_join(thread, NULL);

@@ -138,7 +138,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
         XFree(sh);
     }
     XSetStandardProperties(window.display, window.window, title, NULL, 0, NULL, 0, NULL);
-    XSelectInput(window.display, window.window, ExposureMask | ResizeRedirectMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | PointerMotionMask);
+    XSelectInput(window.display, window.window, ExposureMask | ResizeRedirectMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | PointerMotionMask);
     Atom wmDeleteMessage = XInternAtom(window.display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(window.display, window.window, &wmDeleteMessage, 1);
     window.gc = XCreateGC(window.display, window.window, 0, NULL);
@@ -240,6 +240,16 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
                 graphics_event.events.mouse.x = event.xbutton.x;
                 graphics_event.events.mouse.y = event.xbutton.y;
                 if((window.events_to_queue & SA_GRAPHICS_QUEUE_MOUSE_MOVE) == SA_GRAPHICS_QUEUE_MOUSE_MOVE)
+                {
+                    SA_graphics_post_event(&window, &graphics_event);
+                }
+                break;
+            
+            case KeyPress:
+                graphics_event.event_type = SA_GRAPHICS_EVENT_KEY_DOWN;
+                XLookupString(&(event.xkey), graphics_event.events.key.str, 10, NULL, NULL);
+                graphics_event.events.key.keycode = event.xkey.keycode;
+                if((window.events_to_queue & SA_GRAPHICS_QUEUE_KEYBOARD) == SA_GRAPHICS_QUEUE_KEYBOARD)
                 {
                     SA_graphics_post_event(&window, &graphics_event);
                 }

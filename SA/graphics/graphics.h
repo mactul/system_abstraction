@@ -27,7 +27,9 @@
         SA_GRAPHICS_EVENT_MOUSE_LEFT_CLICK_UP,
         SA_GRAPHICS_EVENT_MOUSE_MOVE,
         SA_GRAPHICS_EVENT_SCROLL_UP,
-        SA_GRAPHICS_EVENT_SCROLL_DOWN
+        SA_GRAPHICS_EVENT_SCROLL_DOWN,
+        SA_GRAPHICS_EVENT_KEY_DOWN,
+        SA_GRAPHICS_EVENT_KEY_UP,
     };
 
     typedef struct _sa_graphics_rectangle {
@@ -37,15 +39,21 @@
         uint32_t height;
     } SA_GraphicsRectangle;
 
-    typedef struct _SA_event_click {
+    typedef struct _SA_event_mouse {
         uint32_t x;
         uint32_t y;
     } SA_EventMouse;
+
+    typedef struct _SA_event_key {
+        uint32_t keycode;
+        char str[10];
+    } SA_EventKey;
 
     typedef struct _sa_graphics_event {
         enum SA_GRAPHICS_EVENTS event_type;
         union events {
             SA_EventMouse mouse;
+            SA_EventKey key;
         } events;
     } SA_GraphicsEvent;
 
