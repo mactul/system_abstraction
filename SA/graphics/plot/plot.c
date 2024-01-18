@@ -15,6 +15,19 @@ static void display_maximum_digits(char* string, double number, int max_chars)
 {
     int power = 0.0;
     int i = 0;
+    if(number == 0)
+    {
+        string[0] = '0';
+        string[1] = '\0';
+        return;
+    }
+    if(number < 0.0)
+    {
+        number = -number;
+        string[0] = '-';
+        i++;
+        max_chars--;
+    }
     while(number < 1.0)
     {
         number *= 10.0;
@@ -33,23 +46,22 @@ static void display_maximum_digits(char* string, double number, int max_chars)
         SA_int64_to_str(str_pow, power);
         len = SA_strlen(str_pow);
 
-        string[0] = '0' + (uint8_t)number;
+        string[i] = '0' + (uint8_t)number;
+        i++;
         if(max_chars >= 4 + len)
         {
-            string[1] = '.';
-            for(i = 0; i < max_chars - 3 - len; i++)
+            string[i] = '.';
+            i++;
+            while(i < max_chars - 3 - len)
             {
                 number -= (uint8_t)number;
                 number *= 10;
-                string[2+i] = '0' + (uint8_t)number;
+                string[i] = '0' + (uint8_t)number;
+                i++;
             }
         }
-        else
-        {
-            i = -1;
-        }
-        string[2+i] = 'e';
-        SA_strcpy(string + 3 + i, str_pow);
+        string[i] = 'e';
+        SA_strcpy(string + i + 1, str_pow);
 
         return;
     }

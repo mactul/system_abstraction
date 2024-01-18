@@ -1,6 +1,7 @@
 #include "test.h"
 #include <stdio.h>
 #include <pthread.h>
+#include <math.h>
 #include "SA/graphics/universal_font/universal_font.h"
 
 
@@ -10,14 +11,20 @@ void callback(SA_GraphicsWindow* window)
     SA_bool event_readed;
     SA_GraphicsEvent event;
     SA_GraphicsRectangle draw_area = {.top_left_corner_x = 0, .top_left_corner_y = 0, .height = 500, .width = 500};
-    double x_array[] = {1, 2, 3, 4};
-    double y_array[] = {0.6, 0.3, 0.1, 0.8};
+    double x_array[200];
+    double y_array[200];
+
+    for(int i = 0; i < sizeof(x_array)/sizeof(double); i++)
+    {
+        x_array[i] = 0.05*i;
+        y_array[i] = sin(0.05*i);
+    }
     //SA_graphics_vram_draw_pixel(window, 5, 5, 0xff7000);
     SA_graphics_vram_draw_line(window, 5, 5, 100, 100, 0xff7000, 3);
     SA_graphics_vram_draw_vertical_line(window, 10, 10, 20, 255, 2);
     SA_graphics_vram_draw_text(window, 20, 20, "Bonjour, j'aime le beurre", 0x0000ff);
 
-    SA_graphics_plot_continuous_graph(window, x_array, y_array, 4, &draw_area, 0x000000, 0xff0000, 0xffffff);
+    SA_graphics_plot_continuous_graph(window, x_array, y_array, sizeof(x_array)/sizeof(double), &draw_area, 0x000000, 0xff0000, 0xffffff);
     
 
     SA_graphics_vram_flush(window);
