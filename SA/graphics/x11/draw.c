@@ -41,6 +41,8 @@ SA_bool SA_graphics_vram_draw_rectangle(SA_GraphicsWindow* window, uint32_t x, u
     XSetForeground(window->display, window->gc, color);
     XFillRectangle(window->display, window->vram, window->gc, x, y, width, height);
     pthread_mutex_unlock(&(window->mutex));
+
+    return SA_TRUE;
 }
 
 SA_bool SA_graphics_vram_draw_text(SA_GraphicsWindow* window, uint32_t x, uint32_t y, const char* str, uint32_t color)

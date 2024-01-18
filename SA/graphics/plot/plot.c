@@ -163,7 +163,7 @@ static double max_array(double* array, unsigned int array_size)
     return x;
 }
 
-static double plot_axis_values(SA_GraphicsWindow* window, double* array, unsigned int array_size, SA_GraphicsRectangle* draw_area, uint32_t axis_color, SA_bool is_y_axis, double* min_el)
+static double plot_axis_values(SA_GraphicsWindow* window, double* array, unsigned int array_size, SA_GraphicsRectangle* draw_area, uint32_t axis_color, SA_bool is_x_axis, double* min_el)
 {
     char str[6];
     uint32_t xy_step;
@@ -173,32 +173,20 @@ static double plot_axis_values(SA_GraphicsWindow* window, double* array, unsigne
     double max = max_array(array, array_size);
     unsigned int points_number = (draw_area->height - 2*MARGIN_Y) / (FONT_SIZE + FONT_PADDING);
     double step = get_step(current, max, points_number-1);
-    if(is_y_axis)
-    {
-        xy_step = (draw_area->height - 2*MARGIN_Y) / (points_number);
-        xy = draw_area->height - MARGIN_Y;
-    }
-    else
+    if(is_x_axis)
     {
         xy_step = (draw_area->width - 2*MARGIN_X) / (points_number);
         xy = MARGIN_X;
     }
-
-    if(is_y_axis)
-    {
-        while(xy > MARGIN_X+xy_step)
-        {
-            display_maximum_digits(str, current, 5);
-            SA_graphics_vram_draw_text(window, 5, xy + 4, str, axis_color);
-            SA_graphics_vram_draw_horizontal_line(window, MARGIN_X-3, MARGIN_X+3, xy, axis_color, 2);
-            current += step;
-            xy -= xy_step;
-        }
-        display_maximum_digits(str, current, 5);
-        SA_graphics_vram_draw_text(window, 5, xy + 4, str, axis_color);
-        SA_graphics_vram_draw_horizontal_line(window, MARGIN_X-3, MARGIN_X+3, xy, axis_color, 2);
-    }
     else
+    {
+        current -= step;
+        *min_el -= step;
+        xy_step = (draw_area->height - 2*MARGIN_Y) / (points_number);
+        xy = draw_area->height - MARGIN_Y;
+    }
+
+    if(is_x_axis)
     {
         while(xy < draw_area->width-MARGIN_X-xy_step)
         {
@@ -211,6 +199,20 @@ static double plot_axis_values(SA_GraphicsWindow* window, double* array, unsigne
         display_maximum_digits(str, current, 4);
         SA_graphics_vram_draw_text(window, xy-10, draw_area->height - MARGIN_Y + 20, str, axis_color);
         SA_graphics_vram_draw_vertical_line(window, xy, draw_area->height-MARGIN_Y-3, draw_area->height-MARGIN_X+3, axis_color, 2);
+    }
+    else
+    {
+        while(xy > MARGIN_X+xy_step)
+        {
+            display_maximum_digits(str, current, 5);
+            SA_graphics_vram_draw_text(window, 5, xy + 4, str, axis_color);
+            SA_graphics_vram_draw_horizontal_line(window, MARGIN_X-3, MARGIN_X+3, xy, axis_color, 2);
+            current += step;
+            xy -= xy_step;
+        }
+        display_maximum_digits(str, current, 5);
+        SA_graphics_vram_draw_text(window, 5, xy + 4, str, axis_color);
+        SA_graphics_vram_draw_horizontal_line(window, MARGIN_X-3, MARGIN_X+3, xy, axis_color, 2);
     }
 
     return xy_step / step;
@@ -225,8 +227,8 @@ void SA_graphics_plot_continuous_graph(SA_GraphicsWindow* window, double* x_arra
     SA_graphics_vram_draw_vertical_line(window, draw_area->top_left_corner_x + MARGIN_X, draw_area->top_left_corner_y + MARGIN_Y, y_bottom, axis_color, 2);
     SA_graphics_vram_draw_horizontal_line(window, draw_area->top_left_corner_x + MARGIN_X, draw_area->top_left_corner_x + draw_area->width - MARGIN_X, y_bottom, axis_color, 2);
 
-    x_factor = plot_axis_values(window, x_array, array_size, draw_area, axis_color, SA_FALSE, &min_x);
-    y_factor = plot_axis_values(window, y_array, array_size, draw_area, axis_color, SA_TRUE, &min_y);
+    x_factor = plot_axis_values(window, x_array, array_size, draw_area, axis_color, SA_TRUE, &min_x);
+    y_factor = plot_axis_values(window, y_array, array_size, draw_area, axis_color, SA_FALSE, &min_y);
 
     for(unsigned int i = 0; i < array_size-1; i++)
     {
