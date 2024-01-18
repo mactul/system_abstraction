@@ -35,6 +35,14 @@ SA_bool SA_graphics_vram_draw_line(SA_GraphicsWindow* window, int32_t x1, int32_
     return SA_TRUE;
 }
 
+SA_bool SA_graphics_vram_draw_rectangle(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color)
+{
+    pthread_mutex_lock(&(window->mutex));
+    XSetForeground(window->display, window->gc, color);
+    XFillRectangle(window->display, window->vram, window->gc, x, y, width, height);
+    pthread_mutex_unlock(&(window->mutex));
+}
+
 SA_bool SA_graphics_vram_draw_text(SA_GraphicsWindow* window, uint32_t x, uint32_t y, const char* str, uint32_t color)
 {
     pthread_mutex_lock(&(window->mutex));

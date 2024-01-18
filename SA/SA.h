@@ -18,3 +18,4 @@ This header include everything in the SA lib.
 #include "SA/memory/queue.h"
 #include "SA/path/directories.h"
 #include "SA/graphics/graphics.h"
+#include "SA/graphics/plot/plot.h"

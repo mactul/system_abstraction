@@ -9,12 +9,18 @@ void callback(SA_GraphicsWindow* window)
 {
     SA_bool event_readed;
     SA_GraphicsEvent event;
+    SA_GraphicsRectangle draw_area = {.top_left_corner_x = 0, .top_left_corner_y = 0, .height = 500, .width = 500};
+    double x_array[] = {1, 2, 3, 4};
+    double y_array[] = {0.6, 0.3, 0.1, 0.8};
     //SA_graphics_vram_draw_pixel(window, 5, 5, 0xff7000);
     SA_graphics_vram_draw_line(window, 5, 5, 100, 100, 0xff7000, 3);
     SA_graphics_vram_draw_vertical_line(window, 10, 10, 20, 255, 2);
-    //SA_graphics_vram_draw_text(window, 20, 20, "Bonjour, j'aime le beurre", 0x0000ff);
-    SA_graphics_vram_flush(window);
+    SA_graphics_vram_draw_text(window, 20, 20, "Bonjour, j'aime le beurre", 0x0000ff);
 
+    SA_graphics_plot_continuous_graph(window, x_array, y_array, 4, &draw_area, 0x000000, 0xff0000, 0xffffff);
+    
+
+    SA_graphics_vram_flush(window);
     do
     {
         if((event_readed = SA_graphics_wait_next_event(window, &event)))
@@ -84,17 +90,17 @@ void event_callback(SA_GraphicsWindow*, SA_GraphicsEvent* event)
 
 void test_graphics(void)
 {
-    pthread_t thread;
+    //pthread_t thread;
 
-    pthread_create(&thread, NULL, other_window, NULL);
+    //pthread_create(&thread, NULL, other_window, NULL);
 
     //SA_UniversalFont font;
     //SA_UF_load_psf_font_from_file(&font, "font_psf1.psf");
 
-    SA_graphics_create_window("Hello world", 100, 100, 300, 300, 0, callback, SA_GRAPHICS_QUEUE_MOUSE_CLICK | SA_GRAPHICS_QUEUE_SCROLL, NULL);
+    SA_graphics_create_window("Hello world", 100, 100, 500, 500, 0, callback, SA_GRAPHICS_QUEUE_MOUSE_CLICK | SA_GRAPHICS_QUEUE_SCROLL, NULL);
 
 
-    pthread_join(thread, NULL);
+    //pthread_join(thread, NULL);
 
-    SA_graphics_create_window("machin", 0, 0, 300, 300, 0, callback, 0, event_callback);
+    SA_graphics_create_window("machin", 0, 0, 500, 500, 0, callback, 0, event_callback);
 }
