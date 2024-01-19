@@ -66,6 +66,23 @@ UNLOCK:
     return ret;
 }
 
+SA_bool SA_graphics_vram_draw_hollow_rectangle(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color)
+{
+    SA_bool ret = SA_TRUE;
+    pthread_mutex_lock(&(window->mutex));
+    if(window->is_killed)
+    {
+        ret = SA_FALSE;
+        goto UNLOCK;
+    }
+    XSetForeground(window->display, window->gc, color);
+    XDrawRectangle(window->display, window->vram, window->gc, x, y, width, height);
+
+UNLOCK:
+    pthread_mutex_unlock(&(window->mutex));
+    return ret;
+}
+
 SA_bool SA_graphics_vram_draw_text(SA_GraphicsWindow* window, uint32_t x, uint32_t y, const char* str, uint32_t color)
 {
     SA_bool ret = SA_TRUE;
