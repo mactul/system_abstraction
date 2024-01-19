@@ -15,9 +15,9 @@ SA_bool SA_graphics_vram_draw_pixel(SA_GraphicsWindow* window, uint32_t x, uint3
     }
     XSetForeground(window->display, window->gc, color);
     XDrawPoint(window->display, window->vram, window->gc, x, y);
-    pthread_mutex_unlock(&(window->mutex));
 
 UNLOCK:
+    pthread_mutex_unlock(&(window->mutex));
     return ret;
 }
 
@@ -43,9 +43,9 @@ SA_bool SA_graphics_vram_draw_line(SA_GraphicsWindow* window, int32_t x1, int32_
     XSetForeground(window->display, window->gc, color);
     XSetLineAttributes(window->display, window->gc, thickness, LineSolid, CapNotLast, JoinMiter);
     XDrawLine(window->display, window->vram, window->gc, x1, y1, x2, y2);
-    pthread_mutex_unlock(&(window->mutex));
 
 UNLOCK:
+    pthread_mutex_unlock(&(window->mutex));
     return ret;
 }
 
@@ -60,9 +60,9 @@ SA_bool SA_graphics_vram_draw_rectangle(SA_GraphicsWindow* window, uint32_t x, u
     }
     XSetForeground(window->display, window->gc, color);
     XFillRectangle(window->display, window->vram, window->gc, x, y, width, height);
-    pthread_mutex_unlock(&(window->mutex));
 
 UNLOCK:
+    pthread_mutex_unlock(&(window->mutex));
     return ret;
 }
 
@@ -77,10 +77,9 @@ SA_bool SA_graphics_vram_draw_text(SA_GraphicsWindow* window, uint32_t x, uint32
     }
     XSetForeground(window->display, window->gc, color);
     XDrawString(window->display, window->vram, window->gc, x, y, str, SA_strlen(str));
-    pthread_mutex_unlock(&(window->mutex));
-
 
 UNLOCK:
+    pthread_mutex_unlock(&(window->mutex));
     return ret;
 }
 
