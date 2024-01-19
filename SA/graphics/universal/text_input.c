@@ -53,6 +53,13 @@ SA_GraphicsTextInput* SA_graphics_create_text_input(SA_GraphicsWindow* window, u
     return text_input;
 }
 
+void SA_graphics_redraw_text_input(const SA_GraphicsTextInput* text_input)
+{
+    SA_graphics_vram_draw_rectangle(text_input->window, text_input->min_x, text_input->min_y, text_input->max_x - text_input->min_x, text_input->max_y - text_input->min_y, text_input->background_color);
+    SA_graphics_vram_draw_text(text_input->window, text_input->min_x + text_input->padding_x, text_input->min_y + 10 + text_input->padding_y, text_input->text, text_input->text_color);
+    SA_graphics_vram_flush(text_input->window);
+}
+
 
 SA_bool SA_graphics_handle_text_input_events(SA_GraphicsTextInput* text_input, const SA_GraphicsEvent* event)
 {
@@ -84,9 +91,7 @@ SA_bool SA_graphics_handle_text_input_events(SA_GraphicsTextInput* text_input, c
             if(c >= ' ')  // printable chars
                 SA_strcpy(text_input->text + actual_size, event->events.key.str);
         }
-        SA_graphics_vram_draw_rectangle(text_input->window, text_input->min_x, text_input->min_y, text_input->max_x - text_input->min_x, text_input->max_y - text_input->min_y, text_input->background_color);
-        SA_graphics_vram_draw_text(text_input->window, text_input->min_x + text_input->padding_x, text_input->min_y + 10 + text_input->padding_y, text_input->text, text_input->text_color);
-        SA_graphics_vram_flush(text_input->window);
+        SA_graphics_redraw_text_input(text_input);
     }
 
     return SA_TRUE;

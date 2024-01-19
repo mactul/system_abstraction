@@ -83,6 +83,7 @@
     void SA_graphics_vram_flush(SA_GraphicsWindow* window);
 
     SA_GraphicsTextInput* SA_graphics_create_text_input(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t background_color, uint32_t text_color, uint32_t max_text_size, uint32_t padding_x, uint32_t padding_y);
+    void SA_graphics_redraw_text_input(const SA_GraphicsTextInput* text_input);
     SA_bool SA_graphics_handle_text_input_events(SA_GraphicsTextInput* text_input, const SA_GraphicsEvent* event);
     const char* SA_graphics_get_text_input_value(SA_GraphicsTextInput* text_input);
     void SA_graphics_get_text_input_rectangle(SA_GraphicsTextInput* text_input, SA_GraphicsRectangle* rectangle);
