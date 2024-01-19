@@ -4,6 +4,7 @@
 #include "SA/graphics/x11/internal.h"
 
 
+
 SA_bool SA_graphics_vram_draw_pixel(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t color)
 {
     SA_bool ret = SA_TRUE;
