@@ -66,7 +66,7 @@ UNLOCK:
     return ret;
 }
 
-SA_bool SA_graphics_vram_draw_hollow_rectangle(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color)
+SA_bool SA_graphics_vram_draw_hollow_rectangle(SA_GraphicsWindow* window, uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color, uint32_t line_thickness)
 {
     SA_bool ret = SA_TRUE;
     pthread_mutex_lock(&(window->mutex));
@@ -76,6 +76,7 @@ SA_bool SA_graphics_vram_draw_hollow_rectangle(SA_GraphicsWindow* window, uint32
         goto UNLOCK;
     }
     XSetForeground(window->display, window->gc, color);
+    XSetLineAttributes(window->display, window->gc, line_thickness, LineSolid, CapNotLast, JoinMiter);
     XDrawRectangle(window->display, window->vram, window->gc, x, y, width, height);
 
 UNLOCK:
