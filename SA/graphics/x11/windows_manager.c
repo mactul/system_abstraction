@@ -35,7 +35,7 @@ UNLOCK:
     pthread_mutex_unlock(&(window->mutex));
 }
 
-static inline void SA_graphics_post_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event)
+void _SA_graphics_post_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event)
 {
     if(window != NULL && window->event_queue != NULL && !window->is_killed && event->event_type != SA_GRAPHICS_EVENT_NOTHING)
     {
@@ -173,7 +173,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
                 if ((Atom)(event.xclient.data.l[0]) == wmDeleteMessage)
                 {
                     graphics_event.event_type = SA_GRAPHICS_EVENT_CLOSE_WINDOW;
-                    SA_graphics_post_event(&window, &graphics_event);
+                    _SA_graphics_post_event(&window, &graphics_event);
                     destroy_window(&window);
                 }
                 break;
@@ -200,7 +200,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
                         graphics_event.events.mouse.y = event.xbutton.y;
                         if((window.events_to_queue & SA_GRAPHICS_QUEUE_MOUSE_CLICK) == SA_GRAPHICS_QUEUE_MOUSE_CLICK)
                         {
-                            SA_graphics_post_event(&window, &graphics_event);
+                            _SA_graphics_post_event(&window, &graphics_event);
                         }
                         break;
                     
@@ -208,14 +208,14 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
                         graphics_event.event_type = SA_GRAPHICS_EVENT_SCROLL_UP;
                         if((window.events_to_queue & SA_GRAPHICS_QUEUE_SCROLL) == SA_GRAPHICS_QUEUE_SCROLL)
                         {
-                            SA_graphics_post_event(&window, &graphics_event);
+                            _SA_graphics_post_event(&window, &graphics_event);
                         }
                         break;
                     case Button5:
                         graphics_event.event_type = SA_GRAPHICS_EVENT_SCROLL_DOWN;
                         if((window.events_to_queue & SA_GRAPHICS_QUEUE_SCROLL) == SA_GRAPHICS_QUEUE_SCROLL)
                         {
-                            SA_graphics_post_event(&window, &graphics_event);
+                            _SA_graphics_post_event(&window, &graphics_event);
                         }
                         break;
 
@@ -230,7 +230,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
                         graphics_event.events.mouse.y = event.xbutton.y;
                         if((window.events_to_queue & SA_GRAPHICS_QUEUE_MOUSE_CLICK) == SA_GRAPHICS_QUEUE_MOUSE_CLICK)
                         {
-                            SA_graphics_post_event(&window, &graphics_event);
+                            _SA_graphics_post_event(&window, &graphics_event);
                         }
                         break;
                 }
@@ -241,7 +241,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
                 graphics_event.events.mouse.y = event.xbutton.y;
                 if((window.events_to_queue & SA_GRAPHICS_QUEUE_MOUSE_MOVE) == SA_GRAPHICS_QUEUE_MOUSE_MOVE)
                 {
-                    SA_graphics_post_event(&window, &graphics_event);
+                    _SA_graphics_post_event(&window, &graphics_event);
                 }
                 break;
             
@@ -251,7 +251,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
                 graphics_event.events.key.keycode = event.xkey.keycode;
                 if((window.events_to_queue & SA_GRAPHICS_QUEUE_KEYBOARD) == SA_GRAPHICS_QUEUE_KEYBOARD)
                 {
-                    SA_graphics_post_event(&window, &graphics_event);
+                    _SA_graphics_post_event(&window, &graphics_event);
                 }
                 break;
         }
