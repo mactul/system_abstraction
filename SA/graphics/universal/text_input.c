@@ -76,7 +76,6 @@ SA_bool SA_graphics_handle_text_input_events(SA_GraphicsTextInput* text_input, c
             if(text_input->text[0] != '\0')
             {
                 text_input->text[actual_size-1] = '\0';
-                SA_graphics_vram_draw_rectangle(text_input->window, text_input->min_x, text_input->min_y, text_input->max_x - text_input->min_x, text_input->max_y - text_input->min_y, text_input->background_color);
             }
         }
         else if(actual_size < text_input->max_text_size)
@@ -85,6 +84,7 @@ SA_bool SA_graphics_handle_text_input_events(SA_GraphicsTextInput* text_input, c
             if(c >= ' ')  // printable chars
                 SA_strcpy(text_input->text + actual_size, event->events.key.str);
         }
+        SA_graphics_vram_draw_rectangle(text_input->window, text_input->min_x, text_input->min_y, text_input->max_x - text_input->min_x, text_input->max_y - text_input->min_y, text_input->background_color);
         SA_graphics_vram_draw_text(text_input->window, text_input->min_x + text_input->padding_x, text_input->min_y + 10 + text_input->padding_y, text_input->text, text_input->text_color);
         SA_graphics_vram_flush(text_input->window);
     }
