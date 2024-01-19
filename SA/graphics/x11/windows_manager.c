@@ -60,7 +60,7 @@ static void* callback_runner(void* data)
 
     thread_data->draw_callback(thread_data->window);
 
-    destroy_window(thread_data->window);
+    thread_data->window->is_killed = SA_TRUE;
 
     return NULL;
 }
@@ -263,6 +263,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
         if(window.event_callback != NULL)
             window.event_callback(&window, &graphics_event);
     }
+    destroy_window(&window);
     
     pthread_join(thread, NULL);
 
