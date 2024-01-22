@@ -9,8 +9,8 @@
     #endif
 
     SA_RequestsHandler* SA_WARN_UNUSED_RESULT SA_req_request(SA_RequestsHandler* handler, const char* method, const char* url, const char* data, const char* additional_headers);
-    const char* SA_req_get_header_value(SA_RequestsHandler* handler, const char* header_name);
-    unsigned short int SA_req_get_status_code(SA_RequestsHandler* handler);
+    const char* SA_FUNCTION_PURE SA_req_get_header_value(SA_RequestsHandler* handler, const char* header_name);
+    unsigned short int SA_FUNCTION_PURE SA_req_get_status_code(SA_RequestsHandler* handler);
     void SA_req_display_headers(SA_RequestsHandler* handler);
     int SA_req_read_output_body(SA_RequestsHandler* handler, char* buffer, int buffer_size);
     void SA_req_close_connection(SA_RequestsHandler** ppr);

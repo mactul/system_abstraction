@@ -25,7 +25,7 @@
     int SA_socket_send(SA_SocketHandler* s, const char* buffer, int n);
     int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n);
     void SA_socket_close(SA_SocketHandler** pps);
-    uint64_t SA_socket_ntoh64(uint64_t input);
+    uint64_t SA_FUNCTION_CONST SA_socket_ntoh64(uint64_t input);
 
     #ifdef __cplusplus
     }

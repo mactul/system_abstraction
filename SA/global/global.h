@@ -28,9 +28,13 @@
     #ifdef __GNUC__
         #define SA_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
         #define SA_FALLTROUGH __attribute__((falltrough))
+        #define SA_FUNCTION_PURE __attribute__((pure))
+        #define SA_FUNCTION_CONST __attribute__((const))
     #else
         #define SA_WARN_UNUSED_RESULT
         #define SA_FALLTROUGH
+        #define SA_FUNCTION_PURE
+        #define SA_FUNCTION_CONST
     #endif
 
     #ifdef __cplusplus

@@ -12,7 +12,7 @@
     SA_bool SA_ptree_update_key(SA_ParserTree* tree, const char* partial_key, int partial_key_len);
     SA_bool SA_ptree_update_value(SA_ParserTree* tree, const char* partial_value, int partial_value_len);
     SA_bool SA_ptree_push(SA_ParserTree* tree, void (*data_modifications)(char*));
-    const char* SA_ptree_get_value(SA_ParserTree* tree, const char* key);
+    const char* SA_FUNCTION_PURE SA_ptree_get_value(SA_ParserTree* tree, const char* key);
     void SA_ptree_free(SA_ParserTree** tree);
     void SA_ptree_abort(SA_ParserTree* tree);
 
