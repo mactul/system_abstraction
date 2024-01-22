@@ -122,6 +122,11 @@ static double get_step(double min_bound, double max_bound, unsigned int n)
     double ideal_step = (max_bound - min_bound) / (double)(n);
     signed int i = 0;
 
+    if(ideal_step == 0)
+    {
+        return 1.0;
+    }
+
     while(ideal_step < 1.0)
     {
         ideal_step *= 10.0;
