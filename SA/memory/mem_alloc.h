@@ -6,15 +6,37 @@
     extern "C"{
     #endif
 
+    /**
+     * @brief Allocate `size` bytes of memory
+     * 
+     * @param size the number of bytes to allocate. 
+     * @return The address of the memory allocated or NULL if an error happend.
+     */
     void* SA_WARN_UNUSED_RESULT SA_malloc(uint64_t size);
+
+
+    /**
+     * @brief Allocate `size` bytes of memory and set them to zero.
+     * 
+     * @param size the number of bytes to allocate. 
+     * @return The address of the memory allocated or NULL if an error happend.
+     */
     void* SA_WARN_UNUSED_RESULT SA_calloc(uint64_t size);
+
+    /**
+     * @brief Add `size` bytes of memory in the previously allocated `ptr` block 
+     * 
+     * @param ptr a previously allocated area, allocated by malloc or calloc.
+     * @param size The new size of the memory block. If it's less than the initial size, the memory will be deallocated.
+     * @return void* 
+     */
     void* SA_WARN_UNUSED_RESULT SA_realloc(void* ptr, uint64_t size);
 
     void _SA_free(void** pptr);
     
-    /*
-    Takes the adress of the pointer allocated by SA_malloc, SA_calloc or SA_realloc
-    free the memory block and set the pointer to NULL to avoid multiple free of a same block.
+    /**
+    * @brief Takes the adress of the pointer allocated by SA_malloc, SA_calloc or SA_realloc
+    * @brief free the memory block and set the pointer to NULL to avoid multiple free of a same block.
     */
     #define SA_free(pptr) _SA_free((void**)(pptr))
 

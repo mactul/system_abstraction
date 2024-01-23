@@ -64,7 +64,7 @@ static char set_blocking_mode(int fd, char blocking)
 {
    if (fd < 0) return 0;
 
-#ifdef _WIN32
+#ifdef SA_OS_IS_WINDOWS
    unsigned long mode = blocking ? 0 : 1;
    return (ioctlsocket(fd, FIONBIO, &mode) == 0) ? 1 : 0;
 #else

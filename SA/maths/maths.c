@@ -23,7 +23,7 @@ uint64_t SA_int_pow(uint32_t base, unsigned char e)
 }
 
 /*
-Returns the logstic (sometimes called sigmoid) function
+Returns the logistic (sometimes called sigmoid) function
 1/(1+e^(-x))
 ```
 ............|........===. 1

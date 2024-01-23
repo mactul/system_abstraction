@@ -113,7 +113,7 @@ void SA_dynarray_qsort(SA_DynamicArray *dyn_array, int (*cmp_func)(const void *,
     qsort(dyn_array->elements, dyn_array->nb_elements, dyn_array->element_size, cmp_func);
 }
 
-void SA_activate_zero_filling(SA_DynamicArray *dyn_array)
+void SA_dynarray_activate_zero_filling(SA_DynamicArray *dyn_array)
 {
     dyn_array->init_to_zero = SA_TRUE;
 }

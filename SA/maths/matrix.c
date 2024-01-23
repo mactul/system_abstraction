@@ -39,7 +39,7 @@ SA_Matrix* SA_matrix_create(uint32_t row_size, uint32_t col_size)
 Fill the line n°ROW of the matrix MAT with the elements of ARRAY.
 ARRAY must be as long as the number of columns in mat.
 */
-void SA_matrix_add_line_from_array(SA_Matrix* mat, uint32_t row, SA_mat_float* array)
+void SA_matrix_set_line_from_array(SA_Matrix* mat, uint32_t row, const SA_mat_float* array)
 {
     SA_mat_float* line = mat->elements + row * mat->col_size;
     for(uint32_t i = 0; i < mat->col_size; i++)
@@ -52,7 +52,7 @@ void SA_matrix_add_line_from_array(SA_Matrix* mat, uint32_t row, SA_mat_float* a
 Returns a new matrix which is the transposition of the matrix mat.
 This new matrix must be freed by `SA_matrix_free`.
 */
-SA_Matrix* SA_matrix_transpose(SA_Matrix* mat)
+SA_Matrix* SA_matrix_transpose(const SA_Matrix* mat)
 {
     SA_Matrix* out_mat = SA_matrix_create(mat->col_size, mat->row_size);
     if(out_mat == NULL)
@@ -73,7 +73,7 @@ SA_Matrix* SA_matrix_transpose(SA_Matrix* mat)
 Create a new matrix which is a copy of the matrix MAT.
 This new matrix must be freed by `SA_matrix_free`.
 */
-SA_Matrix* SA_Matrix_copy(SA_Matrix* mat)
+SA_Matrix* SA_Matrix_copy(const SA_Matrix* mat)
 {
     SA_Matrix* out_mat = SA_matrix_create(mat->row_size, mat->col_size);
     if(out_mat == NULL)
@@ -91,7 +91,7 @@ SA_Matrix* SA_Matrix_copy(SA_Matrix* mat)
 Add the content of the matrix MAT_ADD to the content of the matrix MAT_DEST
 It returns SA_FALSE if the operation is not permitted (the matrix must have the same size)
 */
-SA_bool SA_matrix_add(SA_Matrix* mat_dest, SA_Matrix* mat_add)
+SA_bool SA_matrix_add(SA_Matrix* mat_dest, const SA_Matrix* mat_add)
 {
     if(mat_add->col_size != mat_dest->col_size || mat_add->row_size != mat_dest->row_size)
     {
@@ -108,7 +108,7 @@ SA_bool SA_matrix_add(SA_Matrix* mat_dest, SA_Matrix* mat_add)
 This display the matrix in a readable way.
 Use it in debug purpose.
 */
-void SA_matrix_print(SA_Matrix* mat)
+void SA_matrix_print(const SA_Matrix* mat)
 {
     printf("┌");
     for(uint32_t i = 0; i < mat->col_size; i++)
