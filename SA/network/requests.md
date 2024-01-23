@@ -39,7 +39,7 @@ SA_RequestsHandler* SA_req_get(SA_RequestsHandler* handler, const char* url, con
 - **parameters**
     - `handler`: must be NULL if it's the first connection, otherwise, it should be an old handler (see [keep-alive](#keep-alive) for more information).
     - `url`: It's the url you want to request, it should start with `http://` or `https://`.
-    - `additional_headers`: the headers you want to specify, they are separeted by `\r\n` and __they needs__ to finish by `\r\n`.
+    - `additional_headers`: the headers you want to specify, they are separeted by `\r\n` and __they need__ to finish by `\r\n`.
 - **returns**
     - When it succededs, it returns a pointer to a structure handler.
     - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
@@ -163,7 +163,9 @@ unsigned short int SA_req_get_status_code(SA_RequestsHandler* handler);
 
 
 ### SA_req_display_headers
-- `void SA_req_display_headers(SA_RequestsHandler* handler);`
+```c
+void SA_req_display_headers(SA_RequestsHandler* handler);
+```
 - This is for debugging purpose, it will print the list of headers provided by the server.
 - **parameters**
     - `handler`: the handler returned by a request.
