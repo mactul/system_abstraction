@@ -263,7 +263,7 @@
      * @return - SA_TRUE if the text input has focus
      * @return - SA_FALSE if the text input doesn't have focus
      * 
-     * @note This flush the vram.
+     * @note This may flush the vram.
      */
     SA_bool SA_graphics_handle_text_input_events(SA_GraphicsTextInput* text_input, const SA_GraphicsEvent* event);
 

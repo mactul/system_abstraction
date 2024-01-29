@@ -6,18 +6,20 @@
     #include "SA/graphics/SDL2/internal.h"
 
     /**
-     * @brief Send a custom event to the event queue
+     * @brief Send an event to the internal event queue for sdl2
      * 
      * @param message Pointer to the SA_SDL_Message structure related to this message
      */
     void SA_sdl_post_event(SA_SDL_Message* message);
 
     /**
-     * @brief Get the next event from the event queue
+     * @brief Get the next event from the internal event queue for sdl2
      * 
      * @param message Pointer to the SA_SDL_Message structure that will be filled with the event information
      * @return - SA_FALSE if there is no event to handle
      * @return - SA_TRUE if there is an event to handle
+     * 
+     * @note This function is non-blocking, synchronized by the sdl2 queue.
      */
     SA_bool SA_sdl_get_next_event(SA_SDL_Message* message);
 
