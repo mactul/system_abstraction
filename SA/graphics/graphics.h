@@ -92,7 +92,7 @@
     void _SA_graphics_post_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event);
 
     /**
-     * @brief Poll for an event in a window's event queue
+     * @brief Poll for an event in a window's event queue (this function doesn't block)
      * 
      * @param window Pointer to a SA_GraphicsWindow structure related to this window
      * @param event Pointer to the SA_GraphicsEvent structure that will be filled with this function
@@ -102,7 +102,7 @@
     SA_bool SA_graphics_poll_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event);
 
     /**
-     * @brief Poll for an event in a window's event queue
+     * @brief Wait for an event in a window's event queue (this function blocks)
      * 
      * @param window Pointer to a SA_GraphicsWindow structure related to this window
      * @param event Pointer to the SA_GraphicsEvent structure that will be filled with this function
