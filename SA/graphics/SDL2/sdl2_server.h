@@ -8,14 +8,14 @@
     /**
      * @brief Send a custom event to the event queue
      * 
-     * @param message The message to send
+     * @param message Pointer to the SA_SDL_Message structure related to this message
      */
     void SA_sdl_post_event(SA_SDL_Message* message);
 
     /**
      * @brief Get the next event from the event queue
      * 
-     * @param message Will be filled with the event information
+     * @param message Pointer to the SA_SDL_Message structure that will be filled with the event information
      * @return - SA_FALSE if there is no event to handle
      * @return - SA_TRUE if there is an event to handle
      */
