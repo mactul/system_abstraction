@@ -93,7 +93,14 @@
     extern "C"{
     #endif
 
-
+    /**
+     * @brief Load a SA_UniversalFont structure from a PSF font given its file path
+     * 
+     * @param dest Pointer to the SA_UniversalFont structure to fill
+     * @param filepath File path of the PSF font file
+     * @return - SA_FALSE if loading the font failed
+     * @return - SA_TRUE if loading the font was successful
+     */
     SA_bool SA_UF_load_psf_font_from_file(SA_UniversalFont* dest, const char* filepath);
 
     #ifdef __cplusplus

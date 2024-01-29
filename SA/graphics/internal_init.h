@@ -8,7 +8,14 @@
     extern "C"{
     #endif
 
+    /**
+     * @brief Initialize the graphics protocol
+     */
     void _SA_graphics_init(void);
+
+    /**
+     * @brief Stop the graphics protocol
+     */
     void _SA_graphics_destroy(void);
     
     #ifdef __cplusplus
