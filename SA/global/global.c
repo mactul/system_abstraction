@@ -35,7 +35,6 @@ void SA_init(void)
     #ifndef SA_GRAPHICS_DISABLED
         _SA_graphics_init();
     #endif
-    SA_set_unsecure_seed(SA_random_standard_seed());
 }
 
 /*

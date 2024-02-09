@@ -37,6 +37,13 @@
 
         // cross plateform version of [gnu const attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-const-function-attribute)
         #define SA_FUNCTION_CONST __attribute__((const))
+
+        // cross plateform version of [gnu deprecated attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-deprecated-function-attribute)
+        #define SA_FUNCTION_DEPRECATED __attribute__((deprecated))
+
+        // cross plateform version of [gnu malloc attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute)
+        #define SA_MALLOC_FUNC(free_func) __attribute__((malloc, malloc(free_func, 1)))
+
     #else
         // This statement has no effect with your compiler
         #define SA_WARN_UNUSED_RESULT
@@ -49,6 +56,9 @@
 
         // This statement has no effect with your compiler
         #define SA_FUNCTION_CONST
+
+        // This statement has no effect with your compiler
+        #define SA_MALLOC_FUNC(free_func)
     #endif
 
     #ifdef __cplusplus

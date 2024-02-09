@@ -6,13 +6,15 @@
     extern "C"{
     #endif
 
+    void _SA_free(void* ptr) __THROW;
+
     /**
      * @brief Allocate `size` bytes of memory
      * 
      * @param size the number of bytes to allocate. 
      * @return The address of the memory allocated or NULL if an error happend.
      */
-    void* SA_WARN_UNUSED_RESULT SA_malloc(uint64_t size);
+    void* SA_WARN_UNUSED_RESULT SA_malloc(uint64_t size) __THROW SA_MALLOC_FUNC(_SA_free);
 
 
     /**
@@ -32,13 +34,6 @@
      */
     void* SA_WARN_UNUSED_RESULT SA_realloc(void* ptr, uint64_t size);
 
-    void _SA_free(void** pptr);
-    
-    /**
-    * @brief Takes the adress of the pointer allocated by SA_malloc, SA_calloc or SA_realloc
-    * @brief free the memory block and set the pointer to NULL to avoid multiple free of a same block.
-    */
-    #define SA_free(pptr) _SA_free((void**)(pptr))
 
     #ifdef SA_MEMORY_DEBUG
         SA_bool _SA_is_everything_freed(void);
@@ -47,4 +42,23 @@
     #ifdef __cplusplus
     }
     #endif
+
+    /**
+    * @brief Internal function  
+    * @brief free the memory block and set the pointer to NULL to avoid multiple free of a same block.
+    * 
+    * @param pptr The address of the pointer allocated by SA_malloc, SA_calloc or SA_realloc
+    */
+    static inline void _SA_free_null(void** pptr)
+    {
+        _SA_free(*pptr);
+        *pptr = NULL;
+    }
+
+    /**
+    * @brief Free the memory block and set the pointer to NULL to avoid multiple free of a same block.
+    * 
+    * @param pptr The address of the pointer allocated by SA_malloc, SA_calloc or SA_realloc
+    */
+    #define SA_free(pptr) _SA_free_null((void**)(pptr))
 #endif

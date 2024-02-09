@@ -71,7 +71,7 @@
     */
     SA_bool SA_FUNCTION_CONST SA_float_equals(double a, double b);
 
-    #ifdef __cplusplusthe parameter
+    #ifdef __cplusplus
     }
     #endif
 #endif

@@ -30,9 +30,9 @@ void test_math(void)
 
     mat1 = SA_matrix_create(3, 5);
 
-    SA_matrix_add_line_from_array(mat1, 0, array);
-    SA_matrix_add_line_from_array(mat1, 1, array2);
-    SA_matrix_add_line_from_array(mat1, 2, array);
+    SA_matrix_set_line_from_array(mat1, 0, array);
+    SA_matrix_set_line_from_array(mat1, 1, array2);
+    SA_matrix_set_line_from_array(mat1, 2, array);
 
     SA_matrix_print(mat1);
 

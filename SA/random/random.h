@@ -21,8 +21,19 @@
     extern "C"{
     #endif
 
+    /**
+     * @brief Generate an uint64_t integer between the range 0 and SA_RAND_U64_MAX.  
+     * @brief This is extremly fast, but it's a really poor random generator.
+     * @brief It is infused with a little bit of entropy with `SA_time_seed_ns`.
+     * @brief Good enough if you just want a relatively unpredictable number.
+     * 
+     * @return uint64_t 
+     * 
+     * @note NOT SAFE for cryptographic use
+     */
     uint64_t SA_random_unsecure_uint64(void);
-    void SA_set_unsecure_seed(uint64_t seed);
+
+    void SA_FUNCTION_DEPRECATED SA_set_unsecure_seed(uint64_t seed);
     int64_t SA_random_unsecure_int64(int64_t start, int64_t end);
     double SA_random_unsecure_float(double start, double end);
 
