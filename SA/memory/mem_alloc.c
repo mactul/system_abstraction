@@ -12,7 +12,7 @@ void* SA_malloc(uint64_t size)
 {
     void* ptr = malloc(size);
     #ifdef DEBUG
-        if(!_SA_is_init)
+        if(SA_UNLIKELY(!_SA_is_init))
         {
             SA_print_error("DebugWarning: SA was never initialized\n");
             _SA_is_init = SA_TRUE;

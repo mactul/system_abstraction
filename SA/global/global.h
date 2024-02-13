@@ -44,6 +44,11 @@
         // cross plateform version of [gnu malloc attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute)
         #define SA_MALLOC_FUNC(free_func) __attribute__((malloc, malloc(free_func, 1)))
 
+        // cross plateform version of [gnu expect builtin](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fexpect)
+        #define SA_UNLIKELY(x) __builtin_expect(x, 0L)
+
+        // cross plateform version of [gnu expect builtin](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fexpect)
+        #define SA_LIKELY(x) __builtin_expect(!!(x), 1L)
     #else
         // This statement has no effect with your compiler
         #define SA_WARN_UNUSED_RESULT
@@ -59,6 +64,12 @@
 
         // This statement has no effect with your compiler
         #define SA_MALLOC_FUNC(free_func)
+
+        // This statement has no effect with your compiler
+        #define SA_UNLIKELY(x) (x)
+
+        // This statement has no effect with your compiler
+        #define SA_LIKELY(x) (x)
     #endif
 
     #ifdef __cplusplus
