@@ -41,6 +41,8 @@
         // cross plateform version of [gnu deprecated attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-deprecated-function-attribute)
         #define SA_FUNCTION_DEPRECATED __attribute__((deprecated))
 
+        #define SA_FUNCTION_NOTHROW __attribute__((__nothrow__, __leaf__))
+
         // cross plateform version of [gnu malloc attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute)
         #define SA_MALLOC_FUNC(free_func) __attribute__((malloc, malloc(free_func, 1)))
 
@@ -61,6 +63,9 @@
 
         // This statement has no effect with your compiler
         #define SA_FUNCTION_CONST
+
+        // This statement has no effect with your compiler
+        #define SA_FUNCTION_NOTHROW
 
         // This statement has no effect with your compiler
         #define SA_MALLOC_FUNC(free_func)

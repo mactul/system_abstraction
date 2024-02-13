@@ -6,7 +6,7 @@
     extern "C"{
     #endif
 
-    void _SA_free(void* ptr) __THROW;
+    void SA_FUNCTION_NOTHROW _SA_free(void* ptr);
 
     /**
      * @brief Allocate `size` bytes of memory
@@ -14,7 +14,7 @@
      * @param size the number of bytes to allocate. 
      * @return The address of the memory allocated or NULL if an error happend.
      */
-    void* SA_WARN_UNUSED_RESULT SA_malloc(size_t size) __THROW SA_MALLOC_FUNC(_SA_free);
+    void* SA_WARN_UNUSED_RESULT SA_FUNCTION_NOTHROW SA_malloc(size_t size) SA_MALLOC_FUNC(_SA_free);
 
 
     /**
