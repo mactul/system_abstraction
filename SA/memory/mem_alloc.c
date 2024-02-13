@@ -2,13 +2,13 @@
 #include "SA/memory/mem_alloc.h"
 
 #ifdef SA_MEMORY_DEBUG
-    static uint64_t _allocations = 0;
+    static size_t _allocations = 0;
 #endif
 
 /*
 Allocate SIZE bytes of memory
 */
-void* SA_malloc(uint64_t size)
+void* SA_malloc(size_t size)
 {
     void* ptr = malloc(size);
     #ifdef DEBUG
@@ -30,7 +30,7 @@ void* SA_malloc(uint64_t size)
 /*
 Allocate SIZE bytes of memory and set them to 0
 */
-void* SA_calloc(uint64_t size)
+void* SA_calloc(size_t size)
 {
     void* ptr = calloc(size, 1);
     #ifdef SA_MEMORY_DEBUG
@@ -46,7 +46,7 @@ void* SA_calloc(uint64_t size)
 /*
 Add SIZE bytes of memory in the previously allocated ptr block
 */
-void* SA_realloc(void* ptr, uint64_t size)
+void* SA_realloc(void* ptr, size_t size)
 {
     return realloc(ptr, size);
 }

@@ -4,9 +4,9 @@
 Returns the number of characters in STR.
 '\0' is not counted.
 */
-int SA_strlen(const char* str)
+size_t SA_strlen(const char* str)
 {
-    int i;
+    size_t i;
     for(i = 0; str[i] != '\0'; i++)
         ;
     return i;

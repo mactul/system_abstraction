@@ -94,7 +94,7 @@
      * @return - when it succeeds, it returns SA_TRUE;
      * @return - when it fails, it returns SA_FALSE and `SA_print_last_error()` can tell what happened
      */
-    SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements);
+    SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray* dyn_array, size_t index, size_t nb_block_elements);
     
     /**
      * @brief This will move the dyn_array elements to remove `nb_block_elements` at position `index`.
@@ -105,15 +105,15 @@
      * @return - when it succeeds, it returns SA_TRUE;
      * @return - when it fails, it returns SA_FALSE. This can only happen if index is bigger than the size of the dyn_array.
      */
-    SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements);
+    SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, size_t index, size_t nb_block_elements);
     
     /**
      * @brief Returns the number of elements in the DynamicArray
      * 
      * @param dyn_array the handler returned by `SA_dynarray_create`.
-     * @return uint64_t
+     * @return size_t
      */
-    uint64_t SA_FUNCTION_PURE SA_dynarray_size(const SA_DynamicArray* dyn_array);
+    size_t SA_FUNCTION_PURE SA_dynarray_size(const SA_DynamicArray* dyn_array);
 
     /**
      * @brief Returns the size of the type used in the array.
@@ -166,7 +166,7 @@
      * @param index the index of the element to set.
      * @param value_ptr the address of the value to copy in the array.
      */
-    void _SA_dynarray_set(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr);
+    void _SA_dynarray_set(SA_DynamicArray* dyn_array, size_t index, void* value_ptr);
 
     /**
      * @brief Internal function to get the address of the array, starting at `index` element.
@@ -175,7 +175,7 @@
      * @param index the index of the element you want to get.
      * @return the address to the element and by extension to the array behind or NULL if the element doesn't exists.
      */
-    void* SA_FUNCTION_PURE _SA_dynarray_get_element_ptr(const SA_DynamicArray* dyn_array, uint64_t index);
+    void* SA_FUNCTION_PURE _SA_dynarray_get_element_ptr(const SA_DynamicArray* dyn_array, size_t index);
 
     /**
      * @brief Internal function to append an element to the array.
@@ -192,7 +192,7 @@
      * @param index the index of the position for the element to be inserted.
      * @param value_ptr the address of the value to copy in the array.
      */
-    void _SA_dynarray_insert(SA_DynamicArray* dyn_array, uint64_t index, void* value_ptr);
+    void _SA_dynarray_insert(SA_DynamicArray* dyn_array, size_t index, void* value_ptr);
 
     #ifdef __cplusplus
     }

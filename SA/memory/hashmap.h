@@ -26,7 +26,7 @@
      * @return - SA_TRUE if it succeeded
      * - SA_FALSE if it fails to allocate the memory.
      */
-    SA_bool SA_hashmap_set_value(SA_HashMap* hashmap, void* key, int key_size, void* value);
+    SA_bool SA_hashmap_set_value(SA_HashMap* hashmap, void* key, size_t key_size, void* value);
 
     /**
      * @brief Returns the pointer `value` associated with the value under `key` by `SA_hashmap_set_value`
@@ -36,7 +36,7 @@
      * @param key_size the size of the key under the pointer KEY, in bytes. If the key is an uint64_t for example, KEY_SIZE should be 8.
      * @return the pointer `value` if it was previously set, otherwise NULL.
      */
-    void* SA_FUNCTION_PURE SA_hashmap_get_value(SA_HashMap* hashmap, void* key, int key_size);
+    void* SA_FUNCTION_PURE SA_hashmap_get_value(SA_HashMap* hashmap, void* key, size_t key_size);
 
     /**
      * @brief Free the underlying hashmap behind the pointer `hashmap` and set the hashmap handler to NULL.

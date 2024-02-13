@@ -5,8 +5,8 @@
 
 struct _SA_dynamic_array
 {
-    uint64_t nb_elements;
-    uint64_t nb_slots;
+    size_t nb_elements;
+    size_t nb_slots;
     SA_byte *elements;
     uint32_t element_size;
     SA_bool init_to_zero;
@@ -23,12 +23,12 @@ uint32_t SA_dynarray_get_element_size(const SA_DynamicArray *dyn_array)
 /*
 Returns the number of elements in the array.
 */
-uint64_t SA_dynarray_size(const SA_DynamicArray *dyn_array)
+size_t SA_dynarray_size(const SA_DynamicArray *dyn_array)
 {
     return dyn_array->nb_elements;
 }
 
-static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray *dyn_array, uint64_t nb_slots)
+static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray *dyn_array, size_t nb_slots)
 {
     if (nb_slots > dyn_array->nb_slots)
     {
@@ -54,7 +54,7 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray *dyn_array, uint64_t 
         if (dyn_array->init_to_zero)
         {
             void *ptr = dyn_array->elements + dyn_array->element_size * dyn_array->nb_elements;
-            uint64_t size = (dyn_array->nb_slots - dyn_array->nb_elements) * dyn_array->element_size;
+            size_t size = (dyn_array->nb_slots - dyn_array->nb_elements) * dyn_array->element_size;
             SA_memset(ptr, 0, size);
         }
     }
@@ -65,7 +65,7 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray *dyn_array, uint64_t 
 Insert a space of NB_BLOCK_ELEMENTS in the DynamicArray.
 The space created is uinitiliazed, so filled with garbage.
 */
-SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray *dyn_array, uint64_t index, uint64_t nb_block_elements)
+SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray *dyn_array, size_t index, size_t nb_block_elements)
 {
     if (!SA_dynarray_ensure_nb_slots(dyn_array, dyn_array->nb_elements + nb_block_elements))
     {
@@ -73,7 +73,7 @@ SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray *dyn_array, uint6
     }
     dyn_array->nb_elements += nb_block_elements;
 
-    for (uint64_t i = (dyn_array->nb_elements-1) * dyn_array->element_size; i > (index + nb_block_elements - 1) * dyn_array->element_size; i--)
+    for (size_t i = (dyn_array->nb_elements-1) * dyn_array->element_size; i > (index + nb_block_elements - 1) * dyn_array->element_size; i--)
     {
         dyn_array->elements[i] = dyn_array->elements[i - nb_block_elements * dyn_array->element_size];
     }
@@ -86,7 +86,7 @@ If nothing was removed, the function returns SA_FALSE, else it returns SA_TRUE.
 
 This doesn't free any memory, the remaining memory is used for futur use in the DynamicArray.
 */
-SA_bool SA_dynarray_remove_block(SA_DynamicArray *dyn_array, uint64_t index, uint64_t nb_block_elements)
+SA_bool SA_dynarray_remove_block(SA_DynamicArray *dyn_array, size_t index, size_t nb_block_elements)
 {
     if (index >= dyn_array->nb_elements)
     {
@@ -141,7 +141,7 @@ SA_DynamicArray *_SA_dynarray_create(uint32_t element_size, uint32_t default_arr
     return dyn_array;
 }
 
-void _SA_dynarray_set(SA_DynamicArray *dyn_array, uint64_t index, void *value_ptr)
+void _SA_dynarray_set(SA_DynamicArray *dyn_array, size_t index, void *value_ptr)
 {
     if (!SA_dynarray_ensure_nb_slots(dyn_array, index + 1))
     {
@@ -154,7 +154,7 @@ void _SA_dynarray_set(SA_DynamicArray *dyn_array, uint64_t index, void *value_pt
     SA_memcpy(dyn_array->elements + index * dyn_array->element_size, value_ptr, sizeof(SA_byte) * dyn_array->element_size);
 }
 
-void *_SA_dynarray_get_element_ptr(const SA_DynamicArray *dyn_array, uint64_t index)
+void *_SA_dynarray_get_element_ptr(const SA_DynamicArray *dyn_array, size_t index)
 {
     if (index >= dyn_array->nb_elements)
     {
@@ -168,7 +168,7 @@ void _SA_dynarray_append(SA_DynamicArray *dyn_array, void *value_ptr)
     _SA_dynarray_set(dyn_array, dyn_array->nb_elements, value_ptr);
 }
 
-void _SA_dynarray_insert(SA_DynamicArray *dyn_array, uint64_t index, void *value_ptr)
+void _SA_dynarray_insert(SA_DynamicArray *dyn_array, size_t index, void *value_ptr)
 {
     if (!SA_dynarray_insert_uninitialized_block(dyn_array, index, 1))
     {

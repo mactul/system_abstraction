@@ -92,9 +92,9 @@ Returns the number of characters copied, '\0' included
 If the length of SRC is bigger than DEST_BUFFER_LENGTH, only the first bytes are copied.
 In any case, DEST is always terminated by '\0'.
 */
-int SA_strncpy(char* dest, const char* src, int dest_buffer_length)
+size_t SA_strncpy(char* dest, const char* src, size_t dest_buffer_length)
 {
-    int i;
+    size_t i;
     for(i = 0; i < dest_buffer_length-1 && src[i] != '\0'; i++)
     {
         dest[i] = src[i];
@@ -192,9 +192,9 @@ If you have no idea about the len of the string, you can use SA_strlen, like thi
 reverse_string(str, SA_strlen(str));
 ```
 */
-void SA_reverse_string(char* str, int len_str)
+void SA_reverse_string(char* str, size_t len_str)
 {
-    int i = 0;
+    size_t i = 0;
     while(i < len_str)
     {
         char c = str[i];
@@ -209,10 +209,10 @@ void SA_reverse_string(char* str, int len_str)
 Set the COUNT first bytes under PTR with VALUE
 Returns the pointer PTR.
 */
-void* SA_memset(void* ptr, SA_byte value, uint64_t count)
+void* SA_memset(void* ptr, SA_byte value, size_t count)
 {
     SA_byte* p = (SA_byte*) ptr;
-    for(uint64_t i = 0; i < count; i++)
+    for(size_t i = 0; i < count; i++)
     {
         p[i] = value;
     }
@@ -233,16 +233,31 @@ uint32_t* SA_memset32(uint32_t* dest, uint32_t value, size_t array_len)
 }
 
 /*
-Copy the SIZE first bytes of SOURCE into DEST
+Copy the SIZE first bytes of SRC into DEST
 Returns the pointer DEST.
 */
-void* SA_memcpy(void* dest, void* source, uint64_t size)
+void* SA_memcpy(void* dest, void* src, size_t size)
 {
-    SA_byte* d = (SA_byte*) dest;
-    SA_byte* s = (SA_byte*) source;
-    for(uint64_t i = 0; i < size; i++)
+    SA_byte* dest_char;
+    SA_byte* src_char;
+    size_t* dest_long = (size_t*)dest;
+    size_t* src_long = (size_t*)src;
+    
+
+    for(size_t i = 0; i < size / sizeof(size_t); i++)
     {
-        d[i] = s[i];
+        *dest_long = *src_long;
+        dest_long++;
+        src_long++;
     }
+    dest_char = (SA_byte*) dest_long;
+    src_char = (SA_byte*) src_long;
+    for(size_t i = 0; i < size % sizeof(size_t); i++)
+    {
+        *dest_char = *src_char;
+        dest_char++;
+        src_char++;
+    }
+
     return dest;
 }

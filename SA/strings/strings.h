@@ -47,9 +47,9 @@
      * @brief '\0' is not counted.
      * 
      * @param str the string to analyse
-     * @return int
+     * @return size_t
      */
-    int SA_FUNCTION_PURE SA_strlen(const char* str);
+    size_t SA_FUNCTION_PURE SA_strlen(const char* str);
 
     /**
      * @brief Returns whether or not the char `c` is in the string `str`
@@ -192,7 +192,7 @@
      * @param str the string to reverse in place.
      * @param len_str the length of the string like provided by SA_strlen (often known when we want to reverse a string).
      */
-    void SA_reverse_string(char* str, int len_str);
+    void SA_reverse_string(char* str, size_t len_str);
 
     /**
      * @brief Copy the content of `src` into `dest`  
@@ -217,7 +217,7 @@
      * @param dest_buffer_length The size of the buffer, should be `sizeof(dest)`
      * @return the number of characters copied, '\0' included
      */
-    int SA_strncpy(char* dest, const char* src, int dest_buffer_size);
+    size_t SA_strncpy(char* dest, const char* src, size_t dest_buffer_size);
 
     /**
      * @brief Concatenate the string `add` to the end of `dest`.
@@ -236,7 +236,7 @@
      * @param count the number of bytes to set
      * @return the pointer `ptr`
      */
-    void* SA_memset(void* ptr, SA_byte value, uint64_t count);
+    void* SA_memset(void* ptr, SA_byte value, size_t count);
 
     /**
      * @brief Set the `array_len` first uint32 under `dest` with `value`
@@ -256,7 +256,7 @@
      * @param size the size of `source` in bytes
      * @return the pointer `dest`
      */
-    void* SA_memcpy(void* dest, void* source, uint64_t size);
+    void* SA_memcpy(void* dest, void* source, size_t size);
 
     /**
      * @brief Modify the string `str` with whitespace stripped from the beginning and end of `str`  

@@ -55,7 +55,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
                        "Make sure to initialize the handler to NULL before calling the first requests function.");
     }
     is_first_call = SA_FALSE;
-    if(handler != NULL && (uint64_t)handler < 1000ULL)
+    if(handler != NULL && (size_t)handler < 1000ULL)
     {
         SA_print_error("DebugWarning: requests: handler pointer is non-null and less than 1000, it may be uinitialized\n"
                        "Make sure to initialize the handler to NULL before calling the first requests function.");

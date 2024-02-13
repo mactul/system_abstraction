@@ -23,7 +23,7 @@ DynamicArray allows you to create an array which will automatically grow when yo
 It uses a system of cast and macros to work with any type of value, a little bit like templates in C++.
 
 This documentation is a little bit weird because I have to documentate macros and I wanted to specify the type of every function argument, but that's not always possible.  
-Especially, when I write `type`, it refers to any type in C, like `int`, `float`, `char*`, or even types created by typedef `uint64_t`, `SA_SocketHandler*`, etc...
+Especially, when I write `type`, it refers to any type in C, like `int`, `float`, `char*`, `struct point`, or even types created by typedef `uint64_t`, `SA_SocketHandler*`, etc...
 
 ## __Functions__
 
@@ -80,7 +80,7 @@ void SA_dynarray_append(type, SA_DynamicArray* dyn_array, type value)
 
 ### SA_dynarray_set
 ```c
-void SA_dynarray_set(type, SA_DynamicArray* dyn_array, uint64_t index, type value)
+void SA_dynarray_set(type, SA_DynamicArray* dyn_array, size_t index, type value)
 ```
 - Set the value of a DynamicArray's column at the `index` position.
   If the index is bigger than the size of the array, the array is extended and the values between are filled with garbage.
@@ -99,7 +99,7 @@ void SA_dynarray_set(type, SA_DynamicArray* dyn_array, uint64_t index, type valu
 
 ### SA_dynarray_insert
 ```c
-void SA_dynarray_insert(type, SA_DynamicArray* dyn_array, uint64_t index, type value)
+void SA_dynarray_insert(type, SA_DynamicArray* dyn_array, size_t index, type value)
 ```
 - Insert a value at the `index` position of a DynamicArray.
   If the index is bigger than the size of the array, the array is extended and the values between are filled with garbage.
@@ -121,7 +121,7 @@ void SA_dynarray_insert(type, SA_DynamicArray* dyn_array, uint64_t index, type v
 
 ### SA_dynarray_get
 ```c
-type SA_dynarray_get(type, SA_DynamicArray* dyn_array, uint64_t index)
+type SA_dynarray_get(type, SA_DynamicArray* dyn_array, size_t index)
 ```
 - Returns the value at position `index` in the array `dyn_array`.
 - /!\\ WARNING /!\\ : If the index is bigger than the size of the array, you will have a segfault
@@ -139,7 +139,7 @@ type SA_dynarray_get(type, SA_DynamicArray* dyn_array, uint64_t index)
 
 ### SA_dynarray_insert_uninitialized_block
 ```c
-SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements)
+SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray* dyn_array, size_t index, size_t nb_block_elements)
 ```
 - This will move the dyn_array elements to create a space of uninitialized elements.  
   You should then set them using `SA_dynarray_set`.
@@ -167,7 +167,7 @@ SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray* dyn_array, uint6
 
 ### SA_dynarray_remove_block
 ```c
-SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, uint64_t index, uint64_t nb_block_elements)
+SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, size_t index, size_t nb_block_elements)
 ```
 - This will move the dyn_array elements to remove `nb_block_elements` at position `index`.
 - **parameters:**
@@ -185,7 +185,7 @@ SA_bool SA_dynarray_remove_block(SA_DynamicArray* dyn_array, uint64_t index, uin
 
 ### SA_dynarray_size
 ```c
-uint64_t SA_dynarray_size(SA_DynamicArray* dyn_array)
+size_t SA_dynarray_size(SA_DynamicArray* dyn_array)
 ```
 - Returns the number of elements in the DynamicArray
 

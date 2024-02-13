@@ -14,7 +14,7 @@
      * @param size the number of bytes to allocate. 
      * @return The address of the memory allocated or NULL if an error happend.
      */
-    void* SA_WARN_UNUSED_RESULT SA_malloc(uint64_t size) __THROW SA_MALLOC_FUNC(_SA_free);
+    void* SA_WARN_UNUSED_RESULT SA_malloc(size_t size) __THROW SA_MALLOC_FUNC(_SA_free);
 
 
     /**
@@ -23,7 +23,7 @@
      * @param size the number of bytes to allocate. 
      * @return The address of the memory allocated or NULL if an error happend.
      */
-    void* SA_WARN_UNUSED_RESULT SA_calloc(uint64_t size);
+    void* SA_WARN_UNUSED_RESULT SA_calloc(size_t size);
 
     /**
      * @brief Add `size` bytes of memory in the previously allocated `ptr` block 
@@ -32,7 +32,7 @@
      * @param size The new size of the memory block. If it's less than the initial size, the memory will be deallocated.
      * @return void* 
      */
-    void* SA_WARN_UNUSED_RESULT SA_realloc(void* ptr, uint64_t size);
+    void* SA_WARN_UNUSED_RESULT SA_realloc(void* ptr, size_t size);
 
 
     #ifdef SA_MEMORY_DEBUG

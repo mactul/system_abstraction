@@ -15,11 +15,11 @@ struct _SA_hashmap {
     HashmapNode* nodes[HASHSET_SIZE];
 };
 
-static uint16_t hashmap_calc_hash(void* key, int size)
+static uint16_t hashmap_calc_hash(void* key, size_t size)
 {
     uint16_t* k = (uint16_t*)key;
     uint16_t hash = 0;
-    for(int i = 0; i < size/2; i++)
+    for(size_t i = 0; i < size/2; i++)
     {
         hash ^= *k;
         k++;
@@ -52,7 +52,7 @@ Links the pointer VALUE to the key under the pointer KEY in the HASHMAP.
 KEY_SIZE is the size of the key under the pointer KEY, in bytes.
 If the key is an uint64_t for example, KEY_SIZE should be 8.
 */
-SA_bool SA_hashmap_set_value(SA_HashMap* hashmap, void* key, int key_size, void* value)
+SA_bool SA_hashmap_set_value(SA_HashMap* hashmap, void* key, size_t key_size, void* value)
 {
     uint16_t hash = hashmap_calc_hash(key, key_size);
     HashmapNode* last_node = hashmap->nodes[hash];
@@ -96,7 +96,7 @@ If the key is an uint64_t for example, KEY_SIZE should be 8.
 
 If the key isn't registered in the hashmap, then it returns NULL.
 */
-void* SA_hashmap_get_value(SA_HashMap* hashmap, void* key, int key_size)
+void* SA_hashmap_get_value(SA_HashMap* hashmap, void* key, size_t key_size)
 {
     uint16_t hash = hashmap_calc_hash(key, key_size);
     HashmapNode* node = hashmap->nodes[hash];
