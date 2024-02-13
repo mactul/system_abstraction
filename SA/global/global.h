@@ -9,7 +9,7 @@
     #define SA_FALSE 0
 
     typedef char SA_bool;
-    typedef char SA_byte;
+    typedef uint8_t SA_byte;
 
     /*
     Set here the flags you want to use in debug mode

@@ -12,12 +12,12 @@ int main()
     SA_recursive_mkdir("bidule/machin/chose");
 
     test_graphics();
-    /*test_strings();
+    test_strings();
     test_path();
     test_parser();
     test_math();
     test_memory();
-    test_network();*/
+    test_network();
     
     SA_destroy();
 }
