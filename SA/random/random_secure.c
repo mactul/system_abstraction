@@ -93,3 +93,21 @@ void SA_random_secure_base64_string(char* result, int len)
     }
     result[len] = '\0';
 }
+
+void SA_random_secure_bytes(void* bytes, size_t number_of_bytes)
+{
+    SA_byte* ptr;
+    size_t* ptr_long = (size_t*)bytes;
+
+    for(size_t i = 0; i < number_of_bytes / sizeof(size_t); i++)
+    {
+        *ptr_long = (size_t)SA_random_bbs(sizeof(size_t)*8, SA_random_standard_seed());
+        ptr_long++;
+    }
+    ptr = (SA_byte*) ptr_long;
+    for(size_t i = 0; i < number_of_bytes % sizeof(size_t); i++)
+    {
+        *ptr = (SA_byte)SA_random_bbs(8, SA_random_standard_seed());
+        ptr++;
+    }
+}

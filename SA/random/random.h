@@ -109,6 +109,14 @@
      */
     void SA_random_secure_base64_string(char* result, int len);
 
+    /**
+     * @brief Generate `number_of_bytes` random bytes  
+     * 
+     * @note This function is safe for cryptographic applications
+     * 
+     */
+    void SA_random_secure_bytes(void* bytes, size_t number_of_bytes);
+
     #ifdef __cplusplus
     }
     #endif
