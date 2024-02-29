@@ -82,6 +82,20 @@
     signed char SA_FUNCTION_PURE SA_strcmp(const char* str1, const char* str2);
 
     /**
+     * @brief Compare `buf1` and `buf2` with alphanumeric order.  
+     * @brief Compare the 2 zones on the `size` first bytes. 
+     * 
+     * @param buf1 the first memory area to compare
+     * @param buf2 the second memory area to compare
+     * @param size the number of bytes to compare
+     * 
+     * @return - If buf1 < buf2, it will returns -1  
+     * @return - If buf1 > buf2 it will returns 1  
+     * @return - If buf1 == buf2, it will returns 0  
+     */
+    signed char SA_memcmp(const void* buf1, const void* buf2, size_t size);
+
+    /**
      * @brief Compare `str1` and `str2` with alphanumeric order.  
      * @brief This function is case independend, use SA_strcmp if you want to be case dependent  
      * 

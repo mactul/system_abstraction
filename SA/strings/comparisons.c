@@ -134,3 +134,20 @@ int SA_str_search_case_unsensitive(const char* str, const char* expr)
     }
     return pos;
 }
+
+signed char SA_memcmp(const void* buf1, const void* buf2, size_t size)
+{
+    SA_byte* buf1_char = (SA_byte*)buf1;
+    SA_byte* buf2_char = (SA_byte*)buf2;
+    
+
+    for(size_t i = 0; i < size; i++)
+    {
+        if(buf1_char[i] != buf2_char[i])
+        {
+            return buf1_char[i] < buf2_char[i] ? -1 : 1;
+        }
+    }
+
+    return 0;
+}
