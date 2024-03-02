@@ -111,7 +111,7 @@
      * 
      * @param window Pointer to a SA_GraphicsWindow structure related to this window
      * @param event Pointer to the SA_GraphicsEvent structure that will be filled with this function
-     * @return - SA_FALSE if there is no event to handle, in practise, this should never happend.
+     * @return - SA_FALSE if there is no event to handle, in practice, this should never happened.
      * @return - SA_TRUE if there is an event to handle
      */
     SA_bool SA_graphics_wait_next_event(SA_GraphicsWindow* window, SA_GraphicsEvent* event);

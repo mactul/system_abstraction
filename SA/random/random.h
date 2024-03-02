@@ -23,7 +23,7 @@
 
     /**
      * @brief Generate an uint64_t integer between the range 0 and SA_RAND_U64_MAX.  
-     * @brief This is extremly fast, but unsafe for cryptographic use.
+     * @brief This is extremely fast, but unsafe for cryptographic use.
      * @brief It's based on xorshift128+.
      * 
      * @return uint64_t 
@@ -45,7 +45,7 @@
 
     /**
      * @brief Generate an int64_t integer between the range start and end.  
-     * @brief This is extremly fast, but unsafe for cryptographic use.
+     * @brief This is extremely fast, but unsafe for cryptographic use.
      * @brief It's based on xorshift128+.
      * 
      * @return uint64_t 
@@ -56,7 +56,7 @@
 
     /**
      * @brief Generate an double between the range start and end.  
-     * @brief This is extremly fast, but unsafe for cryptographic use.
+     * @brief This is extremely fast, but unsafe for cryptographic use.
      * @brief It's based on xorshift128+.
      * 
      * @return double 
@@ -74,8 +74,8 @@
 
     /**
      * @brief The blum blum shub algorithm.  
-     * @brief Just like this, this implementation isn't totaly safe, because M isn't big enough. But coupled with SA_random_standard_seed, it's extremly safe.
-     * @brief You should prefere to not use the function directly
+     * @brief Just like this, this implementation isn't totally safe, because M isn't big enough. But coupled with SA_random_standard_seed, it's extremly safe.
+     * @brief You should prefer to not use the function directly
      * 
      * @param n the number of iterations the algorithm should do, determines the number of bytes of the result
      * @param seed the seed in which you want to apply bbs (you should use `SA_random_standard_seed`)

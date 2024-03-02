@@ -2,7 +2,7 @@
 #include "SA/strings/strings.h"
 
 /*
-This parse datas encoded like `key1=value1&key2=value2&...`
+This parse data encoded like `key1=value1&key2=value2&...`
 It returns a ParserTree which can be read by `SA_ptree...` functions.
 */
 SA_ParserTree* SA_parse_urlencoded_form(const char* data)

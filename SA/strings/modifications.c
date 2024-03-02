@@ -142,7 +142,7 @@ void SA_strcat(char* dest, const char* add)
 /*
 Modify the string STR with whitespace stripped from the beginning and end of STR
 The characters removed are ' ', '\t', '\b', '\n', '\r' and '\v'.
-The string returned is the new beginning of the trimed string.
+The string returned is the new beginning of the trimmed string.
 */
 char* SA_strtrim_inplace(char* str)
 {

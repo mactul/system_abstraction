@@ -2,7 +2,7 @@
 
 /*
 compare str1 and str2 with alphanumeric order.
-This function is case dependend, use SA_strcasecmp if you want to be case independent
+This function is case dependent, use SA_strcasecmp if you want to be case independent
 If str1 < str2, it will returns -1
 If str1 > str2 it will returns 1
 If str1 == str2, it will returns 0
@@ -27,7 +27,7 @@ signed char SA_strcmp(const char* str1, const char* str2)
 
 /*
 compare str1 and str2 with alphanumeric order.
-This function is case independend, use SA_strcmp if you want to be case dependent
+This function is case independent, use SA_strcmp if you want to be case dependent
 If str1 < str2, it will returns -1
 If str1 > str2 it will returns 1
 If str1 == str2, it will returns 0

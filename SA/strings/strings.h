@@ -46,7 +46,7 @@
      * @brief Returns the number of characters in STR.  
      * @brief '\0' is not counted.
      * 
-     * @param str the string to analyse
+     * @param str the string to analyze
      * @return size_t
      */
     size_t SA_FUNCTION_PURE SA_strlen(const char* str);
@@ -54,7 +54,7 @@
     /**
      * @brief Returns whether or not the char `c` is in the string `str`
      * 
-     * @param str the string to analyse
+     * @param str the string to analyze
      * @param c the character we search
      * @return SA_bool 
      */
@@ -63,14 +63,14 @@
     /**
      * @brief Returns whether or not the string STR is a unsigned number
      * 
-     * @param str the string to analyse
+     * @param str the string to analyze
      * @return SA_bool 
      */
     SA_bool SA_FUNCTION_PURE SA_is_uint(const char* str);
 
     /**
      * @brief Compare `str1` and `str2` with alphanumeric order.  
-     * @brief This function is case dependend, use SA_strcasecmp if you want to be case independent  
+     * @brief This function is case dependent, use SA_strcasecmp if you want to be case independent  
      * 
      * @param str1
      * @param str2
@@ -97,7 +97,7 @@
 
     /**
      * @brief Compare `str1` and `str2` with alphanumeric order.  
-     * @brief This function is case independend, use SA_strcmp if you want to be case dependent  
+     * @brief This function is case independent, use SA_strcmp if you want to be case dependent  
      * 
      * @param str1
      * @param str2
@@ -277,7 +277,7 @@
      * @brief The characters removed are `' '`, `'\\t'`, `'\\b'`, `'\\n'`, `'\\r'` and `'\\v'`.
      * 
      * @param str the string to modify inplace.
-     * @return the new beginning of the trimed string.
+     * @return the new beginning of the trimmed string.
      */
     char* SA_WARN_UNUSED_RESULT SA_strtrim_inplace(char* str);
 
@@ -320,7 +320,7 @@
      * @brief This transform a string to an uint64_t.  
      * @brief If the string is not the representation of an uint64_t, for example if it contains symbols like '-',
      * @brief the function will returns 0 and SA_get_last_error() will returns SA_ERROR_NAN.  
-     * @brief Please make sure to check this if the function returns 0, unless you are sure that the string is well formated.
+     * @brief Please make sure to check this if the function returns 0, unless you are sure that the string is well formatted.
      * 
      * @param str the string to convert
      * @return uint64_t 
@@ -331,7 +331,7 @@
      * @brief This transform a string to an int64_t.  
      * @brief If the string is not the representation of an int64_t, for example if it contains symbols like '.',
      * @brief the function will returns 0 and SA_get_last_error() will returns SA_ERROR_NAN.  
-     * @brief Please make sure to check this if the function returns 0, unless you are sure that the string is well formated.
+     * @brief Please make sure to check this if the function returns 0, unless you are sure that the string is well formatted.
      * 
      * @param str the string to convert
      * @return int64_t 
@@ -342,7 +342,7 @@
      * @brief This transform a string to a double.  
      * @brief If the string is not the representation of a double, for example if it contains symbols like '/',
      * @brief the function will returns 0.0 and SA_get_last_error() will returns SA_ERROR_NAN.  
-     * @brief Please make sure to check this if the function returns 0.0, unless you are sure that the string is well formated.
+     * @brief Please make sure to check this if the function returns 0.0, unless you are sure that the string is well formatted.
      * 
      * @param str the string to convert
      * @return double
@@ -353,7 +353,7 @@
      * @brief This transform a hexadecimal string to an uint64_t.
      * @brief If the string is not the hexadecimal representation of an uint64_t, for example if it contains symbols like '-',
      * @brief the function will returns 0 and SA_get_last_error() will returns SA_ERROR_NAN
-     * @brief Please make sure to check this if the function returns 0, unless you are sure that the string is well formated.
+     * @brief Please make sure to check this if the function returns 0, unless you are sure that the string is well formatted.
      * 
      * @param str the string to convert
      * @return uint64_t

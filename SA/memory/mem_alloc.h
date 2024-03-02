@@ -12,7 +12,7 @@
      * @brief Allocate `size` bytes of memory
      * 
      * @param size the number of bytes to allocate. 
-     * @return The address of the memory allocated or NULL if an error happend.
+     * @return The address of the memory allocated or NULL if an error happened.
      */
     void* SA_WARN_UNUSED_RESULT SA_FUNCTION_NOTHROW SA_malloc(size_t size) SA_MALLOC_FUNC(_SA_free);
 
@@ -21,7 +21,7 @@
      * @brief Allocate `size` bytes of memory and set them to zero.
      * 
      * @param size the number of bytes to allocate. 
-     * @return The address of the memory allocated or NULL if an error happend.
+     * @return The address of the memory allocated or NULL if an error happened.
      */
     void* SA_WARN_UNUSED_RESULT SA_calloc(size_t size);
 

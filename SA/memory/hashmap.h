@@ -9,7 +9,7 @@
     #endif
 
     /**
-     * @brief Create a hasmap handler with the specified comparison function 
+     * @brief Create a hashmap handler with the specified comparison function 
      * 
      * @param cmp_func A pointer to a callback which specify how to compare 2 keys. It should returns SA_TRUE if `*key1 == *key2`.
      * @return A handler to a SA_HashMap.

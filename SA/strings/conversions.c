@@ -59,7 +59,7 @@ char* SA_int64_to_str(char* result, int64_t n)
 This transform a string to an uint64_t.
 If the string is not the representation of an uint64_t, for example if it contains symbols like '-',
 the function will returns 0 and SA_get_last_error() will returns SA_ERROR_NAN
-Please make sure to check this if the function returns 0, unless you are sure that the string is well formated.
+Please make sure to check this if the function returns 0, unless you are sure that the string is well formatted.
 */
 uint64_t SA_str_to_uint64(const char* str)
 {
@@ -84,7 +84,7 @@ uint64_t SA_str_to_uint64(const char* str)
 This transform a hexadecimal string to an uint64_t.
 If the string is not the hexadecimal representation of an uint64_t, for example if it contains symbols like '-',
 the function will returns 0 and SA_get_last_error() will returns SA_ERROR_NAN
-Please make sure to check this if the function returns 0, unless you are sure that the string is well formated.
+Please make sure to check this if the function returns 0, unless you are sure that the string is well formatted.
 */
 uint64_t SA_hex_to_uint64(const char* str)
 {
@@ -115,7 +115,7 @@ uint64_t SA_hex_to_uint64(const char* str)
 This transform a string to an int64_t.
 If the string is not the representation of an int64_t, for example if it contains symbols like '.',
 the function will returns 0 and SA_get_last_error() will returns SA_ERROR_NAN
-Please make sure to check this if the function returns 0, unless you are sure that the string is well formated.
+Please make sure to check this if the function returns 0, unless you are sure that the string is well formatted.
 */
 int64_t SA_str_to_int64(const char* str)
 {
@@ -146,7 +146,7 @@ int64_t SA_str_to_int64(const char* str)
 This transform a string to a double.
 If the string is not the representation of a double, for example if it contains symbols like '/',
 the function will returns 0.0 and SA_get_last_error() will returns SA_ERROR_NAN
-Please make sure to check this if the function returns 0.0, unless you are sure that the string is well formated.
+Please make sure to check this if the function returns 0.0, unless you are sure that the string is well formatted.
 */
 double SA_str_to_double(const char* str)
 {

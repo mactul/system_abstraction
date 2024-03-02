@@ -41,17 +41,17 @@ SA_ParserTree* SA_ptree_init()
 Allocate the space for the partial_key and concatenate it to the older one.
 It can be called multiple time if the key you want to store is separated in multiples chunks.
 However, because of the realloc, it's quicker if you work with large chunks.
-If it succeded, it returns SA_TRUE.
+If it succeeded, it returns SA_TRUE.
 If it fails, it's a memory error, the operation is aborted and the previously allocated key is freed.
 */
 SA_bool SA_ptree_update_key(SA_ParserTree* tree, const char* partial_key, int partial_key_len)
 {
-    char* writter;
+    char* writer;
     if(tree->current_key == NULL)
     {
         // New key
         tree->current_key = (char*) SA_malloc((partial_key_len + 1) * sizeof(char));
-        writter = tree->current_key;
+        writer = tree->current_key;
     }
     else
     {
@@ -62,7 +62,7 @@ SA_bool SA_ptree_update_key(SA_ParserTree* tree, const char* partial_key, int pa
             SA_free(&(tree->current_key));
         }
         tree->current_key = temp;
-        writter = tree->current_key + len_old_key;
+        writer = tree->current_key + len_old_key;
     }
     if(tree->current_key == NULL)
     {
@@ -70,7 +70,7 @@ SA_bool SA_ptree_update_key(SA_ParserTree* tree, const char* partial_key, int pa
         return SA_FALSE;
     }
     
-    SA_strncpy(writter, partial_key, partial_key_len);
+    SA_strncpy(writer, partial_key, partial_key_len);
 
     return SA_TRUE;
 }
@@ -79,17 +79,17 @@ SA_bool SA_ptree_update_key(SA_ParserTree* tree, const char* partial_key, int pa
 Allocate the space for the partial_value and concatenate it to the older one.
 It can be called multiple time if the value you want to store is separated in multiples chunks.
 However, because of the realloc, it's quicker if you work with large chunks.
-If it succeded, it returns SA_TRUE.
+If it succeeded, it returns SA_TRUE.
 If it fails, it's a memory error, the operation is aborted and the previously allocated value is freed.
 */
 SA_bool SA_ptree_update_value(SA_ParserTree* tree, const char* partial_value, int partial_value_len)
 {
-    char* writter;
+    char* writer;
     if(tree->current_value == NULL)
     {
         // New key
         tree->current_value = (char*) SA_malloc((partial_value_len + 1) * sizeof(char));
-        writter = tree->current_value;
+        writer = tree->current_value;
     }
     else
     {
@@ -100,7 +100,7 @@ SA_bool SA_ptree_update_value(SA_ParserTree* tree, const char* partial_value, in
             SA_free(&(tree->current_value));
         }
         tree->current_value = temp;
-        writter = tree->current_value + len_old_value;
+        writer = tree->current_value + len_old_value;
     }
     if(tree->current_value == NULL)
     {
@@ -108,7 +108,7 @@ SA_bool SA_ptree_update_value(SA_ParserTree* tree, const char* partial_value, in
         return SA_FALSE;
     }
     
-    SA_strncpy(writter, partial_value, partial_value_len);
+    SA_strncpy(writer, partial_value, partial_value_len);
 
     return SA_TRUE;
 }

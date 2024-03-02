@@ -38,7 +38,7 @@ SA_random_seed SA_random_standard_seed(void)
 
 /*
 This function is a small implementation of the Blum Blum Shub algorithm.
-Just like this, this implementation isn't totaly safe, because M isn't big enough. But coupled with SA_random_standard_seed, it's extremly safe.
+Just like this, this implementation isn't totally safe, because M isn't big enough. But coupled with SA_random_standard_seed, it's extremely safe.
 */
 uint64_t SA_random_bbs(int n, SA_random_seed seed)
 {

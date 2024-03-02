@@ -16,7 +16,7 @@
      * @brief This function works exactly like `SA_dynarray_create`  
      * @brief In addition, you can pass the default size of the array. This size will be the first size of the memory allocated by the array and when this will no longer be sufficient, the array will be extended.
      * @param type any type on which you can call `sizeof`, for example `int`, `float`, `struct vector`, etc... It will be the type used in the whole DynamicArray.
-     * @param default_array_size A hint for the compiler. The bigger this parameter is the faster it is to reallocate memory but it can also take more RAM than needed. You should set this parameter to the approximative final size you expect for the dynamic array.
+     * @param default_array_size A hint for the compiler. The bigger this parameter is the faster it is to reallocate memory but it can also take more RAM than needed. You should set this parameter to the approximate final size you expect for the dynamic array.
      * @return - when it succeeds, it returns a pointer to a structure handler.
      * @return - when it fails, it returns `NULL` and `SA_print_last_error()` can tell what happened
     */
@@ -54,7 +54,7 @@
      * @brief Insert a value at the `index` position of a DynamicArray.  
      * @brief If the index is bigger than the size of the array, the array is extended and the values between are filled with garbage.  
      * @brief  
-     * @brief This is very costly, if you have multiple values to insert, use `SA_dynarray_insert_uinitiliazed_block` to create the space required.  
+     * @brief This is very costly, if you have multiple values to insert, use `SA_dynarray_insert_uninitialized_block` to create the space required.  
      * @brief Then, use `SA_dynarray_set` to fill the space with your values.
      * @param type the type specified in `SA_dynarray_create`, for example `int`, `float`, `struct vector`, etc...
      * @param dyn_array the handler returned by `SA_dynarray_create`.
@@ -74,7 +74,7 @@
     */
     #define SA_dynarray_get(type, dyn_array, index) (*((type*) _SA_dynarray_get_element_ptr(dyn_array, index)))
 
-    // retrocompatibilty function - prefere using SA_dynarray_activate_zero_filling
+    // retrocompatibilty function - prefer using SA_dynarray_activate_zero_filling
     #define SA_activate_zero_filling(dyn_array) SA_dynarray_activate_zero_filling(dyn_array)
 
 

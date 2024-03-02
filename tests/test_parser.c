@@ -9,7 +9,7 @@ void test_parser(void)
     SA_parser_reset_stream();
     for(int i = 0; buffer[i] != '\0'; i++)
     {
-        if(SA_parser_search_occurence_in_bytes_stream(buffer[i], "les"))
+        if(SA_parser_search_occurrence_in_bytes_stream(buffer[i], "les"))
         {
             assert(SA_strcmp(buffer+i, "s gnus") == 0);
         }

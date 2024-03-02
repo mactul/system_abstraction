@@ -22,7 +22,7 @@
 DynamicArray allows you to create an array which will automatically grow when you insert values into it.  
 It uses a system of cast and macros to work with any type of value, a little bit like templates in C++.
 
-This documentation is a little bit weird because I have to documentate macros and I wanted to specify the type of every function argument, but that's not always possible.  
+This documentation is a little bit weird because I have to document macros and I wanted to specify the type of every function argument, but that's not always possible.  
 Especially, when I write `type`, it refers to any type in C, like `int`, `float`, `char*`, `struct point`, or even types created by typedef `uint64_t`, `SA_SocketHandler*`, etc...
 
 ## __Functions__
@@ -52,7 +52,7 @@ SA_DynamicArray* SA_dynarray_create_size_hint(type, uint32_t default_array_size)
 - **parameters:**
     - `type`: any type on which you can call `sizeof`, for example `int`, `float`, `struct vector`, etc... It will be the type used in the whole DynamicArray.
     - `default_array_size`: A hint for the compiler. The bigger this parameter is the faster it is to reallocate memory but it can also take more RAM than needed.  
-    You should set this parameter to the approximative final size you expect for the dynamic array.
+    You should set this parameter to the approximate final size you expect for the dynamic array.
 - **returns:**
     - when it succeeds, it returns a pointer to a structure handler.
     - when it fails, it returns `NULL` and `SA_print_last_error()` can tell what happened
@@ -104,7 +104,7 @@ void SA_dynarray_insert(type, SA_DynamicArray* dyn_array, size_t index, type val
 - Insert a value at the `index` position of a DynamicArray.
   If the index is bigger than the size of the array, the array is extended and the values between are filled with garbage.
 
-  This is very costly, if you have multiple values to insert, use `SA_dynarray_insert_uinitiliazed_block` to create the space required.
+  This is very costly, if you have multiple values to insert, use `SA_dynarray_insert_uninitialized_block` to create the space required.
   Then, use `SA_dynarray_set` to fill the space with your values.
 - **parameters:**
     - `type`: the type specified in `SA_dynarray_create`, for example `int`, `float`, `struct vector`, etc...

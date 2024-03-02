@@ -8,7 +8,7 @@
 
 void callback(SA_GraphicsWindow* window)
 {
-    SA_bool event_readed;
+    SA_bool event_read;
     SA_GraphicsEvent event;
     SA_GraphicsRectangle draw_area = {.top_left_corner_x = 50, .top_left_corner_y = 100, .height = 300, .width = 300};
     double x_array[200];
@@ -22,7 +22,7 @@ void callback(SA_GraphicsWindow* window)
     //SA_graphics_vram_draw_pixel(window, 5, 5, 0xff7000);
     SA_graphics_vram_draw_line(window, 5, 5, 100, 100, 0xff7000, 3);
     SA_graphics_vram_draw_vertical_line(window, 10, 10, 20, 255, 2);
-    SA_graphics_vram_draw_text(window, 20, 20, "Bonjour, j'aime le beurre", 0x0000ff);
+    SA_graphics_vram_draw_text(window, 20, 20, "Hello ! I like butter !", 0x0000ff);
 
     SA_graphics_plot_continuous_graph(window, x_array, y_array, sizeof(x_array)/sizeof(double), &draw_area, 0x000000, 0xff0000, 0xffffff);
     
@@ -31,7 +31,7 @@ void callback(SA_GraphicsWindow* window)
     SA_graphics_vram_flush(window);
     do
     {
-        if((event_readed = SA_graphics_wait_next_event(window, &event)))
+        if((event_read = SA_graphics_wait_next_event(window, &event)))
         {
             printf("%d\n", SA_graphics_handle_text_input_events(text_input, &event));
             switch(event.event_type)
@@ -59,7 +59,7 @@ void callback(SA_GraphicsWindow* window)
                     break;
             }
         }
-    } while (!event_readed || event.event_type != SA_GRAPHICS_EVENT_CLOSE_WINDOW);
+    } while (!event_read || event.event_type != SA_GRAPHICS_EVENT_CLOSE_WINDOW);
 
     SA_graphics_free_text_input(&text_input);
 }
@@ -119,5 +119,5 @@ void test_graphics(void)
 
     //pthread_join(thread, NULL);
 
-    SA_graphics_create_window("machin", 0, 0, 600, 600, 0, callback, 0, event_callback);
+    SA_graphics_create_window("something", 0, 0, 600, 600, 0, callback, 0, event_callback);
 }

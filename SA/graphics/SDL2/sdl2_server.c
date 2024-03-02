@@ -1,5 +1,5 @@
 /***********************************************************************************/ 
-/* SDL2 is a BIG PIECE OF SHIT, so this file is required to synchronise everything */
+/* SDL2 is a BIG PIECE OF SHIT, so this file is required to synchronize everything */
 /***********************************************************************************/
 
 #include "SA/memory/dynamic_array.h"
@@ -270,7 +270,7 @@ static void sdl_event_switch(SDL_Event* event)
 
     if(graphics_event.event_type == SA_GRAPHICS_EVENT_CLOSE_WINDOW)
     {
-        sem_post(window->is_completly_destroyed);
+        sem_post(window->is_completely_destroyed);
     }
 }
 

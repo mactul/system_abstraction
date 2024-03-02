@@ -17,7 +17,7 @@
 
 # Easy_TCP_TLS
 
-This library allows you to cypher all your code with ssl by only updating one line in your code.
+This library allows you to cipher all your code with ssl by only updating one line in your code.
 For client applications, you just have to rename [SA_socket_client_init](#sa_socket_client_init) into [SA_socket_ssl_client_init](#sa_socket_ssl_client_init).
 And for server applications, you have to rename [SA_socket_server_init](#sa_socket_server_init) into [SA_socket_ssl_server_init](#sa_socket_ssl_server_init) and add the `cert.pem` and `key.pem` arguments.
 
@@ -29,7 +29,7 @@ SA_SocketHandler* SA_socket_client_init(const char* server_hostname, uint16_t se
 ```
 - This function will create the socket and returns a socket handler.
 - **parameters:**
-    - `server_hostname`: the targeted server host name, formated like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
+    - `server_hostname`: the targeted server host name, formatted like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
     - `server_port`: the opened server port that listen the connection
 - **returns:**
     - when it succeeds, it returns a pointer to a structure handler.
@@ -39,9 +39,9 @@ SA_SocketHandler* SA_socket_client_init(const char* server_hostname, uint16_t se
 ```c
 SA_SocketHandler* SA_socket_ssl_client_init(const char* server_hostname, uint16_t server_port)
 ```
-- This function works like socket_client_init, but it will create an ssl secured socket connexion.
+- This function works like socket_client_init, but it will create an ssl secured socket connection.
 - **parameters:**
-    - `server_hostname`: the targeted server ip, formated like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
+    - `server_hostname`: the targeted server ip, formatted like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
     - `server_port`: the opened server port that listen the connection
 - **returns:**
     - when it succeeds, it returns a pointer to a structure handler.
@@ -101,11 +101,11 @@ SA_SocketHandler* SA_socket_accept(SA_SocketHandler* server, SA_ClientData* pcli
 ```c
 int SA_socket_send(SA_SocketHandler* s, const char* buffer, int n)
 ```
-- This function will send the datas contained in the buffer array through the socket
+- This function will send the data contained in the buffer array through the socket
 - **parameters:**
     - `s`: a pointer to a SocketHandler. If you are in a client application, it's the handler returned by `SA_socket_client_init` or `SA_socket_ssl_client_init`. If you are in a server application, it's the handler returned by `SA_socket_accept`
-    - `buffer`: a buffer containing all the datas you want to send
-    - `n`: the size of the datas, this can be different from the `sizeof(buffer)` if your buffer isn't full.
+    - `buffer`: a buffer containing all the data you want to send
+    - `n`: the size of the data, this can be different from the `sizeof(buffer)` if your buffer isn't full.
 - **returns:**
     - when it succeeds, it returns the number of bytes sended
     - when it fails, it returns -1 and errno contains more information.
@@ -120,19 +120,19 @@ int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n)
     - `buffer`: an empty buffer that will be filled with data from the socket.
     - `n`: the size of your buffer, you can simply provide `sizeof(buffer)`.
 - **returns:**
-    - when it succeeds, it returns the number of bytes readed
+    - when it succeeds, it returns the number of bytes read
     - when it fails, it returns -1 and errno contains more information.
 
 ### SA_socket_close
 ```c
 void SA_socket_close(SA_SocketHandler** pps)
 ```
-- This function take the address of the pointer on the handler to release all the stuff and put the SA_Sockethandler pointer to NULL.
+- This function take the address of the pointer on the handler to release all the stuff and put the SA_SocketHandler pointer to NULL.
 - **parameters:**
     - `pps`: the address of the pointer on the socket
 - **returns:**
     - Nothing.
-    - In theorie, if the pointer pps passed is coherent, this function can't fail.
+    - In theory, if the pointer pps passed is coherent, this function can't fail.
     - If it creates a runtime error, maybe the memory behind the pointer is not allocated properly.
 
 ## __Examples__
@@ -181,7 +181,7 @@ int main()
     SA_init();  // if you forget that, your code will never work on Windows and if you are in release mode, the socket creation will just fail without a warning
     
     server_handler = SA_socket_server_init("127.0.0.1", 3678, 1);  // You can use socket_ssl_server_init if you want the connection to be secure, but you have to create a cert.pem and a key.pem file.
-    // Here we are using a backlog of 1, but you can (should ?) increase that if you want to handle multiple connections handshake in the same time (multiple etablished connections are independant from that).
+    // Here we are using a backlog of 1, but you can (should ?) increase that if you want to handle multiple connections handshake in the same time (multiple established connections are independent from that).
     
     if(server_handler == NULL)
     {

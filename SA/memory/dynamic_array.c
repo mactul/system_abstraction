@@ -38,7 +38,7 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray *dyn_array, size_t nb
             if (dyn_array->nb_slots >= (1ULL << (8 * sizeof(dyn_array->nb_slots) - 1)))
             {
                 // We can't double this without an overflow.
-                // at this moment, the memory sould be completly saturated, but who knows...
+                // at this moment, the memory should be completely saturated, but who knows...
                 _SA_set_error(SA_ERROR_OVERFLOW);
                 return SA_FALSE;
             }
@@ -63,7 +63,7 @@ static SA_bool SA_dynarray_ensure_nb_slots(SA_DynamicArray *dyn_array, size_t nb
 
 /*
 Insert a space of NB_BLOCK_ELEMENTS in the DynamicArray.
-The space created is uinitiliazed, so filled with garbage.
+The space created is uninitialized, so filled with garbage.
 */
 SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray *dyn_array, size_t index, size_t nb_block_elements)
 {
@@ -84,7 +84,7 @@ SA_bool SA_dynarray_insert_uninitialized_block(SA_DynamicArray *dyn_array, size_
 Remove NB_BLOCK_ELEMENTS from the DynamicArray starting at position INDEX.
 If nothing was removed, the function returns SA_FALSE, else it returns SA_TRUE.
 
-This doesn't free any memory, the remaining memory is used for futur use in the DynamicArray.
+This doesn't free any memory, the remaining memory is used for future use in the DynamicArray.
 */
 SA_bool SA_dynarray_remove_block(SA_DynamicArray *dyn_array, size_t index, size_t nb_block_elements)
 {

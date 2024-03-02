@@ -15,9 +15,9 @@
     - [SA\_req\_get\_status\_code](#sa_req_get_status_code)
     - [SA\_req\_display\_headers](#sa_req_display_headers)
   - [__Concepts__](#concepts)
-    - [Url formating](#url-formating)
-    - [Data formating](#data-formating)
-    - [Headers formating](#headers-formating)
+    - [Url formatting](#url-formatting)
+    - [Data formatting](#data-formatting)
+    - [Headers formatting](#headers-formatting)
     - [Keep-alive](#keep-alive)
   - [__Examples__](#examples)
     - [Post - keep-alive disabled](#post---keep-alive-disabled)
@@ -39,9 +39,9 @@ SA_RequestsHandler* SA_req_get(SA_RequestsHandler* handler, const char* url, con
 - **parameters**
     - `handler`: must be NULL if it's the first connection, otherwise, it should be an old handler (see [keep-alive](#keep-alive) for more information).
     - `url`: It's the url you want to request, it should start with `http://` or `https://`.
-    - `additional_headers`: the headers you want to specify, they are separeted by `\r\n` and __they need__ to finish by `\r\n`.
+    - `additional_headers`: the headers you want to specify, they are separated by `\r\n` and __they need__ to finish by `\r\n`.
 - **returns**
-    - When it succededs, it returns a pointer to a structure handler.
+    - When it succeeds, it returns a pointer to a structure handler.
     - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
 
 ### SA_req_post
@@ -53,9 +53,9 @@ SA_RequestsHandler* SA_req_post(SA_RequestsHandler* handler, const char* url, co
     - `handler`: must be NULL if it's the first connection, otherwise, it should be an old handler (see [keep-alive](#keep-alive) for more information).
     - `url`: It's the url you want to request, it should start with `http://` or `https://`.
     - `data`: it's the body of the request.
-    - `additional_headers`: the headers you want to specify, they are separeted by `\r\n` and __they needs__ to finish by `\r\n`.
+    - `additional_headers`: the headers you want to specify, they are separated by `\r\n` and __they needs__ to finish by `\r\n`.
 - **returns**
-    - When it succededs, it returns a pointer to a structure handler.
+    - When it succeeds, it returns a pointer to a structure handler.
     - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
 
 ### SA_req_delete
@@ -98,9 +98,9 @@ It's the generic method for all other HTTP methods.
     - `method`: This parameter must be in CAPS LOCK, followed by a space, like `"GET "`, `"POST "`, etc...
     - `url`: It's the url you want to request, it should start with `http://` or `https://`.
     - `data`: it's the body of the request.
-    - `additional_headers`: the headers you want to specify, they are separeted by `\r\n` and __they needs__ to finish by `\r\n`.
+    - `additional_headers`: the headers you want to specify, they are separated by `\r\n` and __they needs__ to finish by `\r\n`.
 - **returns**
-    - When it succededs, it returns a pointer to a structure handler.
+    - When it succeeds, it returns a pointer to a structure handler.
     - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
 
 
@@ -116,10 +116,10 @@ However, if there is no data left, you can call the function as many times as yo
 - This function fill the buffer entirely, excepted for the last one.
 - **parameters**
   - `handler`: the handler returned by a request
-  - `buffer`: a buffer to fill with the data readed
+  - `buffer`: a buffer to fill with the data read
   - `buffer_size`: the size of the buffer. Don't forget to remove 1 byte from your real buffer size if you are reading text and you want to add an `'\0'` at the end of the buffer.
 - **returns**:
-    - If it succeded, it returns the number of bytes readed and put in `buffer`.
+    - If it succeeded, it returns the number of bytes read and put in `buffer`.
     - If it fails, it returns -1 and errno contains more information.
 
 
@@ -129,7 +129,7 @@ void SA_req_close_connection(SA_RequestsHandler** ppr);
 ```
 - this function will close the connection, destroy the headers parsed tree, free all structures behind the handler and put your handler to `NULL`.
 - **parameters**
-  - `ppr`: the adress of your handler. It's a pointer to a pointer
+  - `ppr`: the address of your handler. It's a pointer to a pointer
 
 
 ### SA_req_get_header_value
@@ -173,7 +173,7 @@ void SA_req_display_headers(SA_RequestsHandler* handler);
 
 ## __Concepts__
 
-### Url formating
+### Url formatting
 
 Requests is able to automatically parse urls, extract the domain the port, and the relative uri.  
 However, to work, url needs to start with `http://` or `https://`.  
@@ -182,17 +182,17 @@ You can change the default port of the url (which is 80 for http and 443 for htt
 `https://example.com:7890/test` will use the port 7890 and will be secured over SSL.
 `http://example.com:4706/test` will use the port 4706 and will **not** be secured over SSL.
 
-### Data formating
+### Data formatting
 
-If you send data (via post, put or patch), they need to be formated like the server want
+If you send data (via post, put or patch), they need to be formatted like the server want
 for example, for a standard post *(application/x-www-form-urlencoded)*, it will be like that
 ```c
 "key1=value1&key2=value2&key3=value3"
 ```
 
-### Headers formating
+### Headers formatting
 
-You can always provide a empty string to the `additional_headers` parameter; However, if you provide any additional headers, they are separeted by `\r\n` and __they need__ to finish by `\r\n`\
+You can always provide a empty string to the `additional_headers` parameter; However, if you provide any additional headers, they are separated by `\r\n` and __they need__ to finish by `\r\n`\
 for example, I can add this header
 ```c
 "Content-Type: application/json\r\n"
@@ -206,7 +206,7 @@ If you forget the ending `\r\n` you will have a failure.
 
 ### Keep-alive
 All the requests are keep-alive by default. However, if you provide NULL for the handler parameter in the request, you will never exploit this acceleration.
-When you do multiple requests to the same server, you can provide the handler of the precedent request to the new one, to avoid retablishing the connection.
+When you do multiple requests to the same server, you can provide the handler of the precedent request to the new one, to avoid reconnection.
 
 **/!\\ Warning /!\\** Make sure to always update the handler when you create connections with an old handler, like this:
 ```c
@@ -282,7 +282,7 @@ int main()
     
     for(int i = 0; i < 4; i++)
     {
-        handler = SA_req_get(handler, url_array[i], "");  // "" is for no additionals headers
+        handler = SA_req_get(handler, url_array[i], "");  // "" is for no additional headers
         
         if(handler == NULL)
         {

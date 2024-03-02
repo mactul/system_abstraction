@@ -15,7 +15,7 @@ uint64_t SA_int_pow(uint32_t base, unsigned char e)
             result *= base;
         e >>= 1;
         if(e == 0)
-            break;  // here to avoid a non usefull multiplication
+            break;  // here to avoid a non useful multiplication
         base *= base;
     }
 

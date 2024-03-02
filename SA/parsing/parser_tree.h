@@ -11,7 +11,7 @@
     /**
      * @brief Create a new ParserTree
      * 
-     * @return - When it succededs, it returns a pointer to a ParserTree handler.
+     * @return - When it succeeds, it returns a pointer to a ParserTree handler.
      * @return - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
      */
     SA_ParserTree* SA_ptree_init();
@@ -25,7 +25,7 @@
      * @param tree The handler returned by `SA_ptree_init`
      * @param partial_key a string that is the part of the key you are actually parsing
      * @param partial_key_len the strlen of the key (can be used to limit the size of the buffer)
-     * @return - When it succeded, it returns SA_TRUE.
+     * @return - When it succeeds, it returns SA_TRUE.
      * @return - When it fails, it's a memory error, the operation is aborted and the previously allocated key is freed.
      */
     SA_bool SA_ptree_update_key(SA_ParserTree* tree, const char* partial_key, int partial_key_len);
@@ -39,7 +39,7 @@
      * @param tree The handler returned by `SA_ptree_init`
      * @param partial_value a string that is the part of the value you are actually parsing
      * @param partial_value_len the strlen of the value (can be used to limit the size of the buffer)
-     * @return - When it succeded, it returns SA_TRUE.
+     * @return - When it succeeds, it returns SA_TRUE.
      * @return - When it fails, it's a memory error, the operation is aborted and the previously allocated value is freed.
      */
     SA_bool SA_ptree_update_value(SA_ParserTree* tree, const char* partial_value, int partial_value_len);
@@ -62,7 +62,7 @@
      * 
      * @param tree The handler returned by `SA_ptree_init`
      * @param key the key corresponding to the value registered
-     * @return - when it succededs, it returns the value registered
+     * @return - when it succeeds, it returns the value registered
      * @return - when it fails, it returns NULL
      */
     const char* SA_FUNCTION_PURE SA_ptree_get_value(SA_ParserTree* tree, const char* key);

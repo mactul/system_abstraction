@@ -16,8 +16,8 @@
      * @param method This parameter must be in CAPS LOCK, followed by a space, like `"GET "`, `"POST "`, etc...
      * @param url It's the url you want to request, it should start with `http://` or `https://`.
      * @param data It's the body of the request.
-     * @param additional_headers The headers you want to specify, they are separeted by `\r\n` and __they needs__ to finish by `\r\n`.
-     * @return - When it succededs, it returns a pointer to a structure handler.
+     * @param additional_headers The headers you want to specify, they are separated by `\r\n` and __they needs__ to finish by `\r\n`.
+     * @return - When it succeeds, it returns a pointer to a structure handler.
      * @return - When it fails, it returns NULL and `SA_print_last_error` can tell what happened.
      */
     SA_RequestsHandler* SA_WARN_UNUSED_RESULT SA_req_request(SA_RequestsHandler* handler, const char* method, const char* url, const char* data, const char* additional_headers);
@@ -60,18 +60,28 @@
      * @brief This function fill the buffer entirely, excepted for the last one.
      * 
      * @param handler the handler returned by a request
-     * @param buffer a buffer to fill with the data readed
+     * @param buffer a buffer to fill with the data read
      * @param buffer_size the size of the buffer. Don't forget to remove 1 byte from your real buffer size if you are reading text and you want to add an `'\0'` at the end of the buffer.
-     * @return - If it succeded, it returns the number of bytes readed and put in `buffer`.
+     * @return - If it succeeded, it returns the number of bytes read and put in `buffer`.
      * @return - If it fails, it returns -1 and errno contains more information.
      */
     int SA_req_read_output_body(SA_RequestsHandler* handler, char* buffer, int buffer_size);
 
 
     /**
+     * @brief To get the number of bytes read in the body of the request.  
+     * @brief It can be used to get the current cursor position if you read a file from the web.
+     * 
+     * @param handler the handler returned by a request
+     * @return the number of bytes read since the first SA_req_read_output_body
+     */
+    uint64_t SA_req_nb_bytes_read(SA_RequestsHandler* handler);
+
+
+    /**
      * @brief this function will close the connection, destroy the headers parsed tree, free all structures behind the handler and put your handler to `NULL`.
      * 
-     * @param ppr the adress of your handler. It's a pointer to a pointer.
+     * @param ppr the address of your handler. It's a pointer to a pointer.
      */
     void SA_req_close_connection(SA_RequestsHandler** ppr);
 
@@ -86,8 +96,8 @@
      * 
      * @param handler must be NULL if it's the first connection, otherwise, it should be an old handler
      * @param url It's the url you want to request, it should start with `http://` or `https://`.
-     * @param additional_headers the headers you want to specify, they are separeted by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
-     * @return - When it succededs, it returns a pointer to a structure handler.
+     * @param additional_headers the headers you want to specify, they are separated by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
+     * @return - When it succeeds, it returns a pointer to a structure handler.
      * @return - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
      */
     static inline SA_RequestsHandler* SA_WARN_UNUSED_RESULT SA_req_get(SA_RequestsHandler* handler, const char* url, const char* additional_headers)
@@ -102,8 +112,8 @@
      * @param handler must be NULL if it's the first connection, otherwise, it should be an old handler
      * @param url It's the url you want to request, it should start with `http://` or `https://`.
      * @param data it's the body of the request, it can be for example `name=Jonathan&password=azerty1234`
-     * @param additional_headers the headers you want to specify, they are separeted by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
-     * @return - When it succededs, it returns a pointer to a structure handler.
+     * @param additional_headers the headers you want to specify, they are separated by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
+     * @return - When it succeeds, it returns a pointer to a structure handler.
      * @return - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
      */
     static inline SA_RequestsHandler* SA_WARN_UNUSED_RESULT SA_req_post(SA_RequestsHandler* handler, const char* url, const char* data, const char* additional_headers)
@@ -117,8 +127,8 @@
      * 
      * @param handler must be NULL if it's the first connection, otherwise, it should be an old handler
      * @param url It's the url you want to request, it should start with `http://` or `https://`.
-     * @param additional_headers the headers you want to specify, they are separeted by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
-     * @return - When it succededs, it returns a pointer to a structure handler.
+     * @param additional_headers the headers you want to specify, they are separated by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
+     * @return - When it succeeds, it returns a pointer to a structure handler.
      * @return - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
      */
     static inline SA_RequestsHandler* SA_WARN_UNUSED_RESULT SA_req_delete(SA_RequestsHandler* handler, const char* url, const char* additional_headers)
@@ -132,8 +142,8 @@
      * @param handler must be NULL if it's the first connection, otherwise, it should be an old handler
      * @param url It's the url you want to request, it should start with `http://` or `https://`.
      * @param data it's the body of the request, it can be for example `name=Jonathan&password=azerty1234`
-     * @param additional_headers the headers you want to specify, they are separeted by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
-     * @return - When it succededs, it returns a pointer to a structure handler.
+     * @param additional_headers the headers you want to specify, they are separated by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
+     * @return - When it succeeds, it returns a pointer to a structure handler.
      * @return - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
      */
     static inline SA_RequestsHandler* SA_WARN_UNUSED_RESULT SA_req_patch(SA_RequestsHandler* handler, const char* url, const char* data, const char* additional_headers)
@@ -147,8 +157,8 @@
      * @param handler must be NULL if it's the first connection, otherwise, it should be an old handler
      * @param url It's the url you want to request, it should start with `http://` or `https://`.
      * @param data it's the body of the request, it can be for example `name=Jonathan&password=azerty1234`
-     * @param additional_headers the headers you want to specify, they are separeted by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
-     * @return - When it succededs, it returns a pointer to a structure handler.
+     * @param additional_headers the headers you want to specify, they are separated by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
+     * @return - When it succeeds, it returns a pointer to a structure handler.
      * @return - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
      */
     static inline SA_RequestsHandler* SA_WARN_UNUSED_RESULT SA_req_put(SA_RequestsHandler* handler, const char* url, const char* data, const char* additional_headers)
@@ -161,8 +171,8 @@
      * 
      * @param handler must be NULL if it's the first connection, otherwise, it should be an old handler
      * @param url It's the url you want to request, it should start with `http://` or `https://`.
-     * @param additional_headers the headers you want to specify, they are separeted by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
-     * @return - When it succededs, it returns a pointer to a structure handler.
+     * @param additional_headers the headers you want to specify, they are separated by `\\r\\n` and THEY NEED to finish by `\\r\\n`. example: `"Content-Type: application/json\\r\\nUser-Agent: requests.c\\r\\n"`
+     * @return - When it succeeds, it returns a pointer to a structure handler.
      * @return - When it fails, it returns NULL and `SA_print_last_error` can tell what happened
      * 
      * @note Even if the server send a body response to this request (which is not possible in the HTTP standard), you will not be able to get it with SA_req_read_output_body.

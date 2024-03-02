@@ -53,7 +53,7 @@ void* SA_realloc(void* ptr, size_t size)
 
 
 /*
-Takes the adress of the pointer allocated by SA_malloc, SA_calloc or SA_realloc
+Takes the address of the pointer allocated by SA_malloc, SA_calloc or SA_realloc
 free the memory block and set the pointer to NULL to avoid multiple free of a same block.
 */
 void _SA_free(void* ptr)
@@ -69,7 +69,7 @@ void _SA_free(void* ptr)
 
 #ifdef SA_MEMORY_DEBUG
     /*
-    Internal function only avaible in debug mode
+    Internal function only available in debug mode
     */
     SA_bool _SA_is_everything_freed(void)
     {

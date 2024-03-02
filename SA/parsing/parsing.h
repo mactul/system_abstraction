@@ -21,18 +21,18 @@
 
 
     /**
-     * @brief split `url` into host, uri, port and wheter or not it's http or https. Fill the structure `url_splitted` with these infos.
+     * @brief split `url` into host, uri, port and whether or not it's http or https. Fill the structure `url_splitted` with these infos.
      *
      * @param url The url to split
      * @param url_splitted A pointer to SA_UrlSplitted structure that will be filled with the url components.
-     * @return - When it succededs, it returns SA_TRUE
-     * @return - When it fails, it returns SA_FALSE and `SA_print_last_error()` can tell what happends.
+     * @return - When it succeeds, it returns SA_TRUE
+     * @return - When it fails, it returns SA_FALSE and `SA_print_last_error()` can tell what happened.
      */
     SA_bool SA_parse_url(const char *url, SA_UrlSplitted *url_splitted);
 
 
     /**
-     * @brief This is used in combinaison of `SA_parser_search_occurence_in_bytes_stream`. Call this to specify that you are searching in new stream.
+     * @brief This is used in combination of `SA_parser_search_occurrence_in_bytes_stream`. Call this to specify that you are searching in new stream.
      *
      * @note This function is NOT thread safe.
      */
@@ -40,20 +40,20 @@
 
 
     /**
-     * @brief This function is used to search an occurence in a stream, byte per byte.
+     * @brief This function is used to search an occurrence in a stream, byte per byte.
      *
      * @param stream_single_byte The byte you are actually reading.
-     * @param occurence The string you are searching for.
+     * @param occurrence The string you are searching for.
      * @return - SA_FALSE if you have to continue searching.
-     * @return - SA_TRUE if the string `occurence` was encountered.
+     * @return - SA_TRUE if the string `occurrence` was encountered.
      *
      * @note This function is NOT thread safe.
      */
-    SA_bool SA_parser_search_occurence_in_bytes_stream(char stream_single_byte, const char *occurence);
+    SA_bool SA_parser_search_occurrence_in_bytes_stream(char stream_single_byte, const char *occurrence);
 
 
     /**
-     * @brief This parse datas encoded like `key1=value1&key2=value2&...`
+     * @brief This parse data encoded like `key1=value1&key2=value2&...`
      *
      * @param data the string to parse
      * @return A ParserTree which can be read by `SA_ptree...` functions.

@@ -3,6 +3,7 @@
 
     #include <stdint.h>
     #include <stddef.h>
+    #include <sys/types.h>
     #include "SA/global/errors.h"
 
     #define SA_TRUE 1
@@ -32,24 +33,24 @@
         // write this instead of `break` in a switch statement to specifically say that you want the statement to falltrough.
         #define SA_FALLTROUGH __attribute__((falltrough))
 
-        // cross plateform version of [gnu pure attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-pure-function-attribute)
+        // cross platform version of [gnu pure attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-pure-function-attribute)
         #define SA_FUNCTION_PURE __attribute__((pure))
 
-        // cross plateform version of [gnu const attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-const-function-attribute)
+        // cross platform version of [gnu const attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-const-function-attribute)
         #define SA_FUNCTION_CONST __attribute__((const))
 
-        // cross plateform version of [gnu deprecated attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-deprecated-function-attribute)
+        // cross platform version of [gnu deprecated attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-deprecated-function-attribute)
         #define SA_FUNCTION_DEPRECATED __attribute__((deprecated))
 
         #define SA_FUNCTION_NOTHROW __attribute__((__nothrow__, __leaf__))
 
-        // cross plateform version of [gnu malloc attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute)
+        // cross platform version of [gnu malloc attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute)
         #define SA_MALLOC_FUNC(free_func) __attribute__((malloc, malloc(free_func, 1)))
 
-        // cross plateform version of [gnu expect builtin](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fexpect)
+        // cross platform version of [gnu expect builtin](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fexpect)
         #define SA_UNLIKELY(x) __builtin_expect(x, 0L)
 
-        // cross plateform version of [gnu expect builtin](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fexpect)
+        // cross platform version of [gnu expect builtin](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fexpect)
         #define SA_LIKELY(x) __builtin_expect(!!(x), 1L)
     #else
         // This statement has no effect with your compiler

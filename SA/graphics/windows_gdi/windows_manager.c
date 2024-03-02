@@ -157,7 +157,7 @@ void SA_graphics_create_window(const char* title, int pos_x, int pos_y, int widt
 
     /* The class is registered, let's create the program*/
     window.hwnd = CreateWindowEx (
-           0,                   /* Extended possibilites for variation */
+           0,                   /* Extended possibilities for variation */
            className,         /* Classname */
            title,       /* Title Text */
            (WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) | windows_flags, /* default window */

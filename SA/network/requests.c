@@ -10,7 +10,7 @@ struct _SA_requests_handler {
     SA_SocketHandler* handler;
     SA_ParserTree* headers_tree;
     int64_t total_bytes;
-    uint64_t bytes_readed;
+    uint64_t bytes_read;
     char host[SA_MAX_CHAR_ON_HOST + 1];
     uint16_t port;
     char* reading_residue;
@@ -20,7 +20,7 @@ struct _SA_requests_handler {
     SA_bool read_finished;
     SA_bool chunked;
     SA_bool secured;
-    char keep_alive_readed;
+    char keep_alive_read;
 };
 
 static int64_t min64(int64_t a, int64_t b)
@@ -38,6 +38,10 @@ static SA_bool connect_socket(SA_RequestsHandler* handler);
 static SA_bool is_first_call = SA_TRUE;
 #endif
 
+uint64_t SA_req_nb_bytes_read(SA_RequestsHandler* handler)
+{
+    return handler->bytes_read;
+}
 
 /*
 This is not meant to be used directly, unless you have exotic HTTP methods.
@@ -57,7 +61,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
     is_first_call = SA_FALSE;
     if(handler != NULL && (size_t)handler < 1000ULL)
     {
-        SA_print_error("DebugWarning: requests: handler pointer is non-null and less than 1000, it may be uinitialized\n"
+        SA_print_error("DebugWarning: requests: handler pointer is non-null and less than 1000, it may be uninitialized\n"
                        "Make sure to initialize the handler to NULL before calling the first requests function.");
     }
     #endif
@@ -79,7 +83,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
         return NULL;
     }
 
-    // build the request with all the datas
+    // build the request with all the data
     SA_strcpy(headers, method);
     SA_strcat(headers, url_splitted.uri);
     SA_strcat(headers, " HTTP/1.1\r\nHost: ");
@@ -124,11 +128,11 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
         SA_ptree_free(&(handler->headers_tree));
         SA_free(&(handler->reading_residue));
 
-        if(!send_headers(handler, headers) || SA_socket_recv(handler->handler, &(handler->keep_alive_readed), 1) <= 0)
+        if(!send_headers(handler, headers) || SA_socket_recv(handler->handler, &(handler->keep_alive_read), 1) <= 0)
         {
-            SA_req_close_connection(&handler);  // connexion expired
+            SA_req_close_connection(&handler);  // connection expired
         }
-        // else: connexion successfuly reused
+        // else: connection successfully reused
     }
     else if(handler != NULL)
     {
@@ -145,7 +149,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
             return NULL;
         }
 
-        handler->keep_alive_readed = '\0';
+        handler->keep_alive_read = '\0';
 
         SA_strncpy(handler->host, url_splitted.host, SA_MAX_CHAR_ON_HOST+1);
         handler->port = url_splitted.port;
@@ -172,7 +176,7 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
     handler->headers_tree = NULL;
     handler->reading_residue = NULL;
     handler->residue_size = 0;
-    handler->bytes_readed = 0;
+    handler->bytes_read = 0;
     handler->residue_offset = 0;
     handler->read_finished = 0;
     handler->status_code = 0;
@@ -250,13 +254,13 @@ SA_RequestsHandler* SA_req_request(SA_RequestsHandler* handler, const char* meth
     return handler;
 }
 
-static unsigned short parse_status(char* key_value, char keep_alive_readed)
+static unsigned short parse_status(char* key_value, char keep_alive_read)
 {   
     int k = 0;
     char status_code[4];
     int l = 0;
 
-    if(!SA_startswith(key_value, "HTTP/") && (keep_alive_readed != 'H' || !SA_startswith(key_value, "TTP/")))
+    if(!SA_startswith(key_value, "HTTP/") && (keep_alive_read != 'H' || !SA_startswith(key_value, "TTP/")))
     {
         return 0;
     }
@@ -303,15 +307,15 @@ static SA_bool req_parse_headers(SA_RequestsHandler* handler)
 
             if(j == PARSER_BUFFER_SIZE-1)
             {
-                char* trimed = SA_strtrim_inplace(key_value);
+                char* trimmed = SA_strtrim_inplace(key_value);
                 if(in_value)
                 {
-                    if(SA_ptree_update_value(handler->headers_tree, trimed, SA_strlen(trimed)+1) == 0)
+                    if(SA_ptree_update_value(handler->headers_tree, trimmed, SA_strlen(trimmed)+1) == 0)
                         return SA_FALSE;
                 }
                 else
                 {
-                    if(SA_ptree_update_key(handler->headers_tree, trimed, SA_strlen(trimed)+1) == 0)
+                    if(SA_ptree_update_key(handler->headers_tree, trimmed, SA_strlen(trimmed)+1) == 0)
                         return SA_FALSE;
                 }
                 j = 0;
@@ -320,8 +324,8 @@ static SA_bool req_parse_headers(SA_RequestsHandler* handler)
             if(!in_value && buffer[i] == ':')
             {
                 in_value = SA_TRUE;
-                char* trimed = SA_strtrim_inplace(key_value);
-                if(SA_ptree_update_key(handler->headers_tree, trimed, SA_strlen(trimed)+1) == 0)
+                char* trimmed = SA_strtrim_inplace(key_value);
+                if(SA_ptree_update_key(handler->headers_tree, trimmed, SA_strlen(trimmed)+1) == 0)
                     return SA_FALSE;
                 j = 0;
             }
@@ -331,15 +335,15 @@ static SA_bool req_parse_headers(SA_RequestsHandler* handler)
                 if(in_value)
                 {
                     in_value = SA_FALSE;
-                    char* trimed = SA_strtrim_inplace(key_value);
-                    if(SA_ptree_update_value(handler->headers_tree, trimed, SA_strlen(trimed)+1) == 0)
+                    char* trimmed = SA_strtrim_inplace(key_value);
+                    if(SA_ptree_update_value(handler->headers_tree, trimmed, SA_strlen(trimmed)+1) == 0)
                         return SA_FALSE;
                     if(SA_ptree_push(handler->headers_tree, NULL) == 0)
                         return SA_FALSE;
                 }
                 else
                 {
-                    unsigned short status_code = parse_status(key_value, handler->keep_alive_readed);
+                    unsigned short status_code = parse_status(key_value, handler->keep_alive_read);
                     if(status_code != 0)
                     {
                         handler->status_code = status_code;
@@ -459,7 +463,7 @@ static int start_chunk_read(SA_RequestsHandler* handler, char* buffer, int bytes
     }
     bytes_in_buffer = SA_RELU(bytes_in_buffer - offset);
     SA_memcpy(buffer, &(buffer[offset]), bytes_in_buffer);
-    handler->bytes_readed = bytes_in_buffer;
+    handler->bytes_read = bytes_in_buffer;
 
     
     if(bytes_in_buffer > handler->total_bytes)
@@ -474,10 +478,10 @@ static int start_chunk_read(SA_RequestsHandler* handler, char* buffer, int bytes
 
 /*
     Skip the response header and fill the buffer with the server response
-    Returns the number of bytes readed
+    Returns the number of bytes read
     Use this in a loop.
-    Note: This function reads binary datas.
-    If you are getting text, use `sizeof(buffer)-1` for buffer_size and add an '\0' at the end of the readed buffer.
+    Note: This function reads binary data.
+    If you are getting text, use `sizeof(buffer)-1` for buffer_size and add an '\0' at the end of the read buffer.
 */
 int SA_req_read_output_body(SA_RequestsHandler* handler, char* buffer, int buffer_size)
 {
@@ -490,16 +494,16 @@ int SA_req_read_output_body(SA_RequestsHandler* handler, char* buffer, int buffe
     {
         return 0;
     }
-    if(handler->total_bytes > (int64_t)handler->bytes_readed)
+    if(handler->total_bytes > (int64_t)handler->bytes_read)
     {
-        int n = min64(buffer_size, handler->total_bytes - handler->bytes_readed);
+        int n = min64(buffer_size, handler->total_bytes - handler->bytes_read);
         size = req_read_output(handler, buffer, n);
         if(size <= 0)
         {
             handler->read_finished = SA_TRUE;
             return 0;
         }
-        handler->bytes_readed += size;
+        handler->bytes_read += size;
     }
     else if(handler->chunked)
     {
@@ -533,18 +537,18 @@ int SA_req_read_output_body(SA_RequestsHandler* handler, char* buffer, int buffe
 
 /*
     Fill the buffer with the http response
-    Returns the numbers of bytes readed
+    Returns the numbers of bytes read
     Can block if there is no data left.
 */
 static int req_read_output(SA_RequestsHandler* handler, char* buffer, int n)
 {
-    int readed;
+    int read;
     if(handler->residue_size > 0)
     {
-        readed = min64(n, handler->residue_size);
-        SA_memcpy(buffer, &(handler->reading_residue[handler->residue_offset]), readed);
-        handler->residue_size -= readed;
-        handler->residue_offset += readed;
+        read = min64(n, handler->residue_size);
+        SA_memcpy(buffer, &(handler->reading_residue[handler->residue_offset]), read);
+        handler->residue_size -= read;
+        handler->residue_offset += read;
         if(handler->residue_size <= 0)
         {
             SA_free(&(handler->reading_residue));
@@ -552,10 +556,10 @@ static int req_read_output(SA_RequestsHandler* handler, char* buffer, int n)
     }
     else
     {
-        readed = SA_socket_recv(handler->handler, buffer, n);
+        read = SA_socket_recv(handler->handler, buffer, n);
     }
 
-    return readed;
+    return read;
 }
 
 static SA_bool connect_socket(SA_RequestsHandler* handler)

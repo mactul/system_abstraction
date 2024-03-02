@@ -191,7 +191,7 @@ uint64_t SA_socket_ntoh64(uint64_t input)
 /*
 This function will create the socket and returns a socket handler.
 
-SERVER_HOSTNAME: the targeted server ip, formated like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
+SERVER_HOSTNAME: the targeted server ip, formatted like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
 SERVER_PORT: the opened server port that listen the connection
 
 - when it succeeds, it returns a pointer to a structure handler.
@@ -233,11 +233,11 @@ SA_SocketHandler* SA_socket_client_init(const char* server_hostname, uint16_t se
 }
 
 /*
-This function works like SA_socket_client_init, but it will create an ssl secured socket connexion.
+This function works like SA_socket_client_init, but it will create an ssl secured socket connection.
 
-SERVER_HOSTNAME: the targeted server ip, formated like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
+SERVER_HOSTNAME: the targeted server ip, formatted like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
 SERVER_PORT: the opened server port that listen the connection
-SNI_HOSTNAME: this is especially for web applications, when a single ip adress can have multiple services. If it's set to NULL, it will take the value of server_hostname, otherwise, you must set the domain name of the server.
+SNI_HOSTNAME: this is especially for web applications, when a single ip address can have multiple services. If it's set to NULL, it will take the value of server_hostname, otherwise, you must set the domain name of the server.
 
 - when it succeeds, it returns a pointer to a structure handler.
 - when it fails, it returns NULL and SA_print_last_error() can tell what happened
@@ -468,12 +468,12 @@ SA_SocketHandler* SA_socket_accept(SA_SocketHandler* server, SA_ClientData* pcli
 
 
 /*
-This function will send the datas contained in the buffer array through the socket
+This function will send the data contained in the buffer array through the socket
 
 S: a pointer to a SA_SocketHandler. If you are in a client application, it's the handler returned by SA_socket_client_init or SA_socket_ssl_client_init. If you are in a server application, it's the handler returned by SA_socket_accept
-BUFFER: a buffer containing all the datas you want to send
-N: the size of the datas, this can be different from the sizeof(buffer) if your buffer isn't full.
-FLAGS: I recommand you to let this parameter to 0, but you can see the man page of send posix function to know more about that. This parameter do nothing if the connection is TLS
+BUFFER: a buffer containing all the data you want to send
+N: the size of the data, this can be different from the sizeof(buffer) if your buffer isn't full.
+FLAGS: I recommend you to let this parameter to 0, but you can see the man page of send posix function to know more about that. This parameter do nothing if the connection is TLS
 
 - when it succeeds, it returns the number of bytes sended
 - when it fails, it returns -1 and errno contains more information.
@@ -497,10 +497,10 @@ This function will wait for data to arrive in the socket and fill a buffer with 
 S: a pointer to a SA_SocketHandler. If you are in a client application, it's the handler returned by SA_socket_client_init or SA_socket_ssl_client_init. If you are in a server application, it's the handler returned by SA_socket_accept.
 BUFFER: an empty buffer that will be filled with data from the socket
 N: the size of your buffer, you can simply provide sizeof(buffer).
-FLAGS: I recommand you to let this parameter to 0, but you can see the man page of recv posix function to know more about that. This parameter do nothing if the connection is TLS
+FLAGS: I recommend you to let this parameter to 0, but you can see the man page of recv posix function to know more about that. This parameter do nothing if the connection is TLS
 
 
-- when it succeeds, it returns the number of bytes readed
+- when it succeeds, it returns the number of bytes read
 - when it fails, it returns -1 and errno contains more information.
 */
 int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n)
@@ -516,7 +516,7 @@ int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n)
 }
 
 /*
-This function take the address of the pointer on the handler, release all the stuff, cloe the socket and put the Sockethandler pointer to NULL.
+This function take the address of the pointer on the handler, release all the stuff, close the socket and put the SocketHandler pointer to NULL.
 
 PPS: the address of the pointer on the socket
 */

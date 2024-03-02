@@ -43,9 +43,9 @@
 
 
     /**
-     * @brief This function works like socket_client_init, but it will create an ssl secured socket connexion.
+     * @brief This function works like socket_client_init, but it will create an ssl secured socket connection.
      * 
-     * @param server_hostname the targeted server ip, formated like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
+     * @param server_hostname the targeted server ip, formatted like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
      * @param server_port the opened server port that listen the connection
      * @return - when it succeeds, it returns a pointer to a structure handler.
      * @return - when it fails, it returns `NULL` and `SA_print_last_error()` can tell what happened
@@ -56,7 +56,7 @@
     /**
      * @brief This function will create the socket and returns a socket handler.
      * 
-     * @param server_hostname the targeted server host name, formated like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
+     * @param server_hostname the targeted server host name, formatted like "127.0.0.1", like "2001:0db8:85a3:0000:0000:8a2e:0370:7334" or like "example.com"
      * @param server_port the opened server port that listen the connection
      * @return - when it succeeds, it returns a pointer to a structure handler.
      * @return - when it fails, it returns `NULL` and `SA_print_last_error()` can tell what happened
@@ -88,11 +88,11 @@
 
 
     /**
-     * @brief This function will send the datas contained in the buffer array through the socket
+     * @brief This function will send the data contained in the buffer array through the socket
      * 
      * @param s a pointer to a SocketHandler. If you are in a client application, it's the handler returned by `SA_socket_client_init` or `SA_socket_ssl_client_init`. If you are in a server application, it's the handler returned by `SA_socket_accept`
-     * @param buffer a buffer containing all the datas you want to send
-     * @param n the size of the datas, this can be different from the `sizeof(buffer)` if your buffer isn't full.
+     * @param buffer a buffer containing all the data you want to send
+     * @param n the size of the data, this can be different from the `sizeof(buffer)` if your buffer isn't full.
      * @return - when it succeeds, it returns the number of bytes sended
      * @return - when it fails, it returns -1 and errno contains more information.
      */
@@ -104,14 +104,14 @@
      * @param s a pointer to a SocketHandler. If you are in a client application, it's the handler returned by `SA_socket_client_init` or `SA_socket_ssl_client_init`. If you are in a server application, it's the handler returned by `SA_socket_accept`.
      * @param buffer an empty buffer that will be filled with data from the socket.
      * @param n the size of your buffer, you can simply provide `sizeof(buffer)`.
-     * @return - when it succeeds, it returns the number of bytes readed
+     * @return - when it succeeds, it returns the number of bytes read
      * @return - when it fails, it returns -1 and errno contains more information.
      */
     int SA_socket_recv(SA_SocketHandler* s, char* buffer, int n);
 
 
     /**
-     * @brief This function take the address of the pointer on the handler to release all the stuff and put the SA_Sockethandler pointer to NULL.
+     * @brief This function take the address of the pointer on the handler to release all the stuff and put the SA_SocketHandler pointer to NULL.
      * 
      * @param pps the address of the pointer on the socket
      */

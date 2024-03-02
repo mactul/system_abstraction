@@ -23,7 +23,7 @@
         SDL_Surface* vram;
         SA_Queue* event_queue;
         void (*event_callback)(SA_GraphicsWindow* window, SA_GraphicsEvent* event);
-        sem_t* is_completly_destroyed;
+        sem_t* is_completely_destroyed;
         pthread_mutex_t mutex;
         uint32_t width;
         uint32_t height;
