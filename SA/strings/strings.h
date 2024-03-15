@@ -270,7 +270,7 @@
      * @param size the size of `source` in bytes
      * @return the pointer `dest`
      */
-    void* SA_memcpy(void* dest, void* source, size_t size);
+    void* SA_memcpy(void* dest, const void* source, size_t size);
 
     /**
      * @brief Modify the string `str` with whitespace stripped from the beginning and end of `str`  

@@ -120,11 +120,10 @@ target("sa")
     add_rules("fine_config")
 
     if has_config("build_network") then
-        add_files("SA/network/*.c")
         add_packages("openssl")
     else
         add_defines("SA_NETWORK_DISABLED")
-        remove_files("SA/network/*")
+        remove_files("SA/network/*", "SA/stream/stream_requests.c")
     end
 
     remove_files("SA/graphics/universal_font/*")

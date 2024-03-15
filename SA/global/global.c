@@ -23,6 +23,10 @@ This function MUST BE put at the top of the main function before doing anything 
 */
 void SA_init(void)
 {
+    if(_SA_is_init)
+    {
+        return;
+    }
     #ifdef DEBUG
         _SA_is_init = SA_TRUE;
         atexit(verify_SA_destroy);
@@ -45,6 +49,10 @@ In debug mode, it can display warning messages on stderr.
 */
 void SA_destroy(void)
 {
+    if(!_SA_is_init)
+    {
+        return;
+    }
     #ifdef DEBUG
         _SA_is_init = SA_FALSE;
     #endif

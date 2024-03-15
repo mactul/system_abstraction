@@ -44,8 +44,19 @@
 
         #define SA_FUNCTION_NOTHROW __attribute__((__nothrow__, __leaf__))
 
+        // cross platform version of [gnu constructor attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-constructor-function-attribute)
+        #define SA_FUNCTION_CONSTRUCTOR __attribute__((constructor))
+
+        // cross platform version of [gnu destructor attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-destructor-function-attribute)
+        #define SA_FUNCTION_DESTRUCTOR __attribute__((destructor))
+
         // cross platform version of [gnu malloc attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute)
-        #define SA_MALLOC_FUNC(free_func) __attribute__((malloc, malloc(free_func, 1)))
+        #if defined(__clang__)
+            #define SA_MALLOC_FUNC(free_func) __attribute__((malloc))
+        #else
+            #define SA_MALLOC_FUNC(free_func) __attribute__((malloc, malloc(free_func, 1)))
+        #endif
+        
 
         // cross platform version of [gnu expect builtin](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fexpect)
         #define SA_UNLIKELY(x) __builtin_expect(x, 0L)
@@ -84,12 +95,16 @@
 
     /**
      * @brief This function MUST BE put at the top of the main function before doing anything else with the library.
+     * 
+     * @note This function can be called multiple times without any issue.
     */
     void SA_init(void);
 
     /**
      * @brief This function must be put at the end of the program, after having closed all the threads.  
      * @brief In debug mode, it can display warning messages on stderr.
+     * 
+     * @note This function can be called multiple times without any issue.
     */
     void SA_destroy(void);
     

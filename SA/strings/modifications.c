@@ -236,7 +236,7 @@ uint32_t* SA_memset32(uint32_t* dest, uint32_t value, size_t array_len)
 Copy the SIZE first bytes of SRC into DEST
 Returns the pointer DEST.
 */
-void* SA_memcpy(void* dest, void* src, size_t size)
+void* SA_memcpy(void* dest, const void* src, size_t size)
 {
     SA_byte* dest_char;
     SA_byte* src_char;
